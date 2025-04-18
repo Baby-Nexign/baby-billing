@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changes/create-subscriber-table-changelog.yaml
+  - include:
+      file: db/changelog/changes/create-record-table-changelog.yaml
