@@ -32,5 +32,6 @@ public class Call {
     private Subscriber receivingSubscriber;
 
     private LocalDateTime callStart;
+
     private LocalDateTime callEnd;
 }

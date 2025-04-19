@@ -18,6 +18,9 @@ import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.*;
 
+/**
+ * Service responsible for generating, managing, and sending Call Detail Records.
+ */
 @Service
 public class CallService {
     private static final int MIN_CALLS_TO_GENERATE = 500;
@@ -41,6 +44,14 @@ public class CallService {
         this.sender = sender;
     }
 
+    /**
+     * Generates call detail records by creating random calls between subscribers.
+     * The method uses a thread pool to generate calls in parallel while ensuring
+     * subscribers are not involved in overlapping calls.
+     *
+     * @throws IllegalStateException if no subscribers are found in the database
+     * @throws RuntimeException if there are errors during call generation
+     */
     public void generateCDRecords() {
         List<Subscriber> subscribers = subscriberRepository.findAll();
         if (subscribers.isEmpty()) {
@@ -93,6 +104,10 @@ public class CallService {
         }
     }
 
+    /**
+     * Sends all generated call records to BRT.
+     * Records are retrieved in chronological order and sent in configurable batch sizes.
+     */
     private void sendGeneratedCDRecords() {
         int page = 0;
         Pageable pageable = PageRequest.of(page, CDR_BATCH_SIZE);
@@ -109,10 +124,27 @@ public class CallService {
         } while (recordPage.hasNext());
     }
 
+    /**
+     * Returns a lock object for a specific subscriber ID, creating it if it doesn't exist.
+     * These lock objects are used to prevent race conditions when checking subscriber availability.
+     *
+     * @param subscriberId the ID of the subscriber
+     * @return the lock object associated with the subscriber
+     */
     private Object getLockObject(Long subscriberId) {
         return lockObjects.computeIfAbsent(subscriberId, k -> new Object());
     }
 
+    /**
+     * Generates a pair of call records (outgoing and incoming) between two random subscribers.
+     * Ensures that subscribers are not busy during the generated call period by using
+     * synchronized locks and checking against existing busy periods.
+     *
+     * @param subscribers list of all available subscribers
+     * @param startDate the earliest possible date for call generation
+     * @param endDate the latest possible date for call generation
+     * @param subscriberBusyPeriods concurrent map tracking when subscribers are busy with calls
+     */
     private void generateCallPair(
             List<Subscriber> subscribers,
             LocalDateTime startDate,
@@ -188,6 +220,14 @@ public class CallService {
         }
     }
 
+    /**
+     * Checks if a subscriber is available during a specified time range.
+     *
+     * @param msisdn the subscriber's MSISDN
+     * @param newCallRange the time range to check for availability
+     * @param subscriberBusyPeriods map of existing busy periods for all subscribers
+     * @return true if the subscriber is available during the entire time range
+     */
     private boolean isSubscriberFree(
             Long msisdn,
             TimeRange newCallRange,
@@ -204,6 +244,13 @@ public class CallService {
         return true;
     }
 
+    /**
+     * Marks a subscriber as busy (in call during a specified time range).
+     *
+     * @param msisdn the subscriber's MSISDN
+     * @param newCallRange the time range during which the subscriber will be busy
+     * @param subscriberBusyPeriods map of busy periods for all subscribers
+     */
     private void markSubscriberBusy(
             Long msisdn,
             TimeRange newCallRange,
@@ -213,6 +260,13 @@ public class CallService {
                 .add(newCallRange);
     }
 
+    /**
+     * Splits a call that spans multiple days into separate records.
+     *
+     * @param callStart the start time of the call
+     * @param callEnd the end time of the call
+     * @return a list of time ranges, each representing a segment of the call within a single day
+     */
     private List<TimeRange> splitCallAcrossDays(LocalDateTime callStart, LocalDateTime callEnd) {
         List<TimeRange> result = new ArrayList<>();
 
@@ -256,6 +310,10 @@ public class CallService {
         return dateTime.plusSeconds(randomSeconds);
     }
 
+    /**
+     * Record class representing a time range with start and end times.
+     * Includes a method to check if two time ranges overlap.
+     */
     private record TimeRange(LocalDateTime start, LocalDateTime end) {
         public boolean overlaps(TimeRange other) {
             return !this.start.isAfter(other.end) && !this.end.isBefore(other.start);

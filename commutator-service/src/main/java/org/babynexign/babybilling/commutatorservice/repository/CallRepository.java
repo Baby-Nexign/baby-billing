@@ -8,5 +8,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CallRepository extends JpaRepository<Call, Long> {
+    /**
+     * Retrieves all call records sorted by call start time in ascending order.
+     *
+     * @param pageable pagination information
+     * @return a page of call records ordered by their start time (oldest first)
+     */
     Page<Call> findAllByOrderByCallStartAsc(Pageable pageable);
 }

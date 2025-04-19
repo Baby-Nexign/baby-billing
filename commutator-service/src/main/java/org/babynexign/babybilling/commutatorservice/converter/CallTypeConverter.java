@@ -4,6 +4,11 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import org.babynexign.babybilling.commutatorservice.entity.enums.CallType;
 
+/**
+ * A JPA converter for the CallType enum that automatically applies to entities using the CallType type.
+ * This converter handles the transformation between CallType enum values and their String representations
+ * in the database, storing the enum's index value as a string in the database column.
+ */
 @Converter(autoApply = true)
 public class CallTypeConverter implements AttributeConverter<CallType, String> {
 
