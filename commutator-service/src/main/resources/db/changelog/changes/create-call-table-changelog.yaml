@@ -1,10 +1,10 @@
   databaseChangeLog:
     - changeSet:
-        id: create-record-table
+        id: create-call-table
         author: developer
         changes:
           - createTable:
-              tableName: record
+              tableName: call
               columns:
                 - column:
                     name: id
@@ -43,14 +43,14 @@
                     constraints:
                       nullable: false
           - createIndex:
-              indexName: idx_record_calling_subscriber
-              tableName: record
+              indexName: idx_call_calling_subscriber
+              tableName: call
               columns:
                 - column:
                     name: calling_subscriber_msisdn
           - createIndex:
-              indexName: idx_record_receiving_subscriber
-              tableName: record
+              indexName: idx_call_receiving_subscriber
+              tableName: call
               columns:
                 - column:
                     name: receiving_subscriber_msisdn
