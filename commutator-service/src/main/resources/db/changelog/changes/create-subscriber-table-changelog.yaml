@@ -1,0 +1,138 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-subscriber-table
+      author: system
+      changes:
+        - createTable:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+  - changeSet:
+      id: insert-sample-subscribers
+      author: system
+      changes:
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79876543221
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79123456789
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79996667755
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79012345678
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79234567890
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79345678901
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79456789012
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79567890123
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79678901234
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79789012345
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79890123456
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79901234567
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79112233445
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79223344556
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79334455667
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79445566778
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79556677889
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79667788990
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79778899001
+        - insert:
+            tableName: subscriber
+            columns:
+              - column:
+                  name: msisdn
+                  value: 79889900112
