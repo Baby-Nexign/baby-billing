@@ -1,8 +1,8 @@
 package org.babynexign.babybilling.commutatorservice.sender.impl;
 
 import org.babynexign.babybilling.commutatorservice.config.RabbitMQConfig;
-import org.babynexign.babybilling.commutatorservice.dto.RecordDTO;
-import org.babynexign.babybilling.commutatorservice.entity.Record;
+import org.babynexign.babybilling.commutatorservice.dto.CallDTO;
+import org.babynexign.babybilling.commutatorservice.entity.Call;
 import org.babynexign.babybilling.commutatorservice.sender.CDRSender;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +22,16 @@ public class RabbitCDRSender implements CDRSender {
     }
 
     @Override
-    public void sendCDR(List<Record> calls) {
+    public void sendCDR(List<Call> calls) {
         if (calls != null && !calls.isEmpty()) {
-            List<RecordDTO> recordDTOs = calls.stream()
-                    .map(RecordDTO::fromEntity)
+            List<CallDTO> callDTOS = calls.stream()
+                    .map(CallDTO::fromEntity)
                     .collect(Collectors.toList());
 
             rabbitTemplate.convertAndSend(
                     RabbitMQConfig.CDR_EXCHANGE_NAME,
                     RabbitMQConfig.CDR_ROUTING_KEY,
-                    recordDTOs
+                    callDTOS
             );
         }
     }

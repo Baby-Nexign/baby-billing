@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Record {
+public class Call {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

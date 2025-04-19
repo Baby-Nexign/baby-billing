@@ -1,6 +1,6 @@
 package org.babynexign.babybilling.commutatorservice.service;
 
-import org.babynexign.babybilling.commutatorservice.entity.Record;
+import org.babynexign.babybilling.commutatorservice.entity.Call;
 import org.babynexign.babybilling.commutatorservice.entity.Subscriber;
 import org.babynexign.babybilling.commutatorservice.entity.enums.CallType;
 import org.babynexign.babybilling.commutatorservice.repository.CallRepository;
@@ -20,8 +20,8 @@ import java.util.concurrent.*;
 
 @Service
 public class CallService {
-    private static final int MIN_RECORDS_TO_GENERATE = 500;
-    private static final int MAX_RECORDS_TO_GENERATE = 1000;
+    private static final int MIN_CALLS_TO_GENERATE = 500;
+    private static final int MAX_CALLS_TO_GENERATE = 1000;
     private static final int MAX_THREAD_COUNT = 10;
     private static final int EXECUTOR_SHUTDOWN_TIMEOUT_SECONDS = 60;
     private static final int MIN_CALL_DURATION_SECONDS = 10;
@@ -49,9 +49,9 @@ public class CallService {
 
         LocalDateTime startDate = LocalDateTime.now().minusYears(HISTORY_YEARS);
         LocalDateTime endDate = LocalDateTime.now();
-        int numberOfRecords = ThreadLocalRandom.current().nextInt(
-                MIN_RECORDS_TO_GENERATE,
-                MAX_RECORDS_TO_GENERATE + 1
+        int numberOfCalls = ThreadLocalRandom.current().nextInt(
+                MIN_CALLS_TO_GENERATE,
+                MAX_CALLS_TO_GENERATE + 1
         );
 
         int processors = Runtime.getRuntime().availableProcessors();
@@ -61,7 +61,7 @@ public class CallService {
         ConcurrentMap<Long, Set<TimeRange>> subscriberBusyPeriods = new ConcurrentHashMap<>();
         List<Future<?>> futures = new ArrayList<>();
 
-        for (int i = 0; i < numberOfRecords; i++) {
+        for (int i = 0; i < numberOfCalls; i++) {
             futures.add(executorService.submit(() -> {
                 try {
                     generateCallPair(subscribers, startDate, endDate, subscriberBusyPeriods);
@@ -96,7 +96,7 @@ public class CallService {
     private void sendGeneratedCDRecords() {
         int page = 0;
         Pageable pageable = PageRequest.of(page, CDR_BATCH_SIZE);
-        Page<Record> recordPage;
+        Page<Call> recordPage;
 
         do {
             recordPage = callRepository.findAllByOrderByCallStartAsc(pageable);
@@ -167,7 +167,7 @@ public class CallService {
         List<TimeRange> splitRanges = splitCallAcrossDays(callStart, callEnd);
 
         for (TimeRange range : splitRanges) {
-            Record outgoingCall = Record.builder()
+            Call outgoingCall = Call.builder()
                     .callType(CallType.OUTCOMING)
                     .callingSubscriber(caller)
                     .receivingSubscriber(receiver)
@@ -175,7 +175,7 @@ public class CallService {
                     .callEnd(range.end())
                     .build();
 
-            Record incomingCall = Record.builder()
+            Call incomingCall = Call.builder()
                     .callType(CallType.INCOMING)
                     .callingSubscriber(receiver)
                     .receivingSubscriber(caller)
