@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the CDRSender interface that uses RabbitMQ
+ * to send Call Detail Records to BRT.
+ */
 @Component
 public class RabbitCDRSender implements CDRSender {
 
