@@ -5,6 +5,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: cdr_record
+            ifNotExists: true
             columns:
               - column:
                   name: id

@@ -1,10 +1,11 @@
 databaseChangeLog:
   - changeSet:
       id: create-tariffs-table
-      author: liquibase
+      author: developer
       changes:
         - createTable:
             tableName: tariffs_per_person
+            ifNotExists: true
             columns:
               - column:
                   name: id

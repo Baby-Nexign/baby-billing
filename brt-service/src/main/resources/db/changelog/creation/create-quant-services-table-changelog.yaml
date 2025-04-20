@@ -5,6 +5,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: quant_services
+            ifNotExists: true
             columns:
               - column:
                   name: id

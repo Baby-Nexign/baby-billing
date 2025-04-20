@@ -43,4 +43,14 @@ public class CDRRecord {
     @ManyToOne
     @JoinColumn(name = "our_subscriber_id", referencedColumnName = "id")
     private Person subscriber;
+
+    public Long getDurationInMinutes() {
+        long minutes = callDuration.toMinutes();
+
+        if (callDuration.getSeconds() > 0 || callDuration.getNano() > 0) {
+            minutes += 1;
+        }
+
+        return minutes;
+    }
 }

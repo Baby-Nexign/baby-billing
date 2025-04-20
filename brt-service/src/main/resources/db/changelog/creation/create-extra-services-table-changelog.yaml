@@ -5,6 +5,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: extra_services
+            ifNotExists: true
             columns:
               - column:
                   name: id
