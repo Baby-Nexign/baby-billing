@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Component
-public class CDRMessageListener {
+public class CDRMessageConsumer {
 
     private final CDRRecordService cdrRecordService;
 
     @Autowired
-    public CDRMessageListener(CDRRecordService cdrRecordService) {
+    public CDRMessageConsumer(CDRRecordService cdrRecordService) {
         this.cdrRecordService = cdrRecordService;
     }
 

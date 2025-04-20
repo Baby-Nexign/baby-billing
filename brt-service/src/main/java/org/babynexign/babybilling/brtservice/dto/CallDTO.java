@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 public record CallDTO(
         Long id,
         String callType,
-        Long callingSubscriberMsisdn,
-        Long receivingSubscriberMsisdn,
+        Long firstSubscriberMsisdn,
+        Long secondSubscriberMsisdn,
         LocalDateTime callStart,
         LocalDateTime callEnd
 ) {}

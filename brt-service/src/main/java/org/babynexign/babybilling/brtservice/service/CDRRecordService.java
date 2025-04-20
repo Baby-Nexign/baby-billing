@@ -8,7 +8,6 @@ import org.babynexign.babybilling.brtservice.repository.CDRRecordRepository;
 import org.babynexign.babybilling.brtservice.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.List;
@@ -25,7 +24,6 @@ public class CDRRecordService {
         this.personRepository = personRepository;
     }
 
-    @Transactional
     public void processCDRs(List<CallDTO> callDTOs) {
         if (callDTOs == null || callDTOs.isEmpty()) {
             return;
@@ -44,10 +42,10 @@ public class CDRRecordService {
             default -> throw new IllegalArgumentException("Unknown call type: " + callDTO.callType());
         };
 
-        Optional<Person> callerPerson = personRepository.findByMsisdn(callDTO.callingSubscriberMsisdn());
-        Optional<Person> receiverPerson = personRepository.findByMsisdn(callDTO.receivingSubscriberMsisdn());
-        boolean inOneNetwork = callerPerson.isPresent() && receiverPerson.isPresent();
-        Person subscriber = callerPerson.orElse(null);
+        Optional<Person> firstPerson = personRepository.findByMsisdn(callDTO.firstSubscriberMsisdn());
+        Optional<Person> secondPerson = personRepository.findByMsisdn(callDTO.secondSubscriberMsisdn());
+        Boolean inOneNetwork = firstPerson.isPresent() && secondPerson.isPresent();
+        Person subscriber = firstPerson.orElse(null);
 
         if (subscriber == null) {
             return;
@@ -60,8 +58,8 @@ public class CDRRecordService {
 
         CDRRecord cdrRecord = CDRRecord.builder()
                 .type(recordType)
-                .firstMsisdn(callDTO.callingSubscriberMsisdn())
-                .secondMsisdn(callDTO.receivingSubscriberMsisdn())
+                .firstMsisdn(callDTO.firstSubscriberMsisdn())
+                .secondMsisdn(callDTO.secondSubscriberMsisdn())
                 .callStart(callDTO.callStart())
                 .callDuration(callDuration)
                 .inOneNetwork(inOneNetwork)
