@@ -9,30 +9,25 @@ import org.babynexign.babybilling.commutatorservice.entity.Call;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class CallDTO implements Serializable {
-    private Long id;
-    private String callType;
-    private Long callingSubscriberMsisdn;
-    private Long receivingSubscriberMsisdn;
-    private LocalDateTime callStart;
-    private LocalDateTime callEnd;
-
+public record CallDTO(
+        Long id,
+        String callType,
+        Long callingSubscriberMsisdn,
+        Long receivingSubscriberMsisdn,
+        LocalDateTime callStart,
+        LocalDateTime callEnd
+) implements Serializable {
     public static CallDTO fromEntity(Call call) {
         if (call == null) {
             return null;
         }
-
-        return CallDTO.builder()
-                .id(call.getId())
-                .callType(call.getCallType().getIndex())
-                .callingSubscriberMsisdn(call.getCallingSubscriber().getMsisdn())
-                .receivingSubscriberMsisdn(call.getReceivingSubscriber().getMsisdn())
-                .callStart(call.getCallStart())
-                .callEnd(call.getCallEnd())
-                .build();
+        return new CallDTO(
+                call.getId(),
+                call.getCallType().getIndex(),
+                call.getCallingSubscriber().getMsisdn(),
+                call.getReceivingSubscriber().getMsisdn(),
+                call.getCallStart(),
+                call.getCallEnd()
+        );
     }
 }
