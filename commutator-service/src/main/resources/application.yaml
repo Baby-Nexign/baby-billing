@@ -30,8 +30,12 @@ spring:
         rabbitCDRSender-out-0:
           destination: cdr-exchange
           content-type: application/json
+          producer:
+            required-groups: brt-group
       rabbit:
         bindings:
           rabbitCDRSender-out-0:
             producer:
               routing-key-expression: '"cdr-routing-key"'
+              auto-bind-dlq: true
+              dlq-ttl: 5000
