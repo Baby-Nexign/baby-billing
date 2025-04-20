@@ -2,11 +2,12 @@ package org.babynexign.babybilling.brtservice.listeners;
 
 import org.babynexign.babybilling.brtservice.dto.CallDTO;
 import org.babynexign.babybilling.brtservice.service.CDRRecordService;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @Component
 public class CDRMessageListener {
@@ -18,8 +19,8 @@ public class CDRMessageListener {
         this.cdrRecordService = cdrRecordService;
     }
 
-    @RabbitListener(queues = "cdr.processing.brt")
-    public void receiveCDRs(List<CallDTO> callDTOs) {
-        cdrRecordService.processCDRs(callDTOs);
+    @Bean
+    public Consumer<List<CallDTO>> cdrConsumer() {
+        return cdrRecordService::processCDRs;
     }
 }
