@@ -14,8 +14,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   cloud:
-    config:
-      uri: http://config-server:8888
     function:
       definition: cdrConsumer
     stream:
