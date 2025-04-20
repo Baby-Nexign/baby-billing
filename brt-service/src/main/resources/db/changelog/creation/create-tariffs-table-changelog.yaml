@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tariffs-table
+      author: liquibase
+      changes:
+        - createTable:
+            tableName: tariffs_per_person
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: t_id
+                  type: bigint
+              - column:
+                  name: start_date
+                  type: datetime
+              - column:
+                  name: p_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_tariffs_person
+                    referencedTableName: person
+                    referencedColumnNames: id

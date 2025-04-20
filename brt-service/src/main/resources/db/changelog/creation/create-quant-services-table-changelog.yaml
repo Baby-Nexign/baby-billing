@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-quant-services-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: quant_services
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: s_type_id
+                  type: bigint
+              - column:
+                  name: amount_left
+                  type: bigint
+              - column:
+                  name: p_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_quant_services_person
+                    referencedTableName: person
+                    referencedColumnNames: id

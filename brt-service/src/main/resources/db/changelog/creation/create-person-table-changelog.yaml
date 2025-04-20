@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-person-table
+      author: liquibase
+      changes:
+        - createTable:
+            tableName: person
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: msisdn
+                  type: bigint
+              - column:
+                  name: money
+                  type: bigint
+              - column:
+                  name: reg_data
+                  type: datetime
+              - column:
+                  name: description
+                  type: varchar(255)
