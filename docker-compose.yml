@@ -1,6 +1,6 @@
 services:
   rabbitmq:
-    image: rabbitmq:latest
+    image: rabbitmq:4-management
     container_name: rabbitmq
     restart: always
     ports:
