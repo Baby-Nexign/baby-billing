@@ -1,4 +1,4 @@
-package org.babynexign.babybilling.brtservice.listeners;
+package org.babynexign.babybilling.brtservice.consumers;
 
 import org.babynexign.babybilling.brtservice.dto.CallDTO;
 import org.babynexign.babybilling.brtservice.service.CDRRecordService;
