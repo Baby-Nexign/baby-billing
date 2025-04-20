@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: commutator-service
+  datasource:
+    url: ${H2_URL}
+    driverClassName: org.h2.Driver
+    username: ${H2_USERNAME}
+    password: ${H2_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+  rabbitmq:
+    host: ${RABBIT_HOST}
+    port: ${RABBIT_PORT}
+    username: ${RABBIT_USERNAME}
+    password: ${RABBIT_PASSWORD}
+  cloud:
+    config:
+      uri: http://config-server:8888
+    function:
+      definition: rabbitCDRSender
+    stream:
+      bindings:
+        rabbitCDRSender-out-0:
+          destination: cdr-exchange
+          content-type: application/json
+      rabbit:
+        bindings:
+          rabbitCDRSender-out-0:
+            producer:
+              routing-key-expression: '"cdr-routing-key"'

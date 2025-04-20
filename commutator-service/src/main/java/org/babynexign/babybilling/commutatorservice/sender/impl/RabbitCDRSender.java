@@ -1,11 +1,10 @@
 package org.babynexign.babybilling.commutatorservice.sender.impl;
 
-import org.babynexign.babybilling.commutatorservice.config.RabbitMQConfig;
 import org.babynexign.babybilling.commutatorservice.dto.CallDTO;
 import org.babynexign.babybilling.commutatorservice.entity.Call;
 import org.babynexign.babybilling.commutatorservice.sender.CDRSender;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,11 +17,11 @@ import java.util.stream.Collectors;
 @Component
 public class RabbitCDRSender implements CDRSender {
 
-    private final RabbitTemplate rabbitTemplate;
+    private final StreamBridge streamBridge;
 
     @Autowired
-    public RabbitCDRSender(RabbitTemplate rabbitTemplate) {
-        this.rabbitTemplate = rabbitTemplate;
+    public RabbitCDRSender(StreamBridge streamBridge) {
+        this.streamBridge = streamBridge;
     }
 
     @Override
@@ -32,11 +31,7 @@ public class RabbitCDRSender implements CDRSender {
                     .map(CallDTO::fromEntity)
                     .collect(Collectors.toList());
 
-            rabbitTemplate.convertAndSend(
-                    RabbitMQConfig.CDR_EXCHANGE_NAME,
-                    RabbitMQConfig.CDR_ROUTING_KEY,
-                    callDTOS
-            );
+            streamBridge.send("callProducer-out-0", callDTOS);
         }
     }
 }
