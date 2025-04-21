@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   rabbitmq:
     image: rabbitmq:4-management
@@ -5,13 +7,10 @@ services:
     restart: always
     ports:
       - "5672:5672"
-      - "15672:15672"
+      - "15672:15672" 
     environment:
       RABBITMQ_DEFAULT_USER: "admin"
       RABBITMQ_DEFAULT_PASS: "password"
-    configs:
-      - source: rabbitmq-plugins
-        target: /etc/rabbitmq/enabled_plugins
     volumes:
       - rabbitmq-lib:/var/lib/rabbitmq/
       - rabbitmq-log:/var/log/rabbitmq
@@ -26,19 +25,16 @@ services:
       H2_USERNAME: "su"
       H2_PASSWORD: "password"
       H2_URL: "jdbc:h2:mem:commutator-service"
-      RABBIT_HOST: "rabbitmq"
+      RABBIT_HOST: "rabbitmq"     
       RABBIT_USERNAME: "admin"
       RABBIT_PASSWORD: "password"
-      RABBIT_PORT: "5672"
+      RABBIT_PORT: "5672"         
     depends_on:
       - rabbitmq
 
-configs:
-  rabbitmq-plugins:
-    content: "[rabbitmq_management]."
 
 volumes:
   rabbitmq-lib:
-    driver: local
+    driver: local	
   rabbitmq-log:
     driver: local
