@@ -4,12 +4,12 @@ import org.babynexign.babybilling.brtservice.dto.CallDTO;
 import org.babynexign.babybilling.brtservice.service.CDRRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-@Component
+@Configuration
 public class CDRMessageConsumer {
 
     private final CDRRecordService cdrRecordService;

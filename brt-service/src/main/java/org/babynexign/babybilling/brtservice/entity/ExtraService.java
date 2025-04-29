@@ -22,9 +22,6 @@ public class ExtraService {
     @Column(name = "s_type_id")
     private Long extraServiceId;
 
-    @Column(name = "amount_left")
-    private Long amountLeft;
-
     @Column(name = "start_date")
     private LocalDateTime startDate;
 }

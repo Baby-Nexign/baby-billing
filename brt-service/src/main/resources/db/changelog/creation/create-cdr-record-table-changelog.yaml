@@ -19,10 +19,10 @@ databaseChangeLog:
                   type: varchar(2)
               - column:
                   name: msisdn_one
-                  type: bigint
+                  type: varchar(20)
               - column:
                   name: msisdn_two
-                  type: bigint
+                  type: varchar(20)
               - column:
                   name: start_time
                   type: datetime

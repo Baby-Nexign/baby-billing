@@ -1,11 +1,16 @@
 package org.babynexign.babybilling.brtservice.service;
 
+import org.babynexign.babybilling.brtservice.dto.billing.BillingRequest;
 import org.babynexign.babybilling.brtservice.dto.CallDTO;
 import org.babynexign.babybilling.brtservice.entity.CDRRecord;
 import org.babynexign.babybilling.brtservice.entity.Person;
+import org.babynexign.babybilling.brtservice.entity.QuantService;
+import org.babynexign.babybilling.brtservice.entity.Tariff;
+import org.babynexign.babybilling.brtservice.entity.enums.QuantServiceType;
 import org.babynexign.babybilling.brtservice.entity.enums.RecordType;
 import org.babynexign.babybilling.brtservice.repository.CDRRecordRepository;
 import org.babynexign.babybilling.brtservice.repository.PersonRepository;
+import org.babynexign.babybilling.brtservice.senders.HrsSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +22,13 @@ import java.util.Optional;
 public class CDRRecordService {
     private final CDRRecordRepository cdrRecordRepository;
     private final PersonRepository personRepository;
+    private final HrsSender hrsSender;
 
     @Autowired
-    public CDRRecordService(CDRRecordRepository cdrRecordRepository, PersonRepository personRepository) {
+    public CDRRecordService(CDRRecordRepository cdrRecordRepository, PersonRepository personRepository, HrsSender hrsSender) {
         this.cdrRecordRepository = cdrRecordRepository;
         this.personRepository = personRepository;
+        this.hrsSender = hrsSender;
     }
 
     public void processCDRs(List<CallDTO> callDTOs) {
@@ -30,11 +37,14 @@ public class CDRRecordService {
         }
 
         for (CallDTO callDTO : callDTOs) {
-            saveCallRecord(callDTO);
+            CDRRecord record = saveCallRecord(callDTO);
+            if (record != null) {
+                processBilling(record);
+            }
         }
     }
 
-    public void saveCallRecord(CallDTO callDTO) {
+    private CDRRecord saveCallRecord(CallDTO callDTO) {
         RecordType recordType;
         recordType = switch (callDTO.callType()) {
             case "01" -> RecordType.OUTCOMING;
@@ -48,7 +58,7 @@ public class CDRRecordService {
         Person subscriber = firstPerson.orElse(null);
 
         if (subscriber == null) {
-            return;
+            return null;
         }
 
         Duration callDuration = null;
@@ -66,6 +76,33 @@ public class CDRRecordService {
                 .subscriber(subscriber)
                 .build();
 
-        cdrRecordRepository.save(cdrRecord);
+        return cdrRecordRepository.save(cdrRecord);
+    }
+
+    private void processBilling(CDRRecord record) {
+        QuantService quantService = record.getSubscriber().getQuantServices().stream()
+                .filter(service -> service.getServiceType() == QuantServiceType.MINUTES)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("QuantService with serviceTypeId=1 not found"));
+
+        Tariff tariff = record.getSubscriber().getTariff();
+
+        if (quantService.getAmountLeft() >= record.getDurationInMinutes()) {
+            quantService.setAmountLeft(quantService.getAmountLeft() - record.getDurationInMinutes());
+        } else {
+            Long minutesToBill = record.getDurationInMinutes() - quantService.getAmountLeft();
+
+            quantService.setAmountLeft(0L);
+
+            BillingRequest billingRequest = new BillingRequest(
+                    record.getSubscriber().getId(),
+                    tariff.getTariffId(),
+                    minutesToBill,
+                    record.getType().toString(),
+                    record.getInOneNetwork()
+            );
+
+            hrsSender.sendBillingRequest(billingRequest);
+        }
     }
 }

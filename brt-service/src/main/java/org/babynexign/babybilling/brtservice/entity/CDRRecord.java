@@ -26,10 +26,10 @@ public class CDRRecord {
     private RecordType type;
 
     @Column(name = "msisdn_one")
-    private Long firstMsisdn;
+    private String firstMsisdn;
 
     @Column(name = "msisdn_two")
-    private Long secondMsisdn;
+    private String secondMsisdn;
 
     @Column(name = "start_time")
     private LocalDateTime callStart;

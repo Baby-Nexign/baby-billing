@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-tariffs-table
+      id: create-person-tariff-table
       author: developer
       changes:
         - createTable:
-            tableName: tariffs_per_person
+            tableName: person_tariff
             ifNotExists: true
             columns:
               - column:
@@ -20,10 +20,3 @@ databaseChangeLog:
               - column:
                   name: start_date
                   type: datetime
-              - column:
-                  name: p_id
-                  type: bigint
-                  constraints:
-                    foreignKeyName: fk_tariffs_person
-                    referencedTableName: person
-                    referencedColumnNames: id

@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tariffs_per_person")
+@Table(name = "person_tariff")
 public class Tariff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @Column(name = "t_id")
     private Long tariffId;

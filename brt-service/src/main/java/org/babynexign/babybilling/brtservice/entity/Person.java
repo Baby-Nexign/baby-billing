@@ -21,10 +21,12 @@ public class Person {
 
     private String name;
 
-    private Long msisdn;
+    private String msisdn;
 
     @Column(name = "money")
     private Long balance;
+
+    private Boolean isRestricted;
 
     @Column(name = "reg_data")
     private LocalDateTime registrationDate;
@@ -34,15 +36,15 @@ public class Person {
     @OneToMany(mappedBy = "subscriber", cascade = CascadeType.ALL)
     private List<CDRRecord> records;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "p_id", referencedColumnName = "id")
     private List<QuantService> quantServices;
 
-    @OneToMany
-    @JoinColumn(name = "p_id", referencedColumnName = "id")
-    private List<Tariff> tariffs;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tariff_id", referencedColumnName = "id")
+    private Tariff tariff;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "p_id", referencedColumnName = "id")
     private List<ExtraService> extraServices;
 }

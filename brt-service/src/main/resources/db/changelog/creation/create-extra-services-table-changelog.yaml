@@ -18,9 +18,6 @@ databaseChangeLog:
                   name: s_type_id
                   type: bigint
               - column:
-                  name: amount_left
-                  type: bigint
-              - column:
                   name: start_date
                   type: datetime
               - column:

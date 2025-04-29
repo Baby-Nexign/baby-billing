@@ -16,23 +16,6 @@ services:
       - rabbitmq-lib:/var/lib/rabbitmq/
       - rabbitmq-log:/var/log/rabbitmq
 
-  commutator:
-    build:
-      context: commutator-service/
-    container_name: baby-billing-commutator
-    ports:
-      - "8080:8080"
-    environment:
-      H2_USERNAME: "su"
-      H2_PASSWORD: "password"
-      H2_URL: "jdbc:h2:mem:commutator-service"
-      RABBIT_HOST: "rabbitmq"
-      RABBIT_USERNAME: "admin"
-      RABBIT_PASSWORD: "password"
-      RABBIT_PORT: "5672"
-    depends_on:
-      - rabbitmq
-
   brt-db:
     image: postgres:latest
     container_name: brt-db
@@ -50,6 +33,43 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  brt:
+    build:
+      context: brt-service/
+    container_name: baby-billing-brt
+    ports:
+      - "8081:8081"
+    environment:
+      POSTGRES_USERNAME: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "brt"
+      RABBIT_HOST: "localhost"
+      RABBIT_USERNAME: "admin"
+      RABBIT_PASSWORD: "password"
+      RABBIT_PORT: "5672"
+    depends_on:
+      - brt-db
+      - rabbitmq
+
+  commutator:
+    build:
+      context: commutator-service/
+    container_name: baby-billing-commutator
+    ports:
+      - "8080:8080"
+    environment:
+      H2_USERNAME: "su"
+      H2_PASSWORD: "password"
+      H2_URL: "jdbc:h2:mem:commutator-service"
+      RABBIT_HOST: "rabbitmq"
+      RABBIT_USERNAME: "admin"
+      RABBIT_PASSWORD: "password"
+      RABBIT_PORT: "5672"
+    depends_on:
+      - rabbitmq
+      - brt
 
 configs:
   rabbitmq-plugins:

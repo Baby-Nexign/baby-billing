@@ -16,7 +16,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: s_type_id
-                  type: bigint
+                  type: int
               - column:
                   name: amount_left
                   type: bigint

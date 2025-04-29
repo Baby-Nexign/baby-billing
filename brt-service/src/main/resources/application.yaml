@@ -15,7 +15,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   cloud:
     function:
-      definition: cdrConsumer
+      definition: cdrConsumer;billingResponseConsumer;tariffInformationResponseConsumer
     stream:
       bindings:
         cdrConsumer-in-0:
@@ -24,6 +24,30 @@ spring:
           content-type: application/json
           consumer:
             max-attempts: 3
+        billingRequestProducer-out-0:
+          destination: billing-request-exchange
+          content-type: application/json
+        billingResponseConsumer-in-0:
+          destination: billing-response-exchange
+          group: billing-response-group
+          content-type: application/json
+          consumer:
+            max-attempts: 3
+        callRestrictionRequestProducer-out-0:
+          destination: call-restriction-request-exchange
+          content-type: application/json
+        tariffInformationResponseConsumer-in-0:
+          destination: tariff-information-response-exchange
+          group: tariff-information-response-group
+          content-type: application/json
+          consumer:
+            max-attempts: 3
+        tariffInformationRequestProducer-out-0:
+          destination: tariff-information-request-exchange
+          content-type: application/json
+        newSubscriberRequestProducer-out-0:
+          destination: new-subscriber-request-exchange
+          content-type: application/json
       rabbit:
         bindings:
           cdrConsumer-in-0:
@@ -31,11 +55,48 @@ spring:
               binding-routing-key: cdr-routing-key
               auto-bind-dlq: true
               dlq-ttl: 5000
+          billingRequestProducer-out-0:
+            producer:
+              routing-key-expression: "'billing-request-key'"
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+          billingResponseConsumer-in-0:
+            consumer:
+              binding-routing-key: billing-response-key
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+          callRestrictionRequestProducer-out-0:
+            producer:
+              routing-key-expression: "'call-restriction-request-key'"
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+          tariffInformationResponseConsumer-in-0:
+            consumer:
+              binding-routing-key: tariff-information-response-key
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+          tariffInformationRequestProducer-out-0:
+            producer:
+              routing-key-expression: "'tariff-information-request-key'"
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+          newSubscriberRequestProducer-out-0:
+            producer:
+              routing-key-expression: "'new-subscriber-request-key'"
+              auto-bind-dlq: true
+              dlq-ttl: 5000
   rabbitmq:
     host: ${RABBIT_HOST}
     port: ${RABBIT_PORT}
     username: ${RABBIT_USERNAME}
     password: ${RABBIT_PASSWORD}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+  instance:
+    prefer-ip-address: true
 
 server:
   port: 8081
