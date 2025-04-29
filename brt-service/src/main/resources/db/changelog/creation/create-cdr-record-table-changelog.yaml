@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-cdr-record-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: cdr_record
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(2)
+              - column:
+                  name: msisdn_one
+                  type: varchar(20)
+              - column:
+                  name: msisdn_two
+                  type: varchar(20)
+              - column:
+                  name: start_time
+                  type: datetime
+              - column:
+                  name: lasts
+                  type: bigint
+              - column:
+                  name: in_one_network
+                  type: boolean
+              - column:
+                  name: our_subscriber_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_cdr_record_person
+                    referencedTableName: person
+                    referencedColumnNames: id

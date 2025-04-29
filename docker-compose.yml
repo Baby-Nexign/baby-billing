@@ -15,6 +15,43 @@ services:
       - rabbitmq-lib:/var/lib/rabbitmq/
       - rabbitmq-log:/var/log/rabbitmq
 
+  brt-db:
+    image: postgres:latest
+    container_name: brt-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "brt"
+    volumes:
+      - brt-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  brt:
+    build:
+      context: brt-service/
+    container_name: baby-billing-brt
+    ports:
+      - "8081:8081"
+    environment:
+      POSTGRES_USERNAME: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "brt"
+      RABBIT_HOST: "localhost"
+      RABBIT_USERNAME: "admin"
+      RABBIT_PASSWORD: "password"
+      RABBIT_PORT: "5672"
+    depends_on:
+      - brt-db
+      - rabbitmq
+
   commutator:
     build:
       context: commutator-service/
@@ -31,10 +68,13 @@ services:
       RABBIT_PORT: "5672"         
     depends_on:
       - rabbitmq
+      - brt
 
 
 volumes:
   rabbitmq-lib:
     driver: local	
   rabbitmq-log:
+    driver: local
+  brt-data:
     driver: local

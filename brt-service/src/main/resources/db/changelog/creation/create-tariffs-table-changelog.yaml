@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-person-tariff-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: person_tariff
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: t_id
+                  type: bigint
+              - column:
+                  name: start_date
+                  type: datetime

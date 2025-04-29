@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-extra-services-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: extra_services
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: s_type_id
+                  type: bigint
+              - column:
+                  name: start_date
+                  type: datetime
+              - column:
+                  name: p_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_extra_services_person
+                    referencedTableName: person
+                    referencedColumnNames: id

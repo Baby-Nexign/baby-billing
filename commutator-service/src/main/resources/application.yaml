@@ -21,8 +21,6 @@ spring:
     username: ${RABBIT_USERNAME}
     password: ${RABBIT_PASSWORD}
   cloud:
-    config:
-      uri: http://config-server:8888
     function:
       definition: rabbitCDRSender
     stream:

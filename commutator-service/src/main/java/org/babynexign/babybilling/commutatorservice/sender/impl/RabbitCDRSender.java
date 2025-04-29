@@ -31,7 +31,7 @@ public class RabbitCDRSender implements CDRSender {
                     .map(CallDTO::fromEntity)
                     .collect(Collectors.toList());
 
-            streamBridge.send("callProducer-out-0", callDTOS);
+            streamBridge.send("rabbitCDRSender-out-0", callDTOS);
         }
     }
 }

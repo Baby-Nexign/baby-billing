@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/creation/create-person-table-changelog.yaml
+  - include:
+      file: db/changelog/creation/create-extra-services-table-changelog.yaml
+  - include:
+      file: db/changelog/creation/create-cdr-record-table-changelog.yaml
+  - include:
+      file: db/changelog/creation/create-quant-services-table-changelog.yaml
+  - include:
+      file: db/changelog/creation/create-tariffs-table-changelog.yaml

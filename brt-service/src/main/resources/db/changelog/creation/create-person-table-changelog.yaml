@@ -1,0 +1,104 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-person-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: person
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: msisdn
+                  type: varchar(20)
+              - column:
+                  name: money
+                  type: bigint
+              - column:
+                  name: is_restricted
+                  type: boolean
+              - column:
+                  name: reg_data
+                  type: datetime
+              - column:
+                  name: description
+                  type: varchar(255)
+              - column:
+                  name: tariff_id
+                  type: bigint
+  - changeSet:
+      id: insert-sample-persons
+      author: developer
+      changes:
+        - insert:
+            tableName: person
+            columns:
+              - column:
+                  name: name
+                  value: "Test1"
+              - column:
+                  name: msisdn
+                  value: "79123456789"
+              - column:
+                  name: money
+                  value: 5000
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
+              - column:
+                  name: reg_data
+                  value: "2023-01-15 10:30:00"
+              - column:
+                  name: description
+                  value: "Test1"
+        - insert:
+            tableName: person
+            columns:
+              - column:
+                  name: name
+                  value: "Test2"
+              - column:
+                  name: msisdn
+                  value: "79996667755"
+              - column:
+                  name: money
+                  value: 7500
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
+              - column:
+                  name: reg_data
+                  value: "2023-02-20 15:45:00"
+              - column:
+                  name: description
+                  value: "Test2"
+        - insert:
+            tableName: person
+            columns:
+              - column:
+                  name: name
+                  value: "Test3"
+              - column:
+                  name: msisdn
+                  value: "79334455667"
+              - column:
+                  name: money
+                  value: 3200
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
+              - column:
+                  name: reg_data
+                  value: "2023-03-10 09:15:00"
+              - column:
+                  name: description
+                  value: "Test3"
