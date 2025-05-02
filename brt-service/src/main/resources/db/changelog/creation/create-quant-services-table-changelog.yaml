@@ -27,3 +27,43 @@ databaseChangeLog:
                     foreignKeyName: fk_quant_services_person
                     referencedTableName: person
                     referencedColumnNames: id
+  - changeSet:
+      id: insert-sample-quant-services
+      author: developer
+      changes:
+        - insert:
+            tableName: quant_services
+            columns:
+              - column:
+                  name: s_type_id
+                  value: 0
+              - column:
+                  name: amount_left
+                  value: 1000
+              - column:
+                  name: p_id
+                  value: 1
+        - insert:
+            tableName: quant_services
+            columns:
+              - column:
+                  name: s_type_id
+                  value: 0
+              - column:
+                  name: amount_left
+                  value: 2000
+              - column:
+                  name: p_id
+                  value: 2
+        - insert:
+            tableName: quant_services
+            columns:
+              - column:
+                  name: s_type_id
+                  value: 0
+              - column:
+                  name: amount_left
+                  value: 100000000
+              - column:
+                  name: p_id
+                  value: 3

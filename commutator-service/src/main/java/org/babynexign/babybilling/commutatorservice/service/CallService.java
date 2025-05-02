@@ -32,6 +32,8 @@ public class CallService {
     private static final int CDR_BATCH_SIZE = 10;
     private static final int HISTORY_YEARS = 1;
 
+    private int currentHistoryYearsOffset = 0;
+
     private final SubscriberRepository subscriberRepository;
     private final CallRepository callRepository;
     private final CDRSender sender;
@@ -48,18 +50,24 @@ public class CallService {
      * Generates call detail records by creating random calls between subscribers.
      * The method uses a thread pool to generate calls in parallel while ensuring
      * subscribers are not involved in overlapping calls.
+     * Each time this method is called, the year from which generation starts
+     * is shifted by one additional year.
      *
      * @throws IllegalStateException if no subscribers are found in the database
      * @throws RuntimeException if there are errors during call generation
      */
     public void generateCDRecords() {
-        List<Subscriber> subscribers = subscriberRepository.findAll();
+        List<Subscriber> subscribers = subscriberRepository.findByIsRestrictedFalse();
         if (subscribers.isEmpty()) {
             throw new IllegalStateException("No subscribers found. Cannot generate CDR records");
         }
 
-        LocalDateTime startDate = LocalDateTime.now().minusYears(HISTORY_YEARS);
-        LocalDateTime endDate = LocalDateTime.now();
+
+        LocalDateTime startDate = LocalDateTime.now().minusYears(HISTORY_YEARS + currentHistoryYearsOffset);
+        LocalDateTime endDate = LocalDateTime.now().minusYears(currentHistoryYearsOffset);
+
+        currentHistoryYearsOffset++;
+
         int numberOfCalls = ThreadLocalRandom.current().nextInt(
                 MIN_CALLS_TO_GENERATE,
                 MAX_CALLS_TO_GENERATE + 1
@@ -175,8 +183,8 @@ public class CallService {
 
             TimeRange newCallRange = new TimeRange(callStart, callEnd);
 
-            Long lockId1 = caller.getMsisdn();
-            Long lockId2 = receiver.getMsisdn();
+            Long lockId1 = caller.getId();
+            Long lockId2 = receiver.getId();
 
             if (lockId1 > lockId2) {
                 Long temp = lockId1;
@@ -186,10 +194,10 @@ public class CallService {
 
             synchronized (getLockObject(lockId1)) {
                 synchronized (getLockObject(lockId2)) {
-                    if (isSubscriberFree(caller.getMsisdn(), newCallRange, subscriberBusyPeriods) &&
-                            isSubscriberFree(receiver.getMsisdn(), newCallRange, subscriberBusyPeriods)) {
-                        markSubscriberBusy(caller.getMsisdn(), newCallRange, subscriberBusyPeriods);
-                        markSubscriberBusy(receiver.getMsisdn(), newCallRange, subscriberBusyPeriods);
+                    if (isSubscriberFree(caller.getId(), newCallRange, subscriberBusyPeriods) &&
+                            isSubscriberFree(receiver.getId(), newCallRange, subscriberBusyPeriods)) {
+                        markSubscriberBusy(caller.getId(), newCallRange, subscriberBusyPeriods);
+                        markSubscriberBusy(receiver.getId(), newCallRange, subscriberBusyPeriods);
                         validCallFound = true;
                     }
                 }
@@ -223,17 +231,17 @@ public class CallService {
     /**
      * Checks if a subscriber is available during a specified time range.
      *
-     * @param msisdn the subscriber's MSISDN
+     * @param subscriberId the subscriber's id
      * @param newCallRange the time range to check for availability
      * @param subscriberBusyPeriods map of existing busy periods for all subscribers
      * @return true if the subscriber is available during the entire time range
      */
     private boolean isSubscriberFree(
-            Long msisdn,
+            Long subscriberId,
             TimeRange newCallRange,
             ConcurrentMap<Long, Set<TimeRange>> subscriberBusyPeriods) {
 
-        Set<TimeRange> busyPeriods = subscriberBusyPeriods.getOrDefault(msisdn, Collections.emptySet());
+        Set<TimeRange> busyPeriods = subscriberBusyPeriods.getOrDefault(subscriberId, Collections.emptySet());
 
         for (TimeRange busyRange : busyPeriods) {
             if (busyRange.overlaps(newCallRange)) {

@@ -1,9 +1,5 @@
 package org.babynexign.babybilling.commutatorservice.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.babynexign.babybilling.commutatorservice.entity.Call;
 
 import java.io.Serializable;
@@ -12,8 +8,8 @@ import java.time.LocalDateTime;
 public record CallDTO(
         Long id,
         String callType,
-        Long callingSubscriberMsisdn,
-        Long receivingSubscriberMsisdn,
+        String firstSubscriberMsisdn,
+        String secondSubscriberMsisdn,
         LocalDateTime callStart,
         LocalDateTime callEnd
 ) implements Serializable {

@@ -1,7 +1,6 @@
 package org.babynexign.babybilling.commutatorservice.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +13,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Subscriber {
     @Id
-    private Long msisdn;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String msisdn;
+
+    private Boolean isRestricted;
 }

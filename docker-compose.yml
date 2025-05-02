@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   rabbitmq:
     image: rabbitmq:4-management
@@ -14,6 +12,14 @@ services:
     volumes:
       - rabbitmq-lib:/var/lib/rabbitmq/
       - rabbitmq-log:/var/log/rabbitmq
+
+  eureka:
+    build:
+      context: eureka-server/
+    container_name: eureka
+    restart: always
+    ports:
+      - "8761:8761"
 
   brt-db:
     image: postgres:latest
@@ -44,13 +50,14 @@ services:
       POSTGRES_PASSWORD: "postgres"
       POSTGRES_PORT: "5432"
       POSTGRES_DB: "brt"
-      RABBIT_HOST: "localhost"
+      RABBIT_HOST: "brt-db"
       RABBIT_USERNAME: "admin"
       RABBIT_PASSWORD: "password"
       RABBIT_PORT: "5672"
     depends_on:
       - brt-db
       - rabbitmq
+      - eureka
 
   commutator:
     build:

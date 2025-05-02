@@ -24,11 +24,9 @@ public class Call {
     private CallType callType;
 
     @ManyToOne
-    @JoinColumn(name = "calling_subscriber_msisdn")
     private Subscriber callingSubscriber;
 
     @ManyToOne
-    @JoinColumn(name = "receiving_subscriber_msisdn")
     private Subscriber receivingSubscriber;
 
     private LocalDateTime callStart;
