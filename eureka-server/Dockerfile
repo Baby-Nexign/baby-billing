@@ -21,6 +21,6 @@ RUN chown -R springuser:springgroup /app
 
 USER springuser
 
-EXPOSE 8080
+EXPOSE 8761
 
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

@@ -19,19 +19,19 @@
                     constraints:
                       nullable: false
                 - column:
-                    name: calling_subscriber_msisdn
+                    name: calling_subscriber_id
                     type: bigint
                     constraints:
                       nullable: false
                       foreignKeyName: fk_call_calling_subscriber
-                      references: subscriber(msisdn)
+                      references: subscriber(id)
                 - column:
-                    name: receiving_subscriber_msisdn
+                    name: receiving_subscriber_id
                     type: bigint
                     constraints:
                       nullable: false
                       foreignKeyName: fk_call_receiving_subscriber
-                      references: subscriber(msisdn)
+                      references: subscriber(id)
                 - column:
                     name: call_start
                     type: datetime
@@ -47,10 +47,10 @@
               tableName: call
               columns:
                 - column:
-                    name: calling_subscriber_msisdn
+                    name: calling_subscriber_id
           - createIndex:
               indexName: idx_call_receiving_subscriber
               tableName: call
               columns:
                 - column:
-                    name: receiving_subscriber_msisdn
+                    name: receiving_subscriber_id

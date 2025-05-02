@@ -7,10 +7,23 @@ databaseChangeLog:
             tableName: subscriber
             columns:
               - column:
-                  name: msisdn
-                  type: BIGINT
+                  name: id
+                  type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
+                    nullable: false
+              - column:
+                  name: msisdn
+                  type: varchar(20)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: is_restricted
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
                     nullable: false
   - changeSet:
       id: insert-sample-subscribers
@@ -21,118 +34,178 @@ databaseChangeLog:
             columns:
               - column:
                   name: msisdn
-                  value: 79876543221
+                  value: "79876543221"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79123456789
+                  value: "79123456789"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79996667755
+                  value: "79996667755"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79012345678
+                  value: "79012345678"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79234567890
+                  value: "79234567890"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79345678901
+                  value: "79345678901"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79456789012
+                  value: "79456789012"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79567890123
+                  value: "79567890123"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79678901234
+                  value: "79678901234"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79789012345
+                  value: "79789012345"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79890123456
+                  value: "79890123456"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79901234567
+                  value: "79901234567"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79112233445
+                  value: "79112233445"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79223344556
+                  value: "79223344556"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79334455667
+                  value: "79334455667"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79445566778
+                  value: "79445566778"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79556677889
+                  value: "79556677889"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79667788990
+                  value: "79667788990"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79778899001
+                  value: "79778899001"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
         - insert:
             tableName: subscriber
             columns:
               - column:
                   name: msisdn
-                  value: 79889900112
+                  value: "79889900112"
+              - column:
+                  name: is_restricted
+                  valueBoolean: false

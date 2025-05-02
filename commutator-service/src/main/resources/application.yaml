@@ -22,18 +22,38 @@ spring:
     password: ${RABBIT_PASSWORD}
   cloud:
     function:
-      definition: rabbitCDRSender
+      definition: rabbitCDRSender;callRestrictionRequestConsumer;newSubscriberRequestConsumer
     stream:
       bindings:
         rabbitCDRSender-out-0:
           destination: cdr-exchange
           content-type: application/json
-          producer:
-            required-groups: brt-group
+        callRestrictionRequestConsumer-in-0:
+          destination: call-restriction-request-exchange
+          content-type: application/json
+          group: call-restriction-group
+          consumer:
+            max-attempts: 3
+        newSubscriberRequestConsumer-in-0:
+          destination: new-subscriber-request-exchange
+          content-type: application/json
+          group: new-subscriber-group
+          consumer:
+            max-attempts: 3
       rabbit:
         bindings:
           rabbitCDRSender-out-0:
             producer:
               routing-key-expression: '"cdr-routing-key"'
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+          callRestrictionRequestConsumer-in-0:
+            consumer:
+              binding-routing-key: call-restriction-request-key
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+          newSubscriberRequestConsumer-in-0:
+            consumer:
+              binding-routing-key: new-subscriber-request-key
               auto-bind-dlq: true
               dlq-ttl: 5000

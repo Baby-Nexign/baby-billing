@@ -13,6 +13,7 @@ import org.babynexign.babybilling.brtservice.repository.PersonRepository;
 import org.babynexign.babybilling.brtservice.senders.HrsSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.List;
@@ -31,6 +32,7 @@ public class CDRRecordService {
         this.hrsSender = hrsSender;
     }
 
+    @Transactional
     public void processCDRs(List<CallDTO> callDTOs) {
         if (callDTOs == null || callDTOs.isEmpty()) {
             return;

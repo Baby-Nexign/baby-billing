@@ -35,6 +35,9 @@ databaseChangeLog:
               - column:
                   name: tariff_id
                   type: bigint
+                  constraints:
+                    foreignKeyName: fk_person_tariff
+                    references: person_tariff(id)
   - changeSet:
       id: insert-sample-persons
       author: developer
@@ -60,6 +63,9 @@ databaseChangeLog:
               - column:
                   name: description
                   value: "Test1"
+              - column:
+                  name: tariff_id
+                  value: 1
         - insert:
             tableName: person
             columns:
@@ -81,6 +87,9 @@ databaseChangeLog:
               - column:
                   name: description
                   value: "Test2"
+              - column:
+                  name: tariff_id
+                  value: 1
         - insert:
             tableName: person
             columns:
@@ -102,3 +111,6 @@ databaseChangeLog:
               - column:
                   name: description
                   value: "Test3"
+              - column:
+                  name: tariff_id
+                  value: 1
