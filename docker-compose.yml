@@ -48,12 +48,15 @@ services:
     environment:
       POSTGRES_USERNAME: "postgres"
       POSTGRES_PASSWORD: "postgres"
-      POSTGRES_PORT: "5432"
+      POSTGRES_HOST: "brt-db"
+      POSTGRES_PORT: 5432
       POSTGRES_DB: "brt"
-      RABBIT_HOST: "brt-db"
+      RABBIT_HOST: "rabbitmq"
       RABBIT_USERNAME: "admin"
       RABBIT_PASSWORD: "password"
-      RABBIT_PORT: "5672"
+      RABBIT_PORT: 5672
+      EUREKA_HOST: "eureka"
+      EUREKA_PORT: 8761
     depends_on:
       - brt-db
       - rabbitmq
@@ -76,7 +79,6 @@ services:
     depends_on:
       - rabbitmq
       - brt
-
 
 volumes:
   rabbitmq-lib:
