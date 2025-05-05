@@ -1,0 +1,70 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-services-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: services
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: service_type_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_service_type
+                    references: services_types(id)
+              - column:
+                  name: is_quantitative
+                  type: boolean
+              - column:
+                  name: start_date
+                  type: timestamp
+              - column:
+                  name: av_date
+                  type: timestamp
+              - column:
+                  name: ac_end_date
+                  type: timestamp
+              - column:
+                  name: amount
+                  type: bigint
+              - column:
+                  name: description
+                  type: varchar(255)
+  - changeSet:
+      id: insert-services-data
+      author: developer
+      changes:
+        - insert:
+            tableName: services
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "50 минут"
+              - column:
+                  name: service_type_id
+                  value: 1
+              - column:
+                  name: is_quantitative
+                  valueBoolean: true
+              - column:
+                  name: start_date
+                  valueDate: "CURRENT_TIMESTAMP()"
+              - column:
+                  name: amount
+                  value: 50
+              - column:
+                  name: description
+                  value: "50 минут входящие и исходящие"

@@ -1,0 +1,109 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-telecom_prices-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: telecom_prices
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: telecom_type_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_telecom_price_type
+                    references: telecom_types(id)
+              - column:
+                  name: in_our_network
+                  type: boolean
+              - column:
+                  name: telecom_data_type_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_telecom_price_data_type
+                    references: telecom_data_types(id)
+              - column:
+                  name: cost
+                  type: bigint
+  - changeSet:
+      id: insert-telecom_prices-data
+      author: developer
+      changes:
+        - insert:
+            tableName: telecom_prices
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: telecom_type_id
+                  value: 1
+              - column:
+                  name: in_our_network
+                  valueBoolean: true
+              - column:
+                  name: telecom_data_type_id
+                  value: 1
+              - column:
+                  name: cost
+                  value: 15
+        - insert:
+            tableName: telecom_prices
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: telecom_type_id
+                  value: 1
+              - column:
+                  name: in_our_network
+                  valueBoolean: false
+              - column:
+                  name: telecom_data_type_id
+                  value: 1
+              - column:
+                  name: cost
+                  value: 25
+        - insert:
+            tableName: telecom_prices
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: telecom_type_id
+                  value: 2
+              - column:
+                  name: in_our_network
+                  valueBoolean: true
+              - column:
+                  name: telecom_data_type_id
+                  value: 1
+              - column:
+                  name: cost
+                  value: 0
+        - insert:
+            tableName: telecom_prices
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: telecom_type_id
+                  value: 2
+              - column:
+                  name: in_our_network
+                  valueBoolean: false
+              - column:
+                  name: telecom_data_type_id
+                  value: 1
+              - column:
+                  name: cost
+                  value: 0

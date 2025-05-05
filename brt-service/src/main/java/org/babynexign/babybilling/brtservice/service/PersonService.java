@@ -53,7 +53,7 @@ public class PersonService {
 
     public PersonDTO createPerson(CreatePersonRequest createPersonRequest) {
         Tariff baseTariff = Tariff.builder()
-                .tariffId(1L)
+                .tariffId(11L)
                 .startDate(LocalDateTime.now())
                 .build();
 
@@ -104,13 +104,17 @@ public class PersonService {
 
         subscriber.setQuantServices(newQuantServices);
         subscriber.setExtraServices(newExtraServices);
-        subscriber.setTariff(Tariff.builder().tariffId(tariffInformationResponse.tariffId()).startDate(LocalDateTime.now()).build());
+
+        Tariff newTariff = subscriber.getTariff();
+        newTariff.setTariffId(tariffInformationResponse.tariffId());
+        newTariff.setStartDate(LocalDateTime.now());
+        subscriber.setTariff(newTariff);
 
         personRepository.save(subscriber);
     }
 
-    public void replenishBalance(Long personMsisdn, Long money) {
-        Person subscriber = personRepository.findById(personMsisdn)
+    public void replenishBalance(String personMsisdn, Long money) {
+        Person subscriber = personRepository.findByMsisdn(personMsisdn)
                 .orElseThrow(() -> new EntityNotFoundException("Person with id " + personMsisdn + " not found"));
 
         if (subscriber.getBalance() < 0 && subscriber.getBalance() + money >= 0){

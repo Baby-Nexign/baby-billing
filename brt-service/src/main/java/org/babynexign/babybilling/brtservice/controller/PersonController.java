@@ -33,7 +33,7 @@ public class PersonController {
 
     @PutMapping("/{msisdn}/balance")
     public ResponseEntity<Void> replenishBalance(
-            @PathVariable("msisdn") Long msisdn,
+            @PathVariable("msisdn") String msisdn,
             @RequestParam("money") Long money) {
         personService.replenishBalance(msisdn, money);
         return ResponseEntity.ok().build();
