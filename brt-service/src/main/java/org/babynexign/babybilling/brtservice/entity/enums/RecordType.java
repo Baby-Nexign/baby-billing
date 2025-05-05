@@ -12,9 +12,4 @@ public enum RecordType {
     RecordType(String index) {
         this.index = index;
     }
-
-    @Override
-    public String toString() {
-        return this.getIndex();
-    }
 }

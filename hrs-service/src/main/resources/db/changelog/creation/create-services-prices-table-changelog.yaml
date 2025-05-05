@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-services_prices-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: services_prices
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: period
+                  type: bigint
+              - column:
+                  name: cost
+                  type: bigint

@@ -1,0 +1,96 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tariffs_telecom_prices-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: tariffs_telecom_prices
+            columns:
+              - column:
+                  name: tariff_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_tariff_telecom_price_tariff
+                    references: tariffs(id)
+              - column:
+                  name: telecom_prices_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_tariff_telecom_price_price
+                    references: telecom_prices(id)
+  - changeSet:
+      id: insert-tariffs_telecom_prices-data
+      author: developer
+      changes:
+        - insert:
+            tableName: tariffs_telecom_prices
+            columns:
+              - column:
+                  name: tariff_id
+                  value: 11
+              - column:
+                  name: telecom_prices_id
+                  value: 1
+        - insert:
+            tableName: tariffs_telecom_prices
+            columns:
+              - column:
+                  name: tariff_id
+                  value: 11
+              - column:
+                  name: telecom_prices_id
+                  value: 2
+        - insert:
+            tableName: tariffs_telecom_prices
+            columns:
+              - column:
+                  name: tariff_id
+                  value: 11
+              - column:
+                  name: telecom_prices_id
+                  value: 3
+        - insert:
+            tableName: tariffs_telecom_prices
+            columns:
+              - column:
+                  name: tariff_id
+                  value: 11
+              - column:
+                  name: telecom_prices_id
+                  value: 4
+        - insert:
+            tableName: tariffs_telecom_prices
+            columns:
+              - column:
+                  name: tariff_id
+                  value: 12
+              - column:
+                  name: telecom_prices_id
+                  value: 1
+        - insert:
+            tableName: tariffs_telecom_prices
+            columns:
+              - column:
+                  name: tariff_id
+                  value: 12
+              - column:
+                  name: telecom_prices_id
+                  value: 2
+        - insert:
+            tableName: tariffs_telecom_prices
+            columns:
+              - column:
+                  name: tariff_id
+                  value: 12
+              - column:
+                  name: telecom_prices_id
+                  value: 3
+        - insert:
+            tableName: tariffs_telecom_prices
+            columns:
+              - column:
+                  name: tariff_id
+                  value: 12
+              - column:
+                  name: telecom_prices_id
+                  value: 4

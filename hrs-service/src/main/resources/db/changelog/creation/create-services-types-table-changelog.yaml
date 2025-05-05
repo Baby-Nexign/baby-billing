@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-services_types-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: services_types
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: insert-services_types-data
+      author: developer
+      changes:
+        - insert:
+            tableName: services_types
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: MINUTES

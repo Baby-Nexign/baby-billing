@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tariffs_services-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: tariffs_services
+            columns:
+              - column:
+                  name: tariff_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_tariff_service_tariff
+                    references: tariffs(id)
+              - column:
+                  name: services_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_tariff_service_service
+                    references: services(id)
+  - changeSet:
+      id: insert-tariffs_services-data
+      author: developer
+      changes:
+        - insert:
+            tableName: tariffs_services
+            columns:
+              - column:
+                  name: tariff_id
+                  value: 12
+              - column:
+                  name: services_id
+                  value: 1

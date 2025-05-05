@@ -1,0 +1,75 @@
+spring:
+  application:
+    name: hrs-service
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    driverClassName: org.postgresql.Driver
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  cloud:
+    function:
+      definition: billingRequestConsumer;tariffInformationRequestConsumer
+    stream:
+      bindings:
+        billingRequestConsumer-in-0:
+          destination: billing-request-exchange
+          group: billing-request-group
+          content-type: application/json
+          consumer:
+            max-attempts: 3
+        billingResponseProducer-out-0:
+          destination: billing-response-exchange
+          content-type: application/json
+        tariffInformationResponseProducer-out-0:
+          destination: tariff-information-response-exchange
+          content-type: application/json
+        tariffInformationRequestConsumer-in-0:
+          destination: tariff-information-request-exchange
+          group: tariff-information-request-group
+          content-type: application/json
+          consumer:
+            max-attempts: 3
+      rabbit:
+        bindings:
+          billingResponseProducer-out-0:
+            producer:
+              routing-key-expression: "'billing-response-key'"
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+          billingRequestConsumer-in-0:
+            consumer:
+              binding-routing-key: billing-request-key
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+          tariffInformationRequestConsumer-in-0:
+            consumer:
+              binding-routing-key: tariff-information-request-key
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+          tariffInformationResponseProducer-out-0:
+            producer:
+              routing-key-expression: "'tariff-information-response-key'"
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+  rabbitmq:
+    host: ${RABBIT_HOST}
+    port: ${RABBIT_PORT}
+    username: ${RABBIT_USERNAME}
+    password: ${RABBIT_PASSWORD}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_HOST}:${EUREKA_PORT}/eureka/
+  instance:
+    prefer-ip-address: true
+
+server:
+  port: 8082

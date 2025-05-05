@@ -5,7 +5,7 @@ services:
     restart: always
     ports:
       - "5672:5672"
-      - "15672:15672" 
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: "admin"
       RABBITMQ_DEFAULT_PASS: "password"
@@ -20,6 +20,47 @@ services:
     restart: always
     ports:
       - "8761:8761"
+
+  hrs-db:
+    image: postgres:latest
+    container_name: hrs-db
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "hrs"
+    volumes:
+      - hrs-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  hrs:
+    build:
+      context: hrs-service/
+    container_name: baby-billing-hrs
+    ports:
+      - "8082:8082"
+    environment:
+      POSTGRES_USERNAME: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_HOST: "hrs-db"
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: "hrs"
+      RABBIT_HOST: "rabbitmq"
+      RABBIT_USERNAME: "admin"
+      RABBIT_PASSWORD: "password"
+      RABBIT_PORT: 5672
+      EUREKA_HOST: "eureka"
+      EUREKA_PORT: 8761
+    depends_on:
+      - hrs-db
+      - rabbitmq
+      - eureka
 
   brt-db:
     image: postgres:latest
@@ -72,18 +113,20 @@ services:
       H2_USERNAME: "su"
       H2_PASSWORD: "password"
       H2_URL: "jdbc:h2:mem:commutator-service"
-      RABBIT_HOST: "rabbitmq"     
+      RABBIT_HOST: "rabbitmq"
       RABBIT_USERNAME: "admin"
       RABBIT_PASSWORD: "password"
-      RABBIT_PORT: "5672"         
+      RABBIT_PORT: "5672"
     depends_on:
       - rabbitmq
       - brt
 
 volumes:
   rabbitmq-lib:
-    driver: local	
+    driver: local
   rabbitmq-log:
     driver: local
   brt-data:
+    driver: local
+  hrs-data:
     driver: local
