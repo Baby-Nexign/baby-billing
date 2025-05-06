@@ -8,7 +8,7 @@
 
 1.  **Клонируйте репозиторий `baby-billing`**:
     ```bash
-    git clone https://github.com/Baby-Nexign/baby-billing.git
+    git clone -b feature/brt-tests --single-branch https://github.com/Baby-Nexign/baby-billing.git
     cd baby-billing
     ```
 
@@ -23,9 +23,8 @@
 
 После успешного запуска сервисов `baby-billing`:
 
-1.  **Клонируйте репозиторий с тестами** 
+1.  **Перейдит в репозиторий с тестами** 
     ```bash
-    git clone https://github.com/imenov06/brt-cdr-tests.git
     cd brt-cdr-tests 
     ```
 
