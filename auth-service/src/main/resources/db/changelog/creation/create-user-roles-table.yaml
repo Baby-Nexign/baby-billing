@@ -1,0 +1,68 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user-roles-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_roles_user_id
+                    referencedTableName: users
+                    referencedColumnNames: id
+              - column:
+                  name: roles_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_roles_role_id
+                    referencedTableName: roles
+                    referencedColumnNames: id
+        - addPrimaryKey:
+            tableName: users_roles
+            columnNames: user_id, roles_id
+            constraintName: pk_user_roles
+  - changeSet:
+      id: assign-user-roles
+      author: developer
+      changes:
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: roles_id
+                  value: 1
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: roles_id
+                  value: 1
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 3
+              - column:
+                  name: roles_id
+                  value: 1
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 4
+              - column:
+                  name: roles_id
+                  value: 2

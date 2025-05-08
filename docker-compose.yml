@@ -117,9 +117,68 @@ services:
       RABBIT_USERNAME: "admin"
       RABBIT_PASSWORD: "password"
       RABBIT_PORT: "5672"
+      EUREKA_HOST: "eureka"
+      EUREKA_PORT: 8761
     depends_on:
       - rabbitmq
       - brt
+
+  auth-db:
+    image: postgres:latest
+    container_name: auth-db
+    restart: always
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "auth"
+    volumes:
+      - auth-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth:
+    build:
+      context: auth-service/
+    container_name: baby-billing-auth
+    ports:
+      - "8083:8083"
+    environment:
+      POSTGRES_USERNAME: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_HOST: "auth-db"
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: "auth"
+      EUREKA_HOST: "eureka"
+      EUREKA_PORT: 8761
+      JWT_SECRET: "2fa00d1905cc63f6c9eb97d461f721f1949484bbf14ce0c7c96d7d3e149af276c27641c004c3fb67cfed4ed1d2a8f740785204920cfff1a7651faa7a6439a38de955d6544f5c6e8a5f8e2ffa863e56b0af2743dfe25d52047ac508fd2d59a03940ef9e365912fa79619ac0ba9fae934047ff8d6ccdc828750cfbe7e7fc78498e9b19dd50d6dbabe964e40a7750440bff02b63268ac2147c04af279df9d024a6a7109b8363baf5b16be588b9f88b31208c76cd9a8b0fd921fd283f3d6a495c2250f2f65632973d503df186df27d14bc9b67747cc1613a5a80fba5c0e4c12ee2c40a16a27e5249515dd8f46d416054dc007925693ade79297077ba7c6da80cf928"
+      JWT_EXPIRATION: 86400000
+      JWT_REFRESH_EXPIRATION: 604800000
+    depends_on:
+      - auth-db
+      - eureka
+      - brt
+
+  crm:
+    build:
+      context: crm-service/
+    container_name: baby-billing-crm
+    ports:
+      - "8084:8084"
+    environment:
+      EUREKA_HOST: "eureka"
+      EUREKA_PORT: 8761
+      JWT_SECRET: "2fa00d1905cc63f6c9eb97d461f721f1949484bbf14ce0c7c96d7d3e149af276c27641c004c3fb67cfed4ed1d2a8f740785204920cfff1a7651faa7a6439a38de955d6544f5c6e8a5f8e2ffa863e56b0af2743dfe25d52047ac508fd2d59a03940ef9e365912fa79619ac0ba9fae934047ff8d6ccdc828750cfbe7e7fc78498e9b19dd50d6dbabe964e40a7750440bff02b63268ac2147c04af279df9d024a6a7109b8363baf5b16be588b9f88b31208c76cd9a8b0fd921fd283f3d6a495c2250f2f65632973d503df186df27d14bc9b67747cc1613a5a80fba5c0e4c12ee2c40a16a27e5249515dd8f46d416054dc007925693ade79297077ba7c6da80cf928"
+    depends_on:
+      - eureka
+      - brt
+      - commutator
+      - hrs
+      - auth
 
 volumes:
   rabbitmq-lib:
@@ -129,4 +188,6 @@ volumes:
   brt-data:
     driver: local
   hrs-data:
+    driver: local
+  auth-data:
     driver: local
