@@ -1,0 +1,86 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-users-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(255)
+              - column:
+                  name: msisdn
+                  type: varchar(20)
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: users
+            columnNames: username
+            constraintName: uk_username
+        - addUniqueConstraint:
+            tableName: users
+            columnNames: msisdn
+            constraintName: uk_msisdn
+  - changeSet:
+      id: insert-users
+      author: developer
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: msisdn
+                  value: "79123456789"
+              - column:
+                  name: password
+                  value: "$2a$10$o5O4PZAx7e6okhmUFI0i5ukkpipKzN7GGv//madMkVxnJ2BeWgwqW"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: msisdn
+                  value: "79996667755"
+              - column:
+                  name: password
+                  value: "$2a$10$SkUu9LfonZXQVk60w/fOAuIpMc6ZziOf952k5RNaS8kIEYJmm6TRS"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: msisdn
+                  value: "79334455667"
+              - column:
+                  name: password
+                  value: "$2a$10$Vweg8NPx/N4N49ZXf6VCne8.83zNp85Usk/Pp8lRIDB5EZEjl6l22"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: username
+                  value: "admin"
+              - column:
+                  name: password
+                  value: "$2a$10$2OsuCxaFNinM2i/fcvR3wujKoioBEf4o6jnWtoz0JfqKQ.4Y35Tf."
