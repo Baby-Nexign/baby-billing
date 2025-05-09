@@ -20,16 +20,17 @@
 Следующие шаги описывают общий процесс установки и запуска тестов. Для каждого набора тестов (cdr_generator, brt_test_cdr, e2e_tests) шаги по переходу в директорию, созданию окружения и установке зависимостей будут схожими, но выполняться в соответствующей поддиректории `auto-tests`.
 
 1.  **Клонируйте репозиторий `baby-billing`**:
+    ```
     git clone -b autotests --single-branch https://github.com/Baby-Nexign/baby-billing.git
     cd baby-billing
     ```
 
-2.  **Запустите сервисы `baby-billing` с помощью Docker Compose**:
+3.  **Запустите сервисы `baby-billing` с помощью Docker Compose**:
     В корневой директории проекта `baby-billing` выполните команду:
     ```bash
     docker compose up -d
     ```
-3.  **Настройка и запуск конкретного набора тестов**:
+4.  **Настройка и запуск конкретного набора тестов**:
 
     Вам нужно будет перейти в директорию соответствующего набора тестов внутри `auto-tests` (например, `auto-tests/cdr_generator`, `auto-tests/brt_test_cdr` или `auto-tests/e2e_tests`).
 
