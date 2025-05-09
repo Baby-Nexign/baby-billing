@@ -1,0 +1,10 @@
+{"callType": "01", "firstSubscriberMsisdn": "79881112233", "secondSubscriberMsisdn": "79551112233", "callStart": "2024-05-24T09:00:00", "callEnd": "2024-05-24T09:05:00"}
+{"callType": "02", "firstSubscriberMsisdn": "79882223344", "secondSubscriberMsisdn": "79552223344", "callStart": "2024-05-24T09:10:00", "callEnd": "2024-05-24T09:12:00"}
+{"callType": "01", "firstSubscriberMsisdn": "79883334455", "secondSubscriberMsisdn": "79553334455", "callStart": "2024-05-24T09:20:00", "callEnd": "2024-05-24T09:28:30"}
+{"callType": "01", "firstSubscriberMsisdn": "79884445566", "secondSubscriberMsisdn": "79554445566", "callStart": "2024-05-24T09:30:00", "callEnd": "2024-05-24T09:31:15"}
+{"callType": "02", "firstSubscriberMsisdn": "79885556677", "secondSubscriberMsisdn": "79555556677", "callStart": "2024-05-24T09:40:00", "callEnd": "2024-05-24T09:45:00"}
+{"callType": "01", "firstSubscriberMsisdn": "79886667788", "secondSubscriberMsisdn": "79556667788", "callStart": "2024-05-24T09:50:00", "callEnd": "2024-05-24T09:59:59"}
+{"callType": "01", "firstSubscriberMsisdn": "79887778899", "secondSubscriberMsisdn": "79557778899", "callStart": "2024-05-24T10:00:00", "callEnd": "2024-05-24T10:00:30"}
+{"callType": "02", "firstSubscriberMsisdn": "79888889900", "secondSubscriberMsisdn": "79558889900", "callStart": "2024-05-24T10:10:00", "callEnd": "2024-05-24T10:15:00"}
+{"callType": "01", "firstSubscriberMsisdn": "79889990011", "secondSubscriberMsisdn": "79559990011", "callStart": "2024-05-24T10:20:00", "callEnd": "2024-05-24T10:22:22"}
+{"callType": "01", "firstSubscriberMsisdn": "79880001122", "secondSubscriberMsisdn": "79550001122", "callStart": "2024-05-24T10:30:00", "callEnd": "2024-05-24T10:40:00"}
