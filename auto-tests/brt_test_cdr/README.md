@@ -1,39 +1,46 @@
 # Тестирование BRT-сервиса: обработка CDR
 
 Данный репозиторий содержит набор интеграционных тестов для сервиса BRT, являющегося частью системы `baby-billing`. Основная задача тестов — проверка корректности обработки CDR (Call Detail Record) файлов, которые сервис BRT получает через RabbitMQ и сохраняет в PostgreSQL.
-## Зависимости
-Для установки проекта и запуска тестов убедитесь, что на вашем компьютере установлены:
 
-* **Python**: версия 3.9 или выше.
-* **Docker** 
-* **Docker Compose**
-* **Git**.
-## Установка
-1.  **Клонируйте векту `feature/brt-tests` репозитории `baby-billing`**:
-    ```bash
-    git clone -b feature/brt-tests --single-branch https://github.com/Baby-Nexign/baby-billing.git
-    cd baby-billing
-    ```
-2.  **Запустите сервисы `baby-billing` с помощью Docker Compose**:
-    В корневой директории проекта `baby-billing` выполните команду:
-    ```bash
-    docker compose up -d #docker-compose up -d на Windows
-    ```
- 3. **Перейдит в репозиторий с тестами** 
-    ```bash
-    cd brt_cdr_tests 
-    ```
-4. **Создайте и активируйте виртуальное окружение**:
-    ```bash
-    python -m venv .venv
-    source .venv/bin/activate  # для Linux/MacOS
-    # .venv\Scripts\activate    # для Windows
-    ```
-5. **Установите зависимости Python**:
-    ```bash
-    pip install -r requirements.txt
-    ```
-## Структура тестового проекта
+## Установка и первоначальная настройка
+
+Для подготовки окружения и установки зависимостей выполните следующие шаги. Более подробное руководство в главном README файле ветки `autotests`
+
+```bash
+# 1. Клонируйте ветку autotests репозитория baby-billing (если еще не сделали)
+git clone -b autotests --single-branch https://github.com/Baby-Nexign/baby-billing.git
+cd baby-billing
+
+# 2. Запустите все сервисы baby-billing с помощью Docker Compose
+# (выполнять из корневой директории baby-billing)
+docker compose up -d
+
+# 3. Перейдите в директорию тестов brt_test_cdr
+cd auto-tests/brt_test_cdr
+
+# 4. Создайте и активируйте виртуальное окружение Python
+python -m venv .venv
+# Для Linux/MacOS:
+source .venv/bin/activate
+# Для Windows:
+# .venv\Scripts\activate
+
+# 5. Установите зависимости Python для тестов BRT
+pip install -r requirements.txt
+```
+
+## Запуск тестов BRT
+Для запуска всех тестов BRT с подробным выводом:
+```bash
+pytest -v
+```
+
+Для запуска тестов из конкретного файла:
+```bash
+pytest -v tests/test_positive_scenarios.py
+```
+
+## Структура тестового проекта `brt_test_cdr`
 
 ```
 brt_test_cdr/
@@ -59,24 +66,9 @@ brt_test_cdr/
 ├── .env                          # Конфигурация окружения
 ├── cdr_reader.py                 # Модуль для чтения и парсинга CDR-файлов
 ├── config.py                     # Загрузка конфигурации тестов из .env
-├── db_checker.py                 # Утилиты для взаимодействия с БД PostgreSQL (очистка, проверки, подготовка абонентов)
+├── db_checker.py                 # Утилиты для взаимодействия с БД PostgreSQL
 ├── rabbitmq_sender.py            # Модуль для отправки сообщений CDR в RabbitMQ
 └── requirements.txt              # Зависимости Python для тестового проекта
-```
-
-## Запуск тестов
-
-Убедитесь, что все сервисы `baby-billing` запущены (см. "Предварительная настройка").
-Из корневой директории `brt_test_cdr` выполните:
-
-Для запуска всех тестов с подробным выводом:
-```bash
-pytest -v
-```
-
-Для запуска тестов из конкретного файла:
-```bash
-pytest -v tests/test_positive_scenarios.py
 ```
 
 ## Описание тестовых сценариев
@@ -92,7 +84,7 @@ pytest -v tests/test_positive_scenarios.py
    - **Невалидный MSISDN второго абонента (`test_invalid_second_msisdn.py`)**:
      - **`test_brt_rejects_cdr_with_invalid_format_second_msisdn`**: Проверяет отбраковку CDR, если `secondSubscriberMsisdn` имеет неверный формат (например, слишком короткий, содержит нецифровые символы). Используется `test_data/invalid_format_second_msisdn.jsonl`.
    - **Невалидные даты (`test_invalid_date.py`)**:
-     - **`test_brt_rejects_cdr_with_invalid_date_formats`**: Гарантирует, что CDR с некорректным форматом или нелогичным значением для полей `callStart` или `callEnd` (например, "2023-13-01T10:00:00Z", "не_дата") из `test_data/invalid_dates.jsonl` не сохраняются.
+     - **`test_brt_rejects_cdr_with_invalid_date_formats`**: Гарантирует, что CDR с некорректным форматом или нелогичным значением для полей `callStart` или `callEnd` (например, "2023-13-01T10:00:00Z", "не\_дата") из `test_data/invalid_dates.jsonl` не сохраняются.
    - **Время окончания раньше времени начала (`test_start_after_end.py`)**:
      - **`test_no_invalid_cdr_inserted_when_end_before_start`**: Проверяет, что CDR, у которых `callEnd` предшествует `callStart` (файл `test_data/end_before_start.jsonl`), не добавляются в `cdr_record`.
 
@@ -115,12 +107,3 @@ pytest -v tests/test_positive_scenarios.py
 3.  **Отправка CDR**: Сформированный список CDR-записей отправляется в RabbitMQ (в определенный `exchange` и `routing_key`, указанные в `.env`) с помощью модуля `rabbitmq_sender.py`.
 4.  **Обработка сервисом BRT**: Запущенный сервис `brt-service` (из основного проекта `baby-billing`) прослушивает очередь RabbitMQ, забирает сообщения с CDR и обрабатывает их согласно своей бизнес-логике.
 5.  **Проверка результатов**: После отправки CDR и предоставления сервису BRT некоторого времени на обработку (через `time.sleep()`), тесты используют `db_checker.py` для подключения к PostgreSQL и проверки содержимого таблицы `cdr_record`. Проверки могут включать количество созданных записей, значения определенных полей и т.д., чтобы убедиться, что обработка прошла корректно и в соответствии с ожиданиями.
-
-## Требования к тестируемому сервису BRT
-
-Данный набор тестов предполагает, что сервис BRT спроектирован для выполнения следующих функций:
-
-1.  **Отбраковка невалидных CDR**: Не должен сохранять CDR с некорректными форматами дат, невалидными MSISDN, или если дата окончания звонка предшествует дате начала.
-2.  **Обработка только валидных форматов**: Должен корректно парсить и обрабатывать CDR, соответствующие ожидаемому JSON-формату.
-3.  **Поддержка типов звонков**: Должен распознавать и обрабатывать по крайней мере типы звонков "01" (исходящий) и "02" (входящий). CDR с другими или отсутствующими типами должны отбраковываться.
-4.  **Обработка абонентов BRT**: Должен обрабатывать и сохранять информацию о звонках, где хотя бы один из абонентов (идентифицируемый по `firstSubscriberMsisdn` в CDR) является зарегистрированным абонентом системы BRT. Звонки между двумя внешними абонентами могут игнорироваться.
