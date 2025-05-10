@@ -27,19 +27,25 @@ databaseChangeLog:
                   type: boolean
               - column:
                   name: start_date
-                  type: timestamp
+                  type: date
               - column:
                   name: av_date
-                  type: timestamp
+                  type: date
               - column:
                   name: ac_end_date
-                  type: timestamp
+                  type: date
               - column:
                   name: amount
                   type: bigint
               - column:
                   name: description
                   type: varchar(255)
+              - column:
+                  name: cost
+                  type: bigint
+              - column:
+                  name: period
+                  type: int
   - changeSet:
       id: insert-services-data
       author: developer
@@ -61,10 +67,13 @@ databaseChangeLog:
                   valueBoolean: true
               - column:
                   name: start_date
-                  valueDate: "CURRENT_TIMESTAMP()"
+                  valueDate: "CURRENT_DATE"
               - column:
                   name: amount
                   value: 50
               - column:
                   name: description
                   value: "50 минут входящие и исходящие"
+              - column:
+                  name: cost
+                  value: 0

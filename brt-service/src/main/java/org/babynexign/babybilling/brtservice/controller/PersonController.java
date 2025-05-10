@@ -3,6 +3,7 @@ package org.babynexign.babybilling.brtservice.controller;
 import org.babynexign.babybilling.brtservice.dto.PersonDTO;
 import org.babynexign.babybilling.brtservice.dto.request.ChangePersonTariffRequest;
 import org.babynexign.babybilling.brtservice.dto.request.CreatePersonRequest;
+import org.babynexign.babybilling.brtservice.dto.request.TariffPaymentRequest;
 import org.babynexign.babybilling.brtservice.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,5 +44,11 @@ public class PersonController {
     public ResponseEntity<PersonDTO> getPersonByMsisdn(@PathVariable("msisdn") String msisdn) {
         PersonDTO personDTO = personService.getPersonByMsisdn(msisdn);
         return ResponseEntity.ok(personDTO);
+    }
+
+    @PostMapping("/tariff-payment")
+    public ResponseEntity<Void> tariffPayment(@RequestBody TariffPaymentRequest tariffPaymentRequest){
+        personService.withdrawTariffPayment(tariffPaymentRequest);
+        return ResponseEntity.ok().build();
     }
 }

@@ -2,9 +2,9 @@ package org.babynexign.babybilling.brtservice.dto;
 
 import org.babynexign.babybilling.brtservice.entity.Tariff;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-public record TariffDTO(Long tariffId, LocalDateTime startDate) {
+public record TariffDTO(Long tariffId, LocalDate startDate) {
 
     public static TariffDTO fromEntity(Tariff entity) {
         if (entity == null) {

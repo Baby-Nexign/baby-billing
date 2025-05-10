@@ -19,7 +19,7 @@ databaseChangeLog:
                   type: bigint
               - column:
                   name: start_date
-                  type: datetime
+                  type: date
   - changeSet:
       id: insert-sample-tariffs
       author: developer
@@ -35,7 +35,7 @@ databaseChangeLog:
                   value: 11
               - column:
                   name: start_date
-                  value: "2023-01-01 00:00:00"
+                  value: "2023-01-01"
         - insert:
             tableName: person_tariff
             columns:
@@ -47,7 +47,7 @@ databaseChangeLog:
                   value: 12
               - column:
                   name: start_date
-                  value: "2023-01-15 00:00:00"
+                  value: "2023-01-15"
         - insert:
             tableName: person_tariff
             columns:
@@ -59,4 +59,4 @@ databaseChangeLog:
                   value: 12
               - column:
                   name: start_date
-                  value: "2023-02-01 00:00:00"
+                  value: "2023-02-01"

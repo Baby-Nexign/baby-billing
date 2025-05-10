@@ -17,23 +17,20 @@ databaseChangeLog:
                   name: name
                   type: varchar(255)
               - column:
-                  name: type_id
-                  type: bigint
-                  constraints:
-                    foreignKeyName: fk_tariff_type
-                    references: tariffs_types(id)
+                  name: payment_period
+                  type: int
               - column:
                   name: cost
                   type: bigint
               - column:
                   name: start_date
-                  type: timestamp
+                  type: date
               - column:
                   name: av_end_date
-                  type: timestamp
+                  type: date
               - column:
                   name: ac_end_date
-                  type: timestamp
+                  type: date
               - column:
                   name: description
                   type: varchar(255)
@@ -51,14 +48,14 @@ databaseChangeLog:
                   name: name
                   value: "Классика"
               - column:
-                  name: type_id
-                  value: 2
+                  name: payment_period
+                  value: 30
               - column:
                   name: cost
                   value: 0
               - column:
                   name: start_date
-                  valueDate: "CURRENT_TIMESTAMP()"
+                  valueDate: "CURRENT_DATE"
               - column:
                   name: description
                   value: "Абонентам «Ромашка» = 1.5 у.е./минута; Абонентам других операторов = 2.5 у.е./минута"
@@ -72,14 +69,14 @@ databaseChangeLog:
                   name: name
                   value: "Помесячный"
               - column:
-                  name: type_id
-                  value: 2
+                  name: payment_period
+                  value: 30
               - column:
                   name: cost
                   value: 100
               - column:
                   name: start_date
-                  valueDate: "CURRENT_TIMESTAMP()"
+                  valueDate: "CURRENT_DATE"
               - column:
                   name: description
                   value: "50 минут входящие и исходящие = 100 у.е. / месяц. Начиная с 51 минуты расчет продолжается по тарифу «Классика»."

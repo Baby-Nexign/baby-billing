@@ -19,7 +19,7 @@ databaseChangeLog:
                   type: bigint
               - column:
                   name: start_date
-                  type: datetime
+                  type: date
               - column:
                   name: p_id
                   type: bigint
