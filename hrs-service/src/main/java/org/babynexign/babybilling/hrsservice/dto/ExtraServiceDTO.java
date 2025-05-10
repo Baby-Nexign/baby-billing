@@ -1,6 +1,6 @@
 package org.babynexign.babybilling.hrsservice.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-public record ExtraServiceDTO(Long extraServiceId, LocalDateTime startDate) {
+public record ExtraServiceDTO(Long extraServiceId, LocalDate startDate) {
 }

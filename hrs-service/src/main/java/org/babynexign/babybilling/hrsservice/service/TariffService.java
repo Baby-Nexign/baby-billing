@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -53,6 +54,21 @@ public class TariffService {
                 quantServices,
                 extraServices
         ));
+    }
+
+    public void processCountTariffPaymentRequest(CountTariffPaymentRequest countTariffPaymentRequest){
+        Tariff tariff = tariffRepository.findById(countTariffPaymentRequest.tariffId())
+                .orElseThrow(() -> new NoSuchElementException("Tariff not found"));
+
+        long daysBetween = ChronoUnit.DAYS.between(
+                countTariffPaymentRequest.startDate(),
+                countTariffPaymentRequest.currentDate());
+
+        System.out.println("Дней между датами: " + daysBetween);
+
+        if (daysBetween % tariff.getPaymentPeriod() == 0){
+           brtSender.sendCountTariffPaymentResponse(new CountTariffPaymentResponse(countTariffPaymentRequest.personId(), tariff.getCost()));
+        }
     }
 
     public List<TariffDTO> getAllTariffs(){

@@ -1,6 +1,7 @@
 package org.babynexign.babybilling.hrsservice.senders.impl;
 
 import org.babynexign.babybilling.hrsservice.dto.BillingResponse;
+import org.babynexign.babybilling.hrsservice.dto.CountTariffPaymentResponse;
 import org.babynexign.babybilling.hrsservice.dto.TariffInformationResponse;
 import org.babynexign.babybilling.hrsservice.senders.BrtSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,10 @@ public class RabbitBrtSender implements BrtSender {
     @Override
     public void sendTariffInformationResponse(TariffInformationResponse tariffInformationResponse) {
         streamBridge.send("tariffInformationResponseProducer-out-0", tariffInformationResponse);
+    }
+
+    @Override
+    public void sendCountTariffPaymentResponse(CountTariffPaymentResponse countTariffPaymentResponse) {
+        streamBridge.send("countTariffPaymentResponseProducer-out-0", countTariffPaymentResponse);
     }
 }

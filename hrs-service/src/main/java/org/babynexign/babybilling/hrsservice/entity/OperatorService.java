@@ -6,8 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -30,13 +29,13 @@ public class OperatorService {
     private Boolean isQuantitative;
 
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @Column(name = "av_date")
-    private LocalDateTime avDate;
+    private LocalDate avDate;
 
     @Column(name = "ac_end_date")
-    private LocalDateTime acEndDate;
+    private LocalDate acEndDate;
 
     @Column(name = "amount")
     private Long amount;
@@ -44,6 +43,9 @@ public class OperatorService {
     @Column(name = "description")
     private String description;
 
-    @OneToMany
-    private List<ServicePrice> servicePrices;
+    @Column(name = "cost")
+    private Long cost;
+
+    @Column(name = "period")
+    private Integer period;
 }

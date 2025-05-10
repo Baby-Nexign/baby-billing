@@ -4,10 +4,9 @@ import jakarta.persistence.EntityNotFoundException;
 import org.babynexign.babybilling.brtservice.dto.*;
 import org.babynexign.babybilling.brtservice.dto.billing.BillingResponse;
 import org.babynexign.babybilling.brtservice.dto.commutator.CallRestrictionRequest;
-import org.babynexign.babybilling.brtservice.dto.request.ChangePersonTariffRequest;
-import org.babynexign.babybilling.brtservice.dto.request.CreatePersonRequest;
+import org.babynexign.babybilling.brtservice.dto.request.*;
 import org.babynexign.babybilling.brtservice.dto.commutator.NewSubscriberRequest;
-import org.babynexign.babybilling.brtservice.dto.request.TariffInformationRequest;
+import org.babynexign.babybilling.brtservice.dto.response.CountTariffPaymentResponse;
 import org.babynexign.babybilling.brtservice.dto.response.TariffInformationResponse;
 import org.babynexign.babybilling.brtservice.entity.ExtraService;
 import org.babynexign.babybilling.brtservice.entity.Person;
@@ -20,6 +19,7 @@ import org.babynexign.babybilling.brtservice.senders.HrsSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class PersonService {
     public PersonDTO createPerson(CreatePersonRequest createPersonRequest) {
         Tariff baseTariff = Tariff.builder()
                 .tariffId(11L)
-                .startDate(LocalDateTime.now())
+                .startDate(LocalDate.now())
                 .build();
 
         List<QuantService> baseQuantServices = List.of(QuantService
@@ -99,7 +99,7 @@ public class PersonService {
                 .toList();
 
         List<ExtraService> newExtraServices = tariffInformationResponse.extraServices().stream()
-                .map(service -> ExtraService.builder().extraServiceId(service.extraServiceId()).startDate(LocalDateTime.now()).build())
+                .map(service -> ExtraService.builder().extraServiceId(service.extraServiceId()).startDate(LocalDate.now()).build())
                 .toList();
 
         subscriber.setQuantServices(newQuantServices);
@@ -107,7 +107,7 @@ public class PersonService {
 
         Tariff newTariff = subscriber.getTariff();
         newTariff.setTariffId(tariffInformationResponse.tariffId());
-        newTariff.setStartDate(LocalDateTime.now());
+        newTariff.setStartDate(LocalDate.now());
         subscriber.setTariff(newTariff);
 
         personRepository.save(subscriber);
@@ -130,5 +130,19 @@ public class PersonService {
                 .orElseThrow(() -> new EntityNotFoundException("Person with MSISDN " + personMsisdn + " not found"));
 
         return PersonDTO.fromEntity(person);
+    }
+
+    public void withdrawTariffPayment(TariffPaymentRequest tariffPaymentRequest){
+        List<Person> allPersons = personRepository.findAllByIsRestrictedFalse();
+        for (Person person: allPersons){
+            hrsSender.sendCountTariffPaymentRequest(new CountTariffPaymentRequest(person.getId(), person.getTariff().getTariffId(), person.getTariff().getStartDate(), tariffPaymentRequest.currentDate()));
+        }
+    }
+
+    public void processCountTariffPaymentResponse(CountTariffPaymentResponse countTariffPaymentResponse){
+        processBillingResponse(new BillingResponse(countTariffPaymentResponse.personId(), countTariffPaymentResponse.cost()));
+        Person person = personRepository.findById(countTariffPaymentResponse.personId())
+                .orElseThrow(() -> new EntityNotFoundException("Person with ID " + countTariffPaymentResponse.personId() + " not found"));
+        changePersonTariff(new ChangePersonTariffRequest(person.getMsisdn(), person.getTariff().getTariffId()));
     }
 }

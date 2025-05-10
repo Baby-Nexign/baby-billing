@@ -15,7 +15,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   cloud:
     function:
-      definition: cdrConsumer;billingResponseConsumer;tariffInformationResponseConsumer
+      definition: cdrConsumer;billingResponseConsumer;tariffInformationResponseConsumer;countTariffPaymentResponseConsumer
     stream:
       bindings:
         cdrConsumer-in-0:
@@ -48,6 +48,16 @@ spring:
         newSubscriberRequestProducer-out-0:
           destination: new-subscriber-request-exchange
           content-type: application/json
+        countTariffPaymentRequestProducer-out-0:
+          destination: count-tariff-payment-request-exchange
+          content-type: application/json
+        countTariffPaymentResponseConsumer-in-0:
+          destination: count-tariff-payment-response-exchange
+          group: count-tariff-payment-response-group
+          content-type: application/json
+          consumer:
+            max-attempts: 3
+
       rabbit:
         bindings:
           cdrConsumer-in-0:
@@ -83,6 +93,16 @@ spring:
           newSubscriberRequestProducer-out-0:
             producer:
               routing-key-expression: "'new-subscriber-request-key'"
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+          countTariffPaymentRequestProducer-out-0:
+            producer:
+              routing-key-expression: "'count-tariff-payment-request-key'"
+              auto-bind-dlq: true
+              dlq-ttl: 5000
+          countTariffPaymentResponseConsumer-in-0:
+            consumer:
+              binding-routing-key: count-tariff-payment-response-key
               auto-bind-dlq: true
               dlq-ttl: 5000
   rabbitmq:

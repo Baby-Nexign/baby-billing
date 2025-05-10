@@ -6,13 +6,7 @@ databaseChangeLog:
   - include:
       file: db/changelog/creation/create-telecom-types-table-changelog.yaml
   - include:
-      file: db/changelog/creation/create-tariffs-types-table-changelog.yaml
-  - include:
       file: db/changelog/creation/create-services-table-changelog.yaml
-  - include:
-      file: db/changelog/creation/create-services-prices-table-changelog.yaml
-  - include:
-      file: db/changelog/creation/create-services-services-prices-table-changelog.yaml
   - include:
       file: db/changelog/creation/create-telecom-prices-table-changelog.yaml
   - include:

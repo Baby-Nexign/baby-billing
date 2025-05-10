@@ -3,7 +3,7 @@ package org.babynexign.babybilling.hrsservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -20,20 +20,20 @@ public class Tariff {
     @Column(name = "name")
     private String name;
 
-    @OneToOne
-    private TariffType type;
+    @Column(name = "payment_period")
+    private Integer paymentPeriod;
 
     @Column(name = "cost")
     private Long cost;
 
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @Column(name = "av_end_date")
-    private LocalDateTime avEndDate;
+    private LocalDate avEndDate;
 
     @Column(name = "ac_end_date")
-    private LocalDateTime acEndDate;
+    private LocalDate acEndDate;
 
     @Column(name = "description")
     private String description;
