@@ -1,0 +1,10 @@
+{
+  "msisdn": "79340001122",
+  "money": 50,
+  "tariff_id_logical": 11,
+  "is_restricted": false,
+  "description": null,
+  "name_prefix": "P1_ClassicM02_",
+  "quant_s_type_id": 0,
+  "quant_amount_left": 0
+}

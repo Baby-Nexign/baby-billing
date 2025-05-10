@@ -17,7 +17,7 @@ pika_loggers_to_silence = [
     "pika.adapters.utils.io_services_utils"
 ]
 for logger_name in pika_loggers_to_silence:
-    logging.getLogger(logger_name).setLevel(logging.WARNING) # или logging.ERROR
+    logging.getLogger(logger_name).setLevel(logging.WARNING)
 
 
 def send_cdr_list_to_rabbitmq(cdr_list: List[Dict[str, Any]]) -> bool:

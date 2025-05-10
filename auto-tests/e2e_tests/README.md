@@ -44,9 +44,48 @@ pip install -r requirements.txt
     ```bash
     pytest -v tests/test_e2e_classic_01.py
     ```
+## Интеграция с Allure Report
+
+Для получения детализированных и наглядных отчетов о выполнении тестов данный проект интегрирован с Allure Report.
+
+### Установка Allure
+
+1.  **Allure Pytest Adapter**: Библиотека `allure-pytest` должна быть уже включена в файл `requirements.txt` и установлена вместе с остальными зависимостями на шаге `pip install -r requirements.txt`.
+2.  **Allure Commandline**: Для генерации HTML-отчета необходим установленный Allure Commandline. Инструкции по его установке для вашей операционной системы можно найти на [официальном сайте Allure Framework](https://allurereport.org/docs/gettingstarted-installation/).
+
+### Запуск тестов для генерации Allure-данных
+
+Чтобы Pytest собрал данные для Allure Report, используйте ключ `--alluredir`, указав директорию для сохранения результатов (обычно `allure-results`):
+
+```bash
+# Запуск всех тестов и сохранение результатов для Allure
+pytest --alluredir=allure-results
+
+# Можно комбинировать с другими ключами, например -v для подробного вывода
+pytest -v --alluredir=allure-results
 
 ## Структура проекта `e2e_tests`
+```
 
+### Генерация и просмотр отчета Allure
+
+После того как тесты выполнены и данные сохранены в `allure-results`:
+
+1.  **Сгенерируйте HTML-отчет**:
+    ```bash
+    allure generate allure-results --clean -o allure-report
+    ```
+    * `allure-results` – папка с результатами выполнения тестов.
+    * `--clean` – удаляет предыдущий сгенерированный отчет перед созданием нового.
+    * `-o allure-report` – указывает папку, в которую будет помещен сгенерированный HTML-отчет (например, `allure-report`).
+
+2.  **Откройте сгенерированный отчет**:
+    ```bash
+    allure open allure-report
+    ```
+    Эта команда запустит локальный веб-сервер и попытается открыть отчет в вашем браузере по умолчанию.
+
+## Структура проекта `e2e_tests`
 ```
 e2e_tests/
 ├── tests/                      # Модули с тестами Pytest
@@ -58,10 +97,12 @@ e2e_tests/
 │   ├── test_e2e_monthly_02.py
 │   └── test_e2e_monthly_03.py
 ├── .env                        # Конфигурационный файл (требуется создать на основе .env.example, если есть)
+├── allure-results/             # (Создается при запуске pytest с --alluredir) Директория с сырыми данными Allure
+├── allure-report/              # (Создается при запуске allure generate) Директория с HTML-отчетом Allure
 ├── config.py                   # Загрузка конфигурации тестов из .env
 ├── database.py                 # Утилиты для взаимодействия с БД PostgreSQL (BRT)
 ├── rabbitmq_sender.py          # Модуль для отправки CDR в RabbitMQ
-├── requirements.txt            # Зависимости Python
+├── requirements.txt            # Зависимости Python 
 ├── subscriber_schema.py        # Pydantic схема для данных абонента
 └── utils.py                    # Вспомогательные утилиты (например, расчет биллинговых минут)
 ```
