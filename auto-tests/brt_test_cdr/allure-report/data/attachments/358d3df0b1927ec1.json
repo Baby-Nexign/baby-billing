@@ -1,0 +1,92 @@
+[
+  {
+    "id": 9,
+    "msisdn_one": "79334455667",
+    "msisdn_two": "79887776655",
+    "type": "01",
+    "start_time": "2024-05-22 12:15:00",
+    "in_one_network": false,
+    "our_subscriber_id": 3,
+    "lasts": 59000000000
+  },
+  {
+    "id": 8,
+    "msisdn_one": "79123456789",
+    "msisdn_two": "79996667755",
+    "type": "02",
+    "start_time": "2024-05-22 12:00:00",
+    "in_one_network": true,
+    "our_subscriber_id": 1,
+    "lasts": 500000000000
+  },
+  {
+    "id": 7,
+    "msisdn_one": "79996667755",
+    "msisdn_two": "79334455667",
+    "type": "01",
+    "start_time": "2024-05-22 11:40:00",
+    "in_one_network": true,
+    "our_subscriber_id": 2,
+    "lasts": 5000000000
+  },
+  {
+    "id": 6,
+    "msisdn_one": "79996667755",
+    "msisdn_two": "79551112233",
+    "type": "01",
+    "start_time": "2024-05-22 11:25:00",
+    "in_one_network": false,
+    "our_subscriber_id": 2,
+    "lasts": 615000000000
+  },
+  {
+    "id": 5,
+    "msisdn_one": "79334455667",
+    "msisdn_two": "79551112233",
+    "type": "02",
+    "start_time": "2024-05-22 11:10:00",
+    "in_one_network": false,
+    "our_subscriber_id": 3,
+    "lasts": 150000000000
+  },
+  {
+    "id": 4,
+    "msisdn_one": "79334455667",
+    "msisdn_two": "79123456789",
+    "type": "01",
+    "start_time": "2024-05-22 11:00:00",
+    "in_one_network": true,
+    "our_subscriber_id": 3,
+    "lasts": 40000000000
+  },
+  {
+    "id": 3,
+    "msisdn_one": "79123456789",
+    "msisdn_two": "79996667755",
+    "type": "01",
+    "start_time": "2024-05-22 10:30:00",
+    "in_one_network": true,
+    "our_subscriber_id": 1,
+    "lasts": 600000000000
+  },
+  {
+    "id": 2,
+    "msisdn_one": "79996667755",
+    "msisdn_two": "79887776655",
+    "type": "02",
+    "start_time": "2024-05-22 10:15:00",
+    "in_one_network": false,
+    "our_subscriber_id": 2,
+    "lasts": 115000000000
+  },
+  {
+    "id": 1,
+    "msisdn_one": "79123456789",
+    "msisdn_two": "79887776655",
+    "type": "01",
+    "start_time": "2024-05-22 10:00:00",
+    "in_one_network": false,
+    "our_subscriber_id": 1,
+    "lasts": 190000000000
+  }
+]

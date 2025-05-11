@@ -1,7 +1,10 @@
+import os
+import platform
+
 import pytest
 import logging
 import psycopg
-from typing import Generator, Dict
+from typing import Generator
 
 from db_checker import connect_db, close_db
 
@@ -19,4 +22,15 @@ def db_connection() -> Generator[psycopg.Connection, None, None]:
     yield conn
     logger.info("Фикстура db_connection: Закрытие соединения с БД...")
     close_db(conn)
+
+def pytest_sessionfinish(session):
+    allure_results_dir = session.config.getoption("--alluredir")
+    if allure_results_dir:
+        env_file_path = os.path.join(allure_results_dir, "environment.properties")
+
+        with open(env_file_path, "w") as f:
+            f.write(f"OS.System={platform.system()}\n")
+            f.write(f"OS.Release={platform.release()}\n")
+            f.write(f"Python.Version={platform.python_version()}\n")
+
 

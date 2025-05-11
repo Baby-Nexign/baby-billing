@@ -1,0 +1,51 @@
+[
+  {
+    "callType": "01",
+    "firstSubscriberMsisdn": "79123456789",
+    "secondSubscriberMsisdn": "79222222222",
+    "callStart": "2024-02-30T10:00:00",
+    "callEnd": "2024-02-30T10:05:00"
+  },
+  {
+    "callType": "02",
+    "firstSubscriberMsisdn": "79996667755",
+    "secondSubscriberMsisdn": "79111111111",
+    "callStart": "2024-13-01T11:00:00",
+    "callEnd": "2024-13-01T11:05:00"
+  },
+  {
+    "callType": "01",
+    "firstSubscriberMsisdn": "79334455667",
+    "secondSubscriberMsisdn": "79222222222",
+    "callStart": "THIS_IS_NOT_A_DATE",
+    "callEnd": "2024-05-20T12:05:00"
+  },
+  {
+    "callType": "02",
+    "firstSubscriberMsisdn": "79123456789",
+    "secondSubscriberMsisdn": "79111111111",
+    "callStart": "2024-05-20T13:00:00",
+    "callEnd": "INVALID_END_DATE"
+  },
+  {
+    "callType": "01",
+    "firstSubscriberMsisdn": "79996667755",
+    "secondSubscriberMsisdn": "79222222222",
+    "callStart": "2024-05-20 14:00:00",
+    "callEnd": "2024-05-20 14:05:00"
+  },
+  {
+    "callType": "02",
+    "firstSubscriberMsisdn": "79334455667",
+    "secondSubscriberMsisdn": "79111111111",
+    "callStart": "",
+    "callEnd": "2024-05-20T15:05:00"
+  },
+  {
+    "callType": "01",
+    "firstSubscriberMsisdn": "79123456789",
+    "secondSubscriberMsisdn": "79222222222",
+    "callStart": "2024-05-20T16:00:00",
+    "callEnd": null
+  }
+]

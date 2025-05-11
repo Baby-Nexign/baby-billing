@@ -1,0 +1,31 @@
+2025-05-11 15:47:07,347 - tests.conftest - INFO - Фикстура db_connection: Попытка подключения к БД...
+2025-05-11 15:47:07,361 - db_checker - INFO - Успешное подключение к БД brt на localhost:5432
+2025-05-11 15:47:07,361 - tests.test_start_after_end - INFO - --- Запуск теста: Проверка отсутствия вставки невалидных CDR (callEnd < callStart) из test_data/end_before_start.jsonl ---
+2025-05-11 15:47:07,362 - tests.test_start_after_end - INFO - Подготовка БД (очистка cdr_record, создание абонентов): ['79123456789', '79996667755', '79334455667']...
+2025-05-11 15:47:07,362 - db_checker - INFO - --- Начало подготовки БД к тесту ---
+2025-05-11 15:47:07,368 - db_checker - INFO - Таблица cdr_record очищена, счетчик ID сброшен.
+2025-05-11 15:47:07,370 - db_checker - INFO - Найдены существующие абоненты: {'79334455667': 3, '79123456789': 1, '79996667755': 2}
+2025-05-11 15:47:07,371 - db_checker - INFO - --- Подготовка БД к тесту завершена ---
+2025-05-11 15:47:07,372 - tests.test_start_after_end - INFO - БД подготовлена. ID абонентов: {'79334455667': 3, '79123456789': 1, '79996667755': 2}
+2025-05-11 15:47:07,372 - tests.test_start_after_end - INFO - Чтение CDR из файла: test_data/end_before_start.jsonl
+2025-05-11 15:47:07,372 - cdr_reader - INFO - Попытка чтения CDR файла: test_data/end_before_start.jsonl
+2025-05-11 15:47:07,373 - cdr_reader - INFO - Успешно прочитано 10 CDR записей из файла test_data/end_before_start.jsonl
+2025-05-11 15:47:07,374 - tests.test_start_after_end - INFO - Прочитано 10 записей из файла для отправки (все невалидные).
+2025-05-11 15:47:07,374 - tests.test_start_after_end - INFO - Отправка невалидных CDR данных в RabbitMQ...
+2025-05-11 15:47:07,374 - rabbitmq_sender - INFO - Подключение к RabbitMQ: host=localhost, port=5672
+2025-05-11 15:47:07,375 - pika.adapters.utils.connection_workflow - INFO - Pika version 1.3.2 connecting to ('127.0.0.1', 5672)
+2025-05-11 15:47:07,375 - pika.adapters.utils.io_services_utils - INFO - Socket connected: <socket.socket fd=24, family=2, type=1, proto=6, laddr=('127.0.0.1', 50788), raddr=('127.0.0.1', 5672)>
+2025-05-11 15:47:07,376 - pika.adapters.utils.connection_workflow - INFO - Streaming transport linked up: (<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc107b86b0>, _StreamingProtocolShim: <SelectConnection PROTOCOL transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc107b86b0> params=<ConnectionParameters host=localhost port=5672 virtual_host=/ ssl=False>>).
+2025-05-11 15:47:07,379 - pika.adapters.utils.connection_workflow - INFO - AMQPConnector - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc107b86b0> params=<ConnectionParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+2025-05-11 15:47:07,380 - pika.adapters.utils.connection_workflow - INFO - AMQPConnectionWorkflow - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc107b86b0> params=<ConnectionParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+2025-05-11 15:47:07,380 - pika.adapters.blocking_connection - INFO - Connection workflow succeeded: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc107b86b0> params=<ConnectionParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+2025-05-11 15:47:07,380 - pika.adapters.blocking_connection - INFO - Created channel=1
+2025-05-11 15:47:07,381 - rabbitmq_sender - INFO - Канал RabbitMQ успешно создан.
+2025-05-11 15:47:07,382 - rabbitmq_sender - INFO - Сообщение с 10 CDR успешно отправлено.
+2025-05-11 15:47:07,382 - tests.test_start_after_end - INFO - Ожидание 5 секунд для обработки CDR консьюмером...
+2025-05-11 15:47:12,382 - tests.test_start_after_end - INFO - Проверка таблицы cdr_record на отсутствие новых записей...
+2025-05-11 15:47:12,386 - db_checker - INFO - Получено 10 записей из cdr_record.
+2025-05-11 15:47:12,386 - tests.test_start_after_end - INFO - Фактически найдено в cdr_record: 10.
+2025-05-11 15:47:12,396 - tests.conftest - INFO - Фикстура db_connection: Закрытие соединения с БД...
+2025-05-11 15:47:12,397 - db_checker - WARNING - Откат незавершенной транзакции при закрытии соединения.
+2025-05-11 15:47:12,397 - db_checker - INFO - Соединение с БД закрыто.

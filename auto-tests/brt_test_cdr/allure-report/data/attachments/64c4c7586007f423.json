@@ -1,0 +1,102 @@
+[
+  {
+    "id": 10,
+    "msisdn_one": "79334455667",
+    "msisdn_two": "79996667755",
+    "type": "01",
+    "start_time": "2024-05-25 19:00:00",
+    "in_one_network": true,
+    "our_subscriber_id": 3,
+    "lasts": -1000000000
+  },
+  {
+    "id": 9,
+    "msisdn_one": "79123456789",
+    "msisdn_two": "79885556677",
+    "type": "02",
+    "start_time": "2024-05-25 18:05:00",
+    "in_one_network": false,
+    "our_subscriber_id": 1,
+    "lasts": -1000000000
+  },
+  {
+    "id": 8,
+    "msisdn_one": "79996667755",
+    "msisdn_two": "79334455667",
+    "type": "01",
+    "start_time": "2024-05-25 17:20:15",
+    "in_one_network": true,
+    "our_subscriber_id": 2,
+    "lasts": -15000000000
+  },
+  {
+    "id": 7,
+    "msisdn_one": "79334455667",
+    "msisdn_two": "79123456789",
+    "type": "02",
+    "start_time": "2024-05-25 16:10:00",
+    "in_one_network": true,
+    "our_subscriber_id": 3,
+    "lasts": -60000000000
+  },
+  {
+    "id": 6,
+    "msisdn_one": "79123456789",
+    "msisdn_two": "79996667755",
+    "type": "01",
+    "start_time": "2024-05-25 15:00:00",
+    "in_one_network": true,
+    "our_subscriber_id": 1,
+    "lasts": -1000000000
+  },
+  {
+    "id": 5,
+    "msisdn_one": "79996667755",
+    "msisdn_two": "79883334455",
+    "type": "01",
+    "start_time": "2024-05-25 14:00:00",
+    "in_one_network": false,
+    "our_subscriber_id": 2,
+    "lasts": 0
+  },
+  {
+    "id": 4,
+    "msisdn_one": "79123456789",
+    "msisdn_two": "79552223344",
+    "type": "02",
+    "start_time": "2024-05-25 13:30:00",
+    "in_one_network": false,
+    "our_subscriber_id": 1,
+    "lasts": -1800000000000
+  },
+  {
+    "id": 3,
+    "msisdn_one": "79334455667",
+    "msisdn_two": "79551112233",
+    "type": "01",
+    "start_time": "2024-05-25 12:01:01",
+    "in_one_network": false,
+    "our_subscriber_id": 3,
+    "lasts": -1000000000
+  },
+  {
+    "id": 2,
+    "msisdn_one": "79996667755",
+    "msisdn_two": "79881112233",
+    "type": "02",
+    "start_time": "2024-05-25 11:15:10",
+    "in_one_network": false,
+    "our_subscriber_id": 2,
+    "lasts": -1000000000
+  },
+  {
+    "id": 1,
+    "msisdn_one": "79123456789",
+    "msisdn_two": "79887776655",
+    "type": "01",
+    "start_time": "2024-05-25 10:00:00",
+    "in_one_network": false,
+    "our_subscriber_id": 1,
+    "lasts": -60000000000
+  }
+]
