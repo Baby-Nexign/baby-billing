@@ -107,3 +107,9 @@ databaseChangeLog:
               - column:
                   name: cost
                   value: 0
+  - changeSet:
+      id: reset-telecom_prices-sequence
+      author: developer
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE telecom_prices_id_seq RESTART WITH 5
