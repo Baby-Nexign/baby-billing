@@ -1,7 +1,7 @@
 import logging
 from time import sleep
 import psycopg
-import allure # <--- Импортируем allure
+import allure 
 
 from database import create_or_update_subscribers_with_related_data, get_sub_balance
 from rabbitmq_sender import send_cdr_list_to_rabbitmq
@@ -52,18 +52,17 @@ def test_e2e_classic_01(db_connection: psycopg.Connection):
             msisdn=MSISDN_CALLER,
             money=INITIAL_BALANCE_CALLER,
             tariff_id_logical=DEFAULT_TARIFF_ID,
-            name_prefix="CallerE2E01_" # Обновил префикс для уникальности, если нужно
+            name_prefix="CallerE2E01_" 
         )
         callee_data = SubscriberCreationData(
             msisdn=MSISDN_CALLEE,
             money=INITIAL_BALANCE_CALLEE,
             tariff_id_logical=DEFAULT_TARIFF_ID,
-            name_prefix="CalleeE2E01_" # Обновил префикс
+            name_prefix="CalleeE2E01_" 
         )
         allure.attach(caller_data.model_dump_json(indent=2), name="Данные звонящего абонента (вход)", attachment_type=allure.attachment_type.JSON)
         allure.attach(callee_data.model_dump_json(indent=2), name="Данные принимающего абонента (вход)", attachment_type=allure.attachment_type.JSON)
 
-        # Создаем/изменяем абонентов
         create_or_update_subscribers_with_related_data(
             db_connection, [caller_data, callee_data]
         )
