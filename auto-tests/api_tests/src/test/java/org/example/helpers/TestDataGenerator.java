@@ -74,6 +74,7 @@ public class TestDataGenerator {
         }
         return body;
     }
+
     public static Map<String, Object> createChangePersonTariffRequestBody(String personMsisdn, Long newTariffId) {
         Map<String, Object> body = new HashMap<>();
         body.put("personMsisdn", personMsisdn);
@@ -101,5 +102,49 @@ public class TestDataGenerator {
             body.put("description", description);
         }
         return body;
+    }
+
+    public static Map<String, Object> createFullTariffRequestBody(
+            String name,
+            Integer paymentPeriod,
+            Integer cost,
+            String description,
+            List<Long> serviceIds,
+            Map<String, Integer> callPrices) {
+
+        Map<String, Object> body = new HashMap<>();
+        if (name != null) {
+            body.put("name", name);
+        }
+        if (paymentPeriod != null) {
+            body.put("paymentPeriod", paymentPeriod);
+        }
+        if (cost != null) {
+            body.put("cost", cost);
+        }
+        if (description != null) {
+            body.put("description", description);
+        }
+        if (serviceIds != null && !serviceIds.isEmpty()) {
+            body.put("serviceIds", serviceIds);
+        }
+        if (callPrices != null && !callPrices.isEmpty()) {
+            body.put("callPrices", callPrices);
+        }
+        return body;
+    }
+
+    public static Map<String, Integer> createCallPrices(
+            Integer incomingInNetworkPrice,
+            Integer outgoingInNetworkPrice,
+            Integer incomingOutNetworkPrice,
+            Integer outgoingOutNetworkPrice) {
+
+        Map<String, Integer> prices = new HashMap<>();
+        prices.put("incomingInNetworkPrice", incomingInNetworkPrice);
+        prices.put("outgoingInNetworkPrice", outgoingInNetworkPrice);
+        prices.put("incomingOutNetworkPrice", incomingOutNetworkPrice);
+        prices.put("outgoingOutNetworkPrice", outgoingOutNetworkPrice);
+        return prices;
     }
 }

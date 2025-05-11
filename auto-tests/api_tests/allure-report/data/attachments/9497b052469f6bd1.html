@@ -1,0 +1,49 @@
+<div>POST to http://localhost:8084/api/tariffs</div>
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;serviceIds&quot;: [
+        1
+    ],
+    &quot;cost&quot;: 2000,
+    &quot;name&quot;: &quot;Тестовый Безлимит 873&quot;,
+    &quot;callPrices&quot;: {
+        &quot;outgoingOutNetworkPrice&quot;: 150,
+        &quot;incomingInNetworkPrice&quot;: 0,
+        &quot;incomingOutNetworkPrice&quot;: 50,
+        &quot;outgoingInNetworkPrice&quot;: 0
+    },
+    &quot;description&quot;: &quot;Описание для тарифа &#39;Тестовый Безлимит 873&#39;&quot;,
+    &quot;paymentPeriod&quot;: 30
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjQiLCJpYXQiOjE3NDY5NzQ3MTQsImV4cCI6MTc0NzA2MTExNH0.6B-bCIWNjsjJUp9VlA0WDpA_vsgRlMl1uafXAL2IYJXXvbvy1BxHUB9ydr340X0lBezJFUkOBe0b2hWdf6gq1w</div>
+        <div>Accept: */*</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+
+
+<h4>Curl</h4>
+<div>
+curl -v -X POST &#39;http://localhost:8084/api/tariffs&#39; -H &#39;Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjQiLCJpYXQiOjE3NDY5NzQ3MTQsImV4cCI6MTc0NzA2MTExNH0.6B-bCIWNjsjJUp9VlA0WDpA_vsgRlMl1uafXAL2IYJXXvbvy1BxHUB9ydr340X0lBezJFUkOBe0b2hWdf6gq1w&#39; -H &#39;Accept: */*&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;serviceIds&quot;: [
+        1
+    ],
+    &quot;cost&quot;: 2000,
+    &quot;name&quot;: &quot;Тестовый Безлимит 873&quot;,
+    &quot;callPrices&quot;: {
+        &quot;outgoingOutNetworkPrice&quot;: 150,
+        &quot;incomingInNetworkPrice&quot;: 0,
+        &quot;incomingOutNetworkPrice&quot;: 50,
+        &quot;outgoingInNetworkPrice&quot;: 0
+    },
+    &quot;description&quot;: &quot;Описание для тарифа &#39;Тестовый Безлимит 873&#39;&quot;,
+    &quot;paymentPeriod&quot;: 30
+}&#39;
+</div>
