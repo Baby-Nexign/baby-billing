@@ -80,3 +80,9 @@ databaseChangeLog:
               - column:
                   name: description
                   value: "50 минут входящие и исходящие = 100 у.е. / месяц. Начиная с 51 минуты расчет продолжается по тарифу «Классика»."
+  - changeSet:
+      id: reset-tariffs-sequence
+      author: developer
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE tariffs_id_seq RESTART WITH 13

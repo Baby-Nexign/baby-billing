@@ -84,3 +84,9 @@ databaseChangeLog:
               - column:
                   name: password
                   value: "$2a$10$2OsuCxaFNinM2i/fcvR3wujKoioBEf4o6jnWtoz0JfqKQ.4Y35Tf."
+  - changeSet:
+      id: reset-users-sequence
+      author: developer
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE users_id_seq RESTART WITH 5

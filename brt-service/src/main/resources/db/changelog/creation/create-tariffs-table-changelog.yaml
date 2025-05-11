@@ -60,3 +60,9 @@ databaseChangeLog:
               - column:
                   name: start_date
                   value: "2023-02-01"
+  - changeSet:
+      id: reset-person-tariff-sequence
+      author: developer
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE person_tariff_id_seq RESTART WITH 4
