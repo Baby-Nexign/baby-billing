@@ -1,7 +1,7 @@
 import logging
 from time import sleep
 import psycopg
-import allure # <--- Импортировали allure
+import allure
 
 from database import create_or_update_subscribers_with_related_data, get_sub_balance
 from rabbitmq_sender import send_cdr_list_to_rabbitmq

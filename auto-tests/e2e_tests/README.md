@@ -63,8 +63,6 @@ pytest --alluredir=allure-results
 
 # Можно комбинировать с другими ключами, например -v для подробного вывода
 pytest -v --alluredir=allure-results
-
-## Структура проекта `e2e_tests`
 ```
 
 ### Генерация и просмотр отчета Allure
