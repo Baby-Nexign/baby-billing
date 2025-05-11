@@ -39,7 +39,45 @@ pytest -v
 ```bash
 pytest -v tests/test_positive_scenarios.py
 ```
+## Интеграция с Allure Report
 
+Для получения детализированных и наглядных отчетов о выполнении тестов данный проект интегрирован с Allure Report.
+
+### Установка Allure
+
+1.  **Allure Pytest Adapter**: Библиотека `allure-pytest` должна быть уже включена в файл `requirements.txt` и установлена вместе с остальными зависимостями на шаге `pip install -r requirements.txt`.
+2.  **Allure Commandline**: Для генерации HTML-отчета необходим установленный Allure Commandline. Инструкции по его установке для вашей операционной системы можно найти на [официальном сайте Allure Framework](https://allurereport.org/docs/gettingstarted-installation/).
+
+### Запуск тестов для генерации Allure-данных
+
+Чтобы Pytest собрал данные для Allure Report, используйте ключ `--alluredir`, указав директорию для сохранения результатов (обычно `allure-results`):
+
+```bash
+# Запуск всех тестов и сохранение результатов для Allure
+pytest --alluredir=allure-results
+
+# Можно комбинировать с другими ключами, например -v для подробного вывода
+pytest -v --alluredir=allure-results
+```
+
+### Генерация и просмотр отчета Allure
+
+После того как тесты выполнены и данные сохранены в `allure-results`:
+
+1.  **Сгенерируйте HTML-отчет**:
+    ```bash
+    allure generate allure-results --clean -o allure-report
+    ```
+    * `allure-results` – папка с результатами выполнения тестов.
+    * `--clean` – удаляет предыдущий сгенерированный отчет перед созданием нового.
+    * `-o allure-report` – указывает папку, в которую будет помещен сгенерированный HTML-отчет (например, `allure-report`).
+
+2.  **Откройте сгенерированный отчет**:
+    ```bash
+    allure open allure-report
+    ```
+    Эта команда запустит локальный веб-сервер и попытается открыть отчет в вашем браузере по умолчанию.
+    
 ## Структура тестового проекта `brt_test_cdr`
 
 ```
@@ -68,6 +106,8 @@ brt_test_cdr/
 ├── config.py                     # Загрузка конфигурации тестов из .env
 ├── db_checker.py                 # Утилиты для взаимодействия с БД PostgreSQL
 ├── rabbitmq_sender.py            # Модуль для отправки сообщений CDR в RabbitMQ
+├── allure-results/               # (Создается при запуске pytest с --alluredir) Директория с сырыми данными Allure
+├── allure-report/                # (Создается при запуске allure generate) Директория с HTML-отчетом Allure
 └── requirements.txt              # Зависимости Python для тестового проекта
 ```
 
