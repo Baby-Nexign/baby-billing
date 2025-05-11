@@ -1,6 +1,7 @@
 package org.babynexign.babybilling.brtservice.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,13 +20,17 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name must not be empty")
     private String name;
 
+    @Pattern(regexp = "^[0-9]{11}$", message = "MSISDN must contain exactly 11 digits")
+    @Column(unique = true)
     private String msisdn;
 
     @Column(name = "money")
     private Long balance;
 
+    @NotNull(message = "Restriction status must be specified")
     private Boolean isRestricted;
 
     @Column(name = "reg_data")

@@ -4,6 +4,10 @@ import org.babynexign.babybilling.hrsservice.dto.*;
 import org.babynexign.babybilling.hrsservice.entity.*;
 import org.babynexign.babybilling.hrsservice.entity.enums.TelecomDataTypeName;
 import org.babynexign.babybilling.hrsservice.entity.enums.TelecomTypeName;
+import org.babynexign.babybilling.hrsservice.exception.ServiceNotFoundException;
+import org.babynexign.babybilling.hrsservice.exception.TariffNotFoundException;
+import org.babynexign.babybilling.hrsservice.exception.TariffValidationException;
+import org.babynexign.babybilling.hrsservice.exception.TelecomPriceNotFoundException;
 import org.babynexign.babybilling.hrsservice.repository.*;
 import org.babynexign.babybilling.hrsservice.senders.BrtSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +19,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class TariffService {
@@ -38,8 +41,12 @@ public class TariffService {
 
     @Transactional
     public void processTariffInformationRequest(TariffInformationRequest tariffInformationRequest) {
+        if (tariffInformationRequest.tariffId() == null || tariffInformationRequest.personId() == null) {
+            throw new TariffValidationException("Tariff ID and Person ID cannot be null");
+        }
+        
         Tariff tariff = tariffRepository.findById(tariffInformationRequest.tariffId())
-                .orElseThrow(() -> new NoSuchElementException("Tariff not found"));
+                .orElseThrow(() -> new TariffNotFoundException("Tariff with ID " + tariffInformationRequest.tariffId() + " not found"));
 
         List<QuantServiceDTO> quantServices = new ArrayList<>();
         List<ExtraServiceDTO> extraServices = new ArrayList<>();
@@ -67,8 +74,19 @@ public class TariffService {
     }
 
     public void processCountTariffPaymentRequest(CountTariffPaymentRequest countTariffPaymentRequest){
+        if (countTariffPaymentRequest.tariffId() == null || 
+            countTariffPaymentRequest.personId() == null ||
+            countTariffPaymentRequest.startDate() == null ||
+            countTariffPaymentRequest.currentDate() == null) {
+            throw new TariffValidationException("Tariff ID, Person ID, Start date and Current date cannot be null");
+        }
+        
+        if (countTariffPaymentRequest.currentDate().isBefore(countTariffPaymentRequest.startDate())) {
+            throw new TariffValidationException("Current date cannot be before start date");
+        }
+        
         Tariff tariff = tariffRepository.findById(countTariffPaymentRequest.tariffId())
-                .orElseThrow(() -> new NoSuchElementException("Tariff not found"));
+                .orElseThrow(() -> new TariffNotFoundException("Tariff with ID " + countTariffPaymentRequest.tariffId() + " not found"));
 
         long daysBetween = ChronoUnit.DAYS.between(
                 countTariffPaymentRequest.startDate(),
@@ -84,7 +102,8 @@ public class TariffService {
     }
 
     public TariffDTO getOneTariff(Long id){
-        return TariffDTO.fromEntity(tariffRepository.findById(id).orElseThrow());
+        return TariffDTO.fromEntity(tariffRepository.findById(id)
+                .orElseThrow(() -> new TariffNotFoundException("Tariff with ID " + id + " not found")));
     }
 
     @Transactional
@@ -93,8 +112,8 @@ public class TariffService {
                 .name(createTariffRequest.name())
                 .paymentPeriod(createTariffRequest.paymentPeriod())
                 .cost(createTariffRequest.cost())
-                .startDate(LocalDate.now())
                 .description(createTariffRequest.description())
+                .startDate(LocalDate.now())
                 .services(new ArrayList<>())
                 .telecomPrices(new ArrayList<>())
                 .build();
@@ -102,7 +121,7 @@ public class TariffService {
         if (createTariffRequest.serviceIds() != null && !createTariffRequest.serviceIds().isEmpty()) {
             List<OperatorService> services = serviceRepository.findAllById(createTariffRequest.serviceIds());
             if (services.size() != createTariffRequest.serviceIds().size()) {
-                throw new IllegalArgumentException("Some operator services not found");
+                throw new ServiceNotFoundException("One or more services with requested IDs not found");
             }
             tariff.setServices(services);
         }
@@ -112,12 +131,12 @@ public class TariffService {
             List<TelecomPrice> telecomPrices = new ArrayList<>();
 
             TelecomType incomingType = telecomTypeRepository.findByName(TelecomTypeName.INCOMING)
-                    .orElseThrow(() -> new NoSuchElementException("INCOMING TelecomType not found"));
+                    .orElseThrow(() -> new TelecomPriceNotFoundException("INCOMING TelecomType not found"));
             TelecomType outgoingType = telecomTypeRepository.findByName(TelecomTypeName.OUTCOMING)
-                    .orElseThrow(() -> new NoSuchElementException("OUTCOMING TelecomType not found"));
+                    .orElseThrow(() -> new TelecomPriceNotFoundException("OUTCOMING TelecomType not found"));
 
             TelecomDataType minutesType = telecomDataTypeRepository.findByName(TelecomDataTypeName.MINUTES)
-                    .orElseThrow(() -> new NoSuchElementException("MINUTES TelecomDataType not found"));
+                    .orElseThrow(() -> new TelecomPriceNotFoundException("MINUTES TelecomDataType not found"));
 
             telecomPrices.add(TelecomPrice.builder()
                     .telecomType(incomingType)

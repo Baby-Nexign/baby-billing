@@ -1,5 +1,6 @@
 package org.babynexign.babybilling.hrsservice.controller;
 
+import jakarta.validation.Valid;
 import org.babynexign.babybilling.hrsservice.dto.CreateTariffRequest;
 import org.babynexign.babybilling.hrsservice.dto.TariffDTO;
 import org.babynexign.babybilling.hrsservice.service.TariffService;
@@ -32,7 +33,7 @@ public class TariffController {
     }
 
     @PostMapping
-    public ResponseEntity<TariffDTO> createTariff(@RequestBody CreateTariffRequest createTariffRequest){
+    public ResponseEntity<TariffDTO> createTariff(@Valid @RequestBody CreateTariffRequest createTariffRequest){
         TariffDTO tariff = tariffService.createTariff(createTariffRequest);
         return ResponseEntity.ok(tariff);
     }

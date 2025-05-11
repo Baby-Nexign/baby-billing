@@ -1,11 +1,10 @@
 package org.babynexign.babybilling.brtservice.service;
 
-import jakarta.persistence.EntityNotFoundException;
-import org.babynexign.babybilling.brtservice.dto.*;
+import org.babynexign.babybilling.brtservice.dto.PersonDTO;
 import org.babynexign.babybilling.brtservice.dto.billing.BillingResponse;
 import org.babynexign.babybilling.brtservice.dto.commutator.CallRestrictionRequest;
-import org.babynexign.babybilling.brtservice.dto.request.*;
 import org.babynexign.babybilling.brtservice.dto.commutator.NewSubscriberRequest;
+import org.babynexign.babybilling.brtservice.dto.request.*;
 import org.babynexign.babybilling.brtservice.dto.response.CountTariffPaymentResponse;
 import org.babynexign.babybilling.brtservice.dto.response.TariffInformationResponse;
 import org.babynexign.babybilling.brtservice.entity.ExtraService;
@@ -13,6 +12,8 @@ import org.babynexign.babybilling.brtservice.entity.Person;
 import org.babynexign.babybilling.brtservice.entity.QuantService;
 import org.babynexign.babybilling.brtservice.entity.Tariff;
 import org.babynexign.babybilling.brtservice.entity.enums.QuantServiceType;
+import org.babynexign.babybilling.brtservice.exception.MsisdnAlreadyExistsException;
+import org.babynexign.babybilling.brtservice.exception.SubscriberNotFoundException;
 import org.babynexign.babybilling.brtservice.repository.PersonRepository;
 import org.babynexign.babybilling.brtservice.senders.CommutatorSender;
 import org.babynexign.babybilling.brtservice.senders.HrsSender;
@@ -39,7 +40,7 @@ public class PersonService {
 
     public void processBillingResponse(BillingResponse billingResponse) {
         Person subscriber = personRepository.findById(billingResponse.personId())
-                .orElseThrow(() -> new EntityNotFoundException("Person with id " + billingResponse.personId() + " not found"));
+                .orElseThrow(() -> new SubscriberNotFoundException("Person with id " + billingResponse.personId() + " not found"));
         long newBalance = subscriber.getBalance() - billingResponse.payment();
 
         if (newBalance < 0) {
@@ -52,6 +53,11 @@ public class PersonService {
     }
 
     public PersonDTO createPerson(CreatePersonRequest createPersonRequest) {
+        // Check if MSISDN already exists
+        if (personRepository.findByMsisdn(createPersonRequest.msisdn()).isPresent()) {
+            throw new MsisdnAlreadyExistsException("Subscriber with MSISDN " + createPersonRequest.msisdn() + " already exists");
+        }
+
         Tariff baseTariff = Tariff.builder()
                 .tariffId(11L)
                 .startDate(LocalDate.now())
@@ -68,11 +74,11 @@ public class PersonService {
                 .name(createPersonRequest.name())
                 .balance(100L)
                 .description(createPersonRequest.description())
-                .registrationDate(LocalDateTime.now())
                 .msisdn(createPersonRequest.msisdn())
                 .tariff(baseTariff)
                 .isRestricted(false)
                 .quantServices(baseQuantServices)
+                .registrationDate(LocalDateTime.now())
                 .build();
 
         PersonDTO newSubscriberDto = PersonDTO.fromEntity(personRepository.save(newSubscriber));
@@ -82,14 +88,14 @@ public class PersonService {
 
     public void changePersonTariff(String msisdn, ChangePersonTariffRequest changePersonTariffRequest) {
         Person subscriber = personRepository.findByMsisdn(msisdn)
-                .orElseThrow(() -> new EntityNotFoundException("Person with MSISDN " + msisdn + " not found"));
+                .orElseThrow(() -> new SubscriberNotFoundException("Person with MSISDN " + msisdn + " not found"));
         hrsSender.sendTariffInformationRequest(
                 new TariffInformationRequest(subscriber.getId(), changePersonTariffRequest.newTariff()));
     }
 
     public void processChangePersonTariff(TariffInformationResponse tariffInformationResponse) {
         Person subscriber = personRepository.findById(tariffInformationResponse.personId())
-                .orElseThrow(() -> new EntityNotFoundException("Person with id " + tariffInformationResponse.personId() + " not found"));
+                .orElseThrow(() -> new SubscriberNotFoundException("Person with id " + tariffInformationResponse.personId() + " not found"));
 
         List<QuantService> newQuantServices = tariffInformationResponse.quantServices().stream()
                 .map(service -> QuantService.builder()
@@ -115,10 +121,11 @@ public class PersonService {
 
     public void replenishBalance(String personMsisdn, Long money) {
         Person subscriber = personRepository.findByMsisdn(personMsisdn)
-                .orElseThrow(() -> new EntityNotFoundException("Person with id " + personMsisdn + " not found"));
+                .orElseThrow(() -> new SubscriberNotFoundException("Person with MSISDN " + personMsisdn + " not found"));
 
-        if (subscriber.getBalance() < 0 && subscriber.getBalance() + money >= 0){
+        if (subscriber.getBalance() < 0 && subscriber.getBalance() + money >= 0) {
             commutatorSender.sendCallRestrictionRequest(new CallRestrictionRequest(subscriber.getMsisdn(), false));
+            subscriber.setIsRestricted(false);
         }
 
         subscriber.setBalance(subscriber.getBalance() + money);
@@ -127,22 +134,22 @@ public class PersonService {
 
     public PersonDTO getPersonByMsisdn(String personMsisdn) {
         Person person = personRepository.findByMsisdn(personMsisdn)
-                .orElseThrow(() -> new EntityNotFoundException("Person with MSISDN " + personMsisdn + " not found"));
+                .orElseThrow(() -> new SubscriberNotFoundException("Person with MSISDN " + personMsisdn + " not found"));
 
         return PersonDTO.fromEntity(person);
     }
 
-    public void withdrawTariffPayment(TariffPaymentRequest tariffPaymentRequest){
+    public void withdrawTariffPayment(TariffPaymentRequest tariffPaymentRequest) {
         List<Person> allPersons = personRepository.findAllByIsRestrictedFalse();
-        for (Person person: allPersons){
+        for (Person person : allPersons) {
             hrsSender.sendCountTariffPaymentRequest(new CountTariffPaymentRequest(person.getId(), person.getTariff().getTariffId(), person.getTariff().getStartDate(), tariffPaymentRequest.currentDate()));
         }
     }
 
-    public void processCountTariffPaymentResponse(CountTariffPaymentResponse countTariffPaymentResponse){
+    public void processCountTariffPaymentResponse(CountTariffPaymentResponse countTariffPaymentResponse) {
         processBillingResponse(new BillingResponse(countTariffPaymentResponse.personId(), countTariffPaymentResponse.cost()));
         Person person = personRepository.findById(countTariffPaymentResponse.personId())
-                .orElseThrow(() -> new EntityNotFoundException("Person with ID " + countTariffPaymentResponse.personId() + " not found"));
+                .orElseThrow(() -> new SubscriberNotFoundException("Person with ID " + countTariffPaymentResponse.personId() + " not found"));
         changePersonTariff(person.getMsisdn(), new ChangePersonTariffRequest(person.getTariff().getTariffId()));
     }
 }

@@ -1,6 +1,7 @@
 package org.babynexign.babybilling.hrsservice.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -17,15 +18,19 @@ public class Tariff {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @NotBlank(message = "Tariff name must not be empty")
+    @Column(name = "name", unique = true)
     private String name;
 
+    @NotNull(message = "Payment period must be specified")
     @Column(name = "payment_period")
     private Integer paymentPeriod;
 
+    @Min(value = 0, message = "Cost cannot be negative")
     @Column(name = "cost")
     private Long cost;
 
+    @NotNull(message = "Start date must be specified")
     @Column(name = "start_date")
     private LocalDate startDate;
 
