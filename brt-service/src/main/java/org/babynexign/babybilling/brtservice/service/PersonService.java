@@ -80,11 +80,11 @@ public class PersonService {
         return newSubscriberDto;
     }
 
-    public void changePersonTariff(ChangePersonTariffRequest changePersonTariffRequest) {
-        Person subscriber = personRepository.findByMsisdn(changePersonTariffRequest.personMsisdn())
-                .orElseThrow(() -> new EntityNotFoundException("Person with MSISDN " + changePersonTariffRequest.personMsisdn() + " not found"));
+    public void changePersonTariff(String msisdn, ChangePersonTariffRequest changePersonTariffRequest) {
+        Person subscriber = personRepository.findByMsisdn(msisdn)
+                .orElseThrow(() -> new EntityNotFoundException("Person with MSISDN " + msisdn + " not found"));
         hrsSender.sendTariffInformationRequest(
-                new TariffInformationRequest(subscriber.getId(), changePersonTariffRequest.newTariffId()));
+                new TariffInformationRequest(subscriber.getId(), changePersonTariffRequest.newTariff()));
     }
 
     public void processChangePersonTariff(TariffInformationResponse tariffInformationResponse) {
@@ -143,6 +143,6 @@ public class PersonService {
         processBillingResponse(new BillingResponse(countTariffPaymentResponse.personId(), countTariffPaymentResponse.cost()));
         Person person = personRepository.findById(countTariffPaymentResponse.personId())
                 .orElseThrow(() -> new EntityNotFoundException("Person with ID " + countTariffPaymentResponse.personId() + " not found"));
-        changePersonTariff(new ChangePersonTariffRequest(person.getMsisdn(), person.getTariff().getTariffId()));
+        changePersonTariff(person.getMsisdn(), new ChangePersonTariffRequest(person.getTariff().getTariffId()));
     }
 }

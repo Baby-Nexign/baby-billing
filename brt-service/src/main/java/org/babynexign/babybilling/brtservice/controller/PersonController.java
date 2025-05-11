@@ -26,9 +26,9 @@ public class PersonController {
         return new ResponseEntity<>(personDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping("/tariff")
-    public ResponseEntity<Void> changePersonTariff(@RequestBody ChangePersonTariffRequest changePersonTariffRequest) {
-        personService.changePersonTariff(changePersonTariffRequest);
+    @PutMapping("/{msisdn}/tariff")
+    public ResponseEntity<Void> changePersonTariff(@PathVariable("msisdn") String personMsisdn, @RequestBody ChangePersonTariffRequest changePersonTariffRequest) {
+        personService.changePersonTariff(personMsisdn, changePersonTariffRequest);
         return ResponseEntity.ok().build();
     }
 
