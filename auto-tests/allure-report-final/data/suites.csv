@@ -1,0 +1,116 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"Проверка, что администратор может успешно получить список всех доступных тарифов.","251","HRS-TARIFFS-002: Аутентифицированный администратор успешно получает список тарифов","","Sun May 11 17:45:15 MSK 2025","passed","Sun May 11 17:45:15 MSK 2025","","org.example.hrs.HrsServiceTests","org.example.hrs.HrsServiceTests","adminUserCanGetListOfTariffs"
+"Проверка запрета на смену тарифа другому абоненту пользователем с ролью 'абонент'. Ожидается код 403.","231","BRT-PERSON-005: Абонент не может сменить тариф другому абоненту (403 Forbidden)","","Sun May 11 17:45:17 MSK 2025","passed","Sun May 11 17:45:18 MSK 2025","","org.example.brt.BrtPersonTests","org.example.brt.BrtPersonTests","subscriberCannotChangeTariffForAnotherPerson"
+"Проверка возможности смены тарифа существующему абоненту администратором. Ожидается код 200.","260","BRT-PERSON-003: Администратор успешно меняет тариф абоненту","","Sun May 11 17:45:20 MSK 2025","passed","Sun May 11 17:45:21 MSK 2025","","org.example.brt.BrtPersonTests","org.example.brt.BrtPersonTests","adminCanChangePersonTariffSuccessfully"
+"Проверка, что администратор может успешно получить список всех доступных услуг.","234","HRS-SERVICES-002: Аутентифицированный администратор успешно получает список услуг","","Sun May 11 17:45:15 MSK 2025","passed","Sun May 11 17:45:15 MSK 2025","","org.example.hrs.HrsServiceTests","org.example.hrs.HrsServiceTests","adminUserCanGetListOfServices"
+"Проверка успешного входа в систему с учетными данными администратора.","313","ASL-001: Успешный логин администратора","","Sun May 11 17:45:12 MSK 2025","passed","Sun May 11 17:45:12 MSK 2025","","org.example.auth.LoginTests","org.example.auth.LoginTests","adminLoginSuccess"
+"
+    Тест проверяет сценарий, когда абонент с 'Помесячным' тарифом совершает исходящий звонок
+    на номер ВНЕШНЕГО оператора, и длительность звонка превышает остаток минут в пакете.
+    Ожидаемое поведение:
+    1. Имеющиеся пакетные минуты списываются полностью.
+    2. Оставшаяся часть длительности звонка тарифицируется с денежного баланса
+       по тарифу для звонков на внешние сети сверх пакета.
+    Шаги:
+    1. Создание/обновление данных звонящего абонента (P2, Помесячный).
+    2. Отправка CDR о звонке на внешний номер в RabbitMQ.
+    3. Расчет общей длительности, минут из пакета, минут сверх пакета и стоимости минут сверх пакета (для внешних вызовов).
+    4. Проверка полного списания пакетных минут у звонящего (P2).
+    5. Проверка корректного списания средств с денежного баланса звонящего (P2).
+","7024","Проверка списания из пакета и деньгами (ТП 'Помесячный', звонок на внешнюю сеть)","tests","Sun May 11 02:30:49 MSK 2025","passed","Sun May 11 02:30:56 MSK 2025","","test_e2e_monthly_03","",""
+"Проверяет, что файл CDR, содержащий только звонки между внешними (неизвестными BRT) номерами, не приводит к созданию записей в БД. Используется файл: test_data/all_external_cdr.jsonl.","5035","Тест: BRT не сохраняет CDR, если оба абонента внешние","tests","Sun May 11 15:46:39 MSK 2025","passed","Sun May 11 15:46:44 MSK 2025","","test_external_calls","",""
+"Проверка создания новой услуги администратором. Текущая реализация сервиса использует заглушку и возвращает 200 OK с null полями.","327","HRS-SERVICES-005: Администратор успешно создает новую услугу (заглушка)","","Sun May 11 17:45:15 MSK 2025","passed","Sun May 11 17:45:15 MSK 2025","","org.example.hrs.HrsServiceTests","org.example.hrs.HrsServiceTests","adminCanCreateNewService"
+"Проверка получения ошибки при запросе информации о несуществующем абоненте. Ожидается код 404.","219","BRT-PERSON-012: Попытка получить информацию о несуществующем абоненте (404 Not Found)","","Sun May 11 17:45:19 MSK 2025","failed","Sun May 11 17:45:20 MSK 2025","","org.example.brt.BrtPersonTests","org.example.brt.BrtPersonTests","getInfoForNonExistentPersonReturnsNotFound"
+"Проверка запрета на создание нового тарифа пользователем с ролью 'абонент'. Ожидается код 403.","248","HRS-TARIFFS-006: Абонент не может создать новый тариф (403 Forbidden)","","Sun May 11 17:45:14 MSK 2025","failed","Sun May 11 17:45:14 MSK 2025","","org.example.hrs.HrsServiceTests","org.example.hrs.HrsServiceTests","subscriberCannotCreateNewTariff"
+"
+    Тест проверяет, что при исходящем звонке абонента с тарифным планом 'Помесячный':
+    1. Минуты корректно списываются из предоплаченного пакета.
+    2. Денежный баланс абонента не изменяется, если длительность звонка не превышает остаток минут в пакете.
+    Шаги:
+    1. Создание/обновление данных абонента с начальным пакетом минут и денежным балансом.
+    2. Отправка CDR о звонке в RabbitMQ.
+    3. Расчет ожидаемого остатка минут в пакете после звонка.
+    4. Проверка фактического остатка минут в пакете.
+    5. Проверка неизменности денежного баланса абонента.
+","5052","Проверка списания минут из пакета (ТП 'Помесячный') без изменения денежного баланса","tests","Sun May 11 02:30:35 MSK 2025","passed","Sun May 11 02:30:40 MSK 2025","","test_e2e_monthly_01","",""
+"Проверяет, что BRT-сервис НЕ сохраняет CDR в 'cdr_record', если CDR имеет невалидный формат или значение для 'callStart' или 'callEnd'. Используется файл: test_data/invalid_dates.jsonl. Ожидается 0 записей в БД.","5035","Тест: BRT отклоняет CDR с невалидными форматами или значениями дат","tests","Sun May 11 15:46:50 MSK 2025","passed","Sun May 11 15:46:55 MSK 2025","","test_invalid_date","",""
+"Проверка невозможности регистрации пользователя с MSISDN, который уже занят.","149","ASR-004: Неуспешная регистрация (MSISDN уже существует)","","Sun May 11 17:45:13 MSK 2025","failed","Sun May 11 17:45:13 MSK 2025","","org.example.auth.RegisterTests","org.example.auth.RegisterTests","registerUserWithExistingMsisdn"
+"Проверка поведения системы при попытке входа с несуществующим логином.","93","ASL-004: Неуспешный логин (несуществующий пользователь)","","Sun May 11 17:45:13 MSK 2025","failed","Sun May 11 17:45:13 MSK 2025","","org.example.auth.LoginTests","org.example.auth.LoginTests","loginWithNonExistentUser"
+"Проверка создания нового тарифа администратором с полным набором данных. Ожидается код 201 Created и возврат созданного тарифа.","263","HRS-TARIFFS-005: Администратор успешно создает новый тариф","","Sun May 11 17:45:14 MSK 2025","failed","Sun May 11 17:45:14 MSK 2025","","org.example.hrs.HrsServiceTests","org.example.hrs.HrsServiceTests","adminCanCreateNewTariff"
+"Проверка невозможности регистрации пользователя с уже существующим username.","72","ASR-003: Неуспешная регистрация (username уже существует)","","Sun May 11 17:45:13 MSK 2025","failed","Sun May 11 17:45:13 MSK 2025","","org.example.auth.RegisterTests","org.example.auth.RegisterTests","registerUserWithExistingUsername"
+"Проверка возможности смены собственного тарифа абонентом. Ожидается код 200.","238","BRT-PERSON-004: Абонент успешно меняет свой собственный тариф","","Sun May 11 17:45:17 MSK 2025","failed","Sun May 11 17:45:17 MSK 2025","","org.example.brt.BrtPersonTests","org.example.brt.BrtPersonTests","subscriberCanChangeOwnTariffSuccessfully"
+"
+    Тест проверяет, что баланс принимающего абонента на тарифном плане 'Классика'
+    не изменяется при входящем звонке от внешнего абонента.
+    Шаги:
+    1. Создание/обновление данных принимающего абонента.
+    2. Отправка CDR о входящем звонке в RabbitMQ.
+    3. Проверка, что расчетная стоимость входящего звонка равна нулю.
+    4. Проверка баланса принимающего абонента (не должен измениться).
+","5042","Проверка отсутствия списаний при входящем звонке (ТП 'Классика')","tests","Sun May 11 02:30:30 MSK 2025","passed","Sun May 11 02:30:35 MSK 2025","","test_e2e_classic_03","",""
+"Проверка, что при запросе тарифа с несуществующим ID система возвращает ошибку 404.","46","HRS-TARIFFS-004: Запрос несуществующего тарифа по ID возвращает 404 Not Found","","Sun May 11 17:45:16 MSK 2025","failed","Sun May 11 17:45:16 MSK 2025","","org.example.hrs.HrsServiceTests","org.example.hrs.HrsServiceTests","getNonExistentTariffByIdReturnsNotFound"
+"Проверка возможности пополнения собственного баланса абонентом. Ожидается код 200.","229","BRT-PERSON-007: Абонент успешно пополняет свой собственный баланс","","Sun May 11 17:45:20 MSK 2025","passed","Sun May 11 17:45:20 MSK 2025","","org.example.brt.BrtPersonTests","org.example.brt.BrtPersonTests","subscriberCanReplenishOwnBalanceSuccessfully"
+"Проверяет, что корректный файл CDR (из test_data/good_cdrs.jsonl) успешно обрабатывается, и все записи из него сохраняются в базу данных cdr_record.","7038","Тест успешной обработки файла с валидными CDR записями","tests","Sun May 11 15:47:00 MSK 2025","passed","Sun May 11 15:47:07 MSK 2025","","test_positive_scenarios","",""
+"Проверка, что пользователь с ролью 'администратор' может успешно запустить процесс генерации CDR файлов. Ожидается код 200 OK.","14905","CDR-001: Администратор успешно инициирует генерацию CDR","","Sun May 11 17:44:56 MSK 2025","passed","Sun May 11 17:45:11 MSK 2025","","org.example.cdr.CommutatorServiceTests","org.example.cdr.CommutatorServiceTests","adminCanSuccessfullyGenerateCdr"
+"Проверяет, что BRT-сервис НЕ сохраняет CDR в 'cdr_record', если CDR имеет невалидный 'callType'. Используется файл: test_data/invalid_call_types.jsonl. Ожидается 0 записей в БД.","5050","Тест: BRT отклоняет CDR с невалидными значениями callType","tests","Sun May 11 15:46:45 MSK 2025","passed","Sun May 11 15:46:50 MSK 2025","","test_invalid_call_type","",""
+"
+    Тест проверяет сценарий, когда абонент с 'Помесячным' тарифом совершает исходящий внутрисетевой звонок,
+    длительность которого превышает остаток минут в пакете.
+    Ожидаемое поведение:
+    1. Имеющиеся пакетные минуты списываются полностью.
+    2. Оставшаяся часть длительности звонка тарифицируется с денежного баланса по соответствующему тарифу.
+    3. Баланс принимающего абонента (если он внутрисетевой) не изменяется.
+    Шаги:
+    1. Создание/обновление данных звонящего (P2, Помесячный) и принимающего (P1, Классика) абонентов.
+    2. Отправка CDR о звонке в RabbitMQ.
+    3. Расчет общей длительности звонка, минут из пакета, минут сверх пакета и стоимости минут сверх пакета.
+    4. Проверка полного списания пакетных минут у звонящего (P2).
+    5. Проверка корректного списания средств с денежного баланса звонящего (P2).
+    6. Проверка неизменности баланса принимающего абонента (P1).
+","8384","Проверка частичного списания из пакета и деньгами (ТП 'Помесячный', внутрисеть)","tests","Sun May 11 02:30:41 MSK 2025","passed","Sun May 11 02:30:49 MSK 2025","","test_e2e_monthly_02","",""
+"Проверка запрета на создание нового абонента пользователем с ролью 'абонент'. Ожидается код 403.","1603","BRT-PERSON-002: Абонент не может создать нового абонента (403 Forbidden)","","Sun May 11 17:45:18 MSK 2025","passed","Sun May 11 17:45:19 MSK 2025","","org.example.brt.BrtPersonTests","org.example.brt.BrtPersonTests","subscriberCannotCreateNewPerson"
+"Проверка, что неавторизованный пользователь не может запустить процесс генерации CDR файлов. Ожидается код 401 Unauthorized.","43","CDR-003: Не авторизованный юзер не может инициировать генерацию CDR (401 UNAUTHORIZED)","","Sun May 11 17:45:12 MSK 2025","passed","Sun May 11 17:45:12 MSK 2025","","org.example.cdr.CommutatorServiceTests","org.example.cdr.CommutatorServiceTests","unauthorizeCannotGenerateCdr"
+"Проверка невозможности регистрации абонента, если его MSISDN не зарегистрирован в BRT (биллинговой системе).","85","ASR-005: Неуспешная регистрация абонента (MSISDN не известен BRT)","","Sun May 11 17:45:13 MSK 2025","failed","Sun May 11 17:45:13 MSK 2025","","org.example.auth.RegisterTests","org.example.auth.RegisterTests","registerSubscriberWithMsisdnNotKnownToBrtFails"
+"Проверка возможности пополнения баланса абонента администратором. Ожидается код 200.","446","BRT-PERSON-006: Администратор успешно пополняет баланс абоненту","","Sun May 11 17:45:16 MSK 2025","passed","Sun May 11 17:45:16 MSK 2025","","org.example.brt.BrtPersonTests","org.example.brt.BrtPersonTests","adminCanReplenishPersonBalanceSuccessfully"
+"Проверка запрета на получение информации о другом абоненте пользователем с ролью 'абонент'. Ожидается код 403.","294","BRT-PERSON-011: Абонент не может получить информацию о другом абоненте (403 Forbidden)","","Sun May 11 17:45:16 MSK 2025","passed","Sun May 11 17:45:17 MSK 2025","","org.example.brt.BrtPersonTests","org.example.brt.BrtPersonTests","subscriberCannotGetInfoForAnotherPerson"
+"Проверка получения конкретной существующей услуги по ее ID без аутентификации.","94","HRS-SERVICES-003: Неаутентифицированный пользователь успешно получает существующую услугу по ID","","Sun May 11 17:45:16 MSK 2025","passed","Sun May 11 17:45:16 MSK 2025","","org.example.hrs.HrsServiceTests","org.example.hrs.HrsServiceTests","unauthenticatedUserCanGetExistingServiceById"
+"Проверка поведения системы при попытке входа с верным логином, но неверным паролем.","278","ASL-003: Неуспешный логин (неверный пароль)","","Sun May 11 17:45:12 MSK 2025","failed","Sun May 11 17:45:12 MSK 2025","","org.example.auth.LoginTests","org.example.auth.LoginTests","loginWithInvalidPassword"
+"Проверка запрета на пополнение баланса другого абонента пользователем с ролью 'абонент'. Ожидается код 403.","208","BRT-PERSON-008: Абонент не может пополнить баланс другому абоненту (403 Forbidden)","","Sun May 11 17:45:17 MSK 2025","passed","Sun May 11 17:45:17 MSK 2025","","org.example.brt.BrtPersonTests","org.example.brt.BrtPersonTests","subscriberCannotReplenishBalanceForAnotherPerson"
+"Проверка успешного входа в систему с учетными данными существующего абонента.","255","ASL-002: Успешный логин существующего абонента","","Sun May 11 17:45:12 MSK 2025","passed","Sun May 11 17:45:13 MSK 2025","","org.example.auth.LoginTests","org.example.auth.LoginTests","subscriberLoginSuccess"
+"Проверка, что при запросе услуги с несуществующим ID система возвращает ошибку 404.","121","HRS-SERVICES-004: Запрос несуществующей услуги по ID возвращает 404 Not Found","","Sun May 11 17:45:15 MSK 2025","failed","Sun May 11 17:45:15 MSK 2025","","org.example.hrs.HrsServiceTests","org.example.hrs.HrsServiceTests","getNonExistentServiceByIdReturnsNotFound"
+"Проверка, что любой пользователь (даже не аутентифицированный) может получить список всех доступных тарифов.","109","HRS-TARIFFS-001: Неаутентифицированный пользователь успешно получает список тарифов","","Sun May 11 17:45:15 MSK 2025","passed","Sun May 11 17:45:16 MSK 2025","","org.example.hrs.HrsServiceTests","org.example.hrs.HrsServiceTests","unauthenticatedUserCanGetListOfTariffs"
+"
+    Тест проверяет корректность списания средств у звонящего абонента
+    при исходящем звонке на номер другого (внешнего) оператора
+    для тарифного плана 'Классика'.
+    Шаги:
+    1. Создание/обновление данных звонящего абонента.
+    2. Отправка CDR о звонке на внешний номер в RabbitMQ.
+    3. Расчет ожидаемой стоимости звонка по тарифу для внешних вызовов.
+    4. Проверка баланса звонящего абонента после биллинга.
+","5050","Проверка списания средств при звонке на внешнего оператора (ТП 'Классика')","tests","Sun May 11 02:30:25 MSK 2025","passed","Sun May 11 02:30:30 MSK 2025","","test_e2e_classic_02","",""
+"
+    Тест проверяет корректность списания средств у звонящего абонента
+    и неизменность баланса у принимающего абонента при внутрисетевом звонке
+    на тарифном плане 'Классика'.
+    Шаги:
+    1. Создание/обновление данных звонящего и принимающего абонентов.
+    2. Отправка CDR о звонке в RabbitMQ.
+    3. Расчет ожидаемой стоимости звонка.
+    4. Проверка баланса звонящего абонента после биллинга.
+    5. Проверка баланса принимающего абонента (не должен измениться).
+","5033","Проверка списания средств при внутрисетевом звонке на тарифе 'Классика'","tests","Sun May 11 02:30:20 MSK 2025","passed","Sun May 11 02:30:25 MSK 2025","","test_e2e_classic_01","",""
+"Проверка запрета на создание новой услуги пользователем с ролью 'абонент'. Ожидается код 403.","285","HRS-SERVICES-006: Абонент не может создать новую услугу (403 Forbidden)","","Sun May 11 17:45:14 MSK 2025","failed","Sun May 11 17:45:14 MSK 2025","","org.example.hrs.HrsServiceTests","org.example.hrs.HrsServiceTests","subscriberCannotCreateNewService"
+"Проверка возможности успешной регистрации нового пользователя с ролью администратора.","221","ASR-001: Успешная регистрация нового администратора","","Sun May 11 17:45:13 MSK 2025","passed","Sun May 11 17:45:13 MSK 2025","","org.example.auth.RegisterTests","org.example.auth.RegisterTests","registerNewAdminSuccess"
+"Проверяет, что BRT-сервис НЕ сохраняет CDR в 'cdr_record', если 'secondSubscriberMsisdn' имеет невалидный формат. Используется файл: test_data/invalid_format_second_msisdn.jsonl. Ожидается 0 записей в БД.","5035","Тест: BRT отклоняет CDR с невалидным форматом secondSubscriberMsisdn","tests","Sun May 11 15:46:55 MSK 2025","failed","Sun May 11 15:47:00 MSK 2025","","test_invalid_second_msisdn","",""
+"Проверка регистрации нового пользователя с ролью абонента только по username (без MSISDN). Ожидается ошибка, так как для абонента MSISDN должен быть обязателен и известен BRT, ","245","ASR-002: Успешная регистрация нового абонента (только username, без msisdn)","","Sun May 11 17:45:13 MSK 2025","failed","Sun May 11 17:45:13 MSK 2025","","org.example.auth.RegisterTests","org.example.auth.RegisterTests","registerNewSubscriberUsernameOnlyBad"
+"Проверка получения информации о существующем абоненте администратором. Ожидается код 200 и корректное тело ответа.","319","BRT-PERSON-009: Администратор успешно получает информацию об абоненте","","Sun May 11 17:45:17 MSK 2025","passed","Sun May 11 17:45:17 MSK 2025","","org.example.brt.BrtPersonTests","org.example.brt.BrtPersonTests","adminCanGetPersonInfoSuccessfully"
+"Проверка возможности создания нового абонента администратором. Ожидается код 201 и корректное тело ответа.","290","BRT-PERSON-001: Администратор успешно создает нового абонента","","Sun May 11 17:45:19 MSK 2025","passed","Sun May 11 17:45:19 MSK 2025","","org.example.brt.BrtPersonTests","org.example.brt.BrtPersonTests","adminCanCreateNewPersonSuccessfully"
+"Проверяет, что CDR, где время окончания ('callEnd') предшествует времени начала ('callStart'), НЕ добавляются в таблицу 'cdr_record'. Используется файл: test_data/end_before_start.jsonl. Ожидается 0 записей в БД.","5027","Тест: BRT отклоняет CDR, если время окончания звонка раньше времени начала","tests","Sun May 11 15:47:07 MSK 2025","failed","Sun May 11 15:47:12 MSK 2025","","test_start_after_end","",""
+"Проверяет, что пустой файл CDR (test_data/empty_cdr.jsonl) не приводит к созданию записей в БД и не вызывает ошибок при чтении/отправке.","1021","Тест обработки пустого CDR файла","tests","Sun May 11 15:46:38 MSK 2025","passed","Sun May 11 15:46:39 MSK 2025","","test_edge_cases","",""
+"Проверка, что любой пользователь (даже не аутентифицированный) может получить список всех доступных услуг.","147","HRS-SERVICES-001: Неаутентифицированный пользователь успешно получает список услуг","","Sun May 11 17:45:14 MSK 2025","passed","Sun May 11 17:45:14 MSK 2025","","org.example.hrs.HrsServiceTests","org.example.hrs.HrsServiceTests","unauthenticatedUserCanGetListOfServices"
+"Проверяет обработку пачки CDR из файла 'test_data/complex_cdr_batch.jsonl', содержащей как корректные, так и некорректные записи. Ожидается, что только корректные CDR (10 из 20 по условию теста) будут сохранены.","10034","Тест: BRT обрабатывает комплексную пачку CDR (валидные и невалидные)","tests","Sun May 11 15:46:28 MSK 2025","failed","Sun May 11 15:46:38 MSK 2025","","test_complex_cdr","",""
+"Проверка получения конкретного существующего тарифа по его ID без аутентификации.","83","HRS-TARIFFS-003: Неаутентифицированный пользователь успешно получает существующий тариф по ID","","Sun May 11 17:45:16 MSK 2025","passed","Sun May 11 17:45:16 MSK 2025","","org.example.hrs.HrsServiceTests","org.example.hrs.HrsServiceTests","unauthenticatedUserCanGetExistingTariffById"
+"Проверка получения информации о себе абонентом. Ожидается код 200 и корректное тело ответа.","296","BRT-PERSON-010: Абонент успешно получает информацию о себе","","Sun May 11 17:45:20 MSK 2025","passed","Sun May 11 17:45:20 MSK 2025","","org.example.brt.BrtPersonTests","org.example.brt.BrtPersonTests","subscriberCanGetOwnInfoSuccessfully"
+"Проверка невозможности регистрации, если не предоставлен ни username, ни MSISDN.","61","ASR-006: Неуспешная регистрация (не указаны ни username, ни msisdn)","","Sun May 11 17:45:13 MSK 2025","failed","Sun May 11 17:45:14 MSK 2025","","org.example.auth.RegisterTests","org.example.auth.RegisterTests","registerUserWithNoLoginIdentifier"
+"Проверка, что пользователь с ролью 'абонент' не может запустить процесс генерации CDR файлов. Ожидается код 403 Forbidden.","287","CDR-002: Абонент не может инициировать генерацию CDR (403 Forbidden)","","Sun May 11 17:45:11 MSK 2025","passed","Sun May 11 17:45:12 MSK 2025","","org.example.cdr.CommutatorServiceTests","org.example.cdr.CommutatorServiceTests","subscriberCannotGenerateCdr"

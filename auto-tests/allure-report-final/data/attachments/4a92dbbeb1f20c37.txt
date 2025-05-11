@@ -1,0 +1,22 @@
+2025-05-11 15:46:38,867 - tests.conftest - INFO - Фикстура db_connection: Попытка подключения к БД...
+2025-05-11 15:46:38,878 - db_checker - INFO - Успешное подключение к БД brt на localhost:5432
+2025-05-11 15:46:38,878 - tests.test_edge_cases - INFO - --- Запуск теста: Обработка пустого файла test_data/empty_cdr.jsonl ---
+2025-05-11 15:46:38,878 - tests.test_edge_cases - INFO - Подготовка БД (очистка cdr_record)...
+2025-05-11 15:46:38,878 - db_checker - INFO - --- Начало подготовки БД к тесту ---
+2025-05-11 15:46:38,887 - db_checker - INFO - Таблица cdr_record очищена, счетчик ID сброшен.
+2025-05-11 15:46:38,889 - db_checker - INFO - Найдены существующие абоненты: {}
+2025-05-11 15:46:38,889 - db_checker - INFO - --- Подготовка БД к тесту завершена ---
+2025-05-11 15:46:38,889 - tests.test_edge_cases - INFO - БД подготовлена. ID затронутых абонентов: {}
+2025-05-11 15:46:38,890 - tests.test_edge_cases - INFO - Чтение CDR из файла: test_data/empty_cdr.jsonl
+2025-05-11 15:46:38,890 - cdr_reader - INFO - Попытка чтения CDR файла: test_data/empty_cdr.jsonl
+2025-05-11 15:46:38,890 - cdr_reader - INFO - Успешно прочитано 0 CDR записей из файла test_data/empty_cdr.jsonl
+2025-05-11 15:46:38,890 - tests.test_edge_cases - INFO - Успешно прочитан пустой список из test_data/empty_cdr.jsonl.
+2025-05-11 15:46:38,890 - tests.test_edge_cases - INFO - Отправка в RabbitMQ не выполняется, так как список CDR пуст.
+2025-05-11 15:46:38,890 - tests.test_edge_cases - INFO - Ожидание 1 сек...
+2025-05-11 15:46:39,891 - tests.test_edge_cases - INFO - Получение записей из cdr_record (ожидается 0)...
+2025-05-11 15:46:39,897 - db_checker - INFO - Получено 0 записей из cdr_record.
+2025-05-11 15:46:39,898 - tests.test_edge_cases - INFO - Фактически найдено записей: 0.
+2025-05-11 15:46:39,899 - tests.test_edge_cases - INFO - --- Тест 'test_process_empty_cdr_file' УСПЕШНО завершен ---
+2025-05-11 15:46:39,902 - tests.conftest - INFO - Фикстура db_connection: Закрытие соединения с БД...
+2025-05-11 15:46:39,904 - db_checker - WARNING - Откат незавершенной транзакции при закрытии соединения.
+2025-05-11 15:46:39,905 - db_checker - INFO - Соединение с БД закрыто.

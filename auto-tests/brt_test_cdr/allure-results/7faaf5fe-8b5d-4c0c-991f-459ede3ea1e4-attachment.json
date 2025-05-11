@@ -1,0 +1,44 @@
+[
+  {
+    "callType": "02",
+    "firstSubscriberMsisdn": "79123456789",
+    "secondSubscriberMsisdn": "89881112233",
+    "callStart": "2024-05-24T10:00:00",
+    "callEnd": "2024-05-24T10:05:00"
+  },
+  {
+    "callType": "01",
+    "firstSubscriberMsisdn": "79996667755",
+    "secondSubscriberMsisdn": "7988444556",
+    "callStart": "2024-05-24T11:00:00",
+    "callEnd": "2024-05-24T11:05:00"
+  },
+  {
+    "callType": "02",
+    "firstSubscriberMsisdn": "79334455667",
+    "secondSubscriberMsisdn": "798877788990",
+    "callStart": "2024-05-24T12:00:00",
+    "callEnd": "2024-05-24T12:05:00"
+  },
+  {
+    "callType": "01",
+    "firstSubscriberMsisdn": "79123456789",
+    "secondSubscriberMsisdn": "ABCDEFGHIJK",
+    "callStart": "2024-05-24T13:00:00",
+    "callEnd": "2024-05-24T13:05:00"
+  },
+  {
+    "callType": "02",
+    "firstSubscriberMsisdn": "79996667755",
+    "secondSubscriberMsisdn": "7988111223A",
+    "callStart": "2024-05-24T14:00:00",
+    "callEnd": "2024-05-24T14:05:00"
+  },
+  {
+    "callType": "01",
+    "firstSubscriberMsisdn": "79334455667",
+    "secondSubscriberMsisdn": "",
+    "callStart": "2024-05-24T15:00:00",
+    "callEnd": "2024-05-24T15:05:00"
+  }
+]

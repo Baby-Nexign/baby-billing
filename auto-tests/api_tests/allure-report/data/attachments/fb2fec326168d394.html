@@ -1,0 +1,27 @@
+<div>POST to http://localhost:8084/api/tariffs</div>
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;name&quot;: &quot;Attempt Tariff&quot;,
+    &quot;description&quot;: &quot;Attempt Descr by Subscriber&quot;
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1NVQlNDUklCRVIiXSwibXNpc2RuIjoiNzkxMjM0NTY3ODkiLCJzdWIiOiIxIiwiaWF0IjoxNzQ2OTc0NzE0LCJleHAiOjE3NDcwNjExMTR9.SAHjjRMqu9kbystyJyaWGkMzQLdEJFXHIK1Q9OZd_ogPvSkKg1Bk-Am6e5_O7LFZv089XCJPkqhZT5y_hEGBFQ</div>
+        <div>Accept: */*</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+
+
+<h4>Curl</h4>
+<div>
+curl -v -X POST &#39;http://localhost:8084/api/tariffs&#39; -H &#39;Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1NVQlNDUklCRVIiXSwibXNpc2RuIjoiNzkxMjM0NTY3ODkiLCJzdWIiOiIxIiwiaWF0IjoxNzQ2OTc0NzE0LCJleHAiOjE3NDcwNjExMTR9.SAHjjRMqu9kbystyJyaWGkMzQLdEJFXHIK1Q9OZd_ogPvSkKg1Bk-Am6e5_O7LFZv089XCJPkqhZT5y_hEGBFQ&#39; -H &#39;Accept: */*&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;name&quot;: &quot;Attempt Tariff&quot;,
+    &quot;description&quot;: &quot;Attempt Descr by Subscriber&quot;
+}&#39;
+</div>

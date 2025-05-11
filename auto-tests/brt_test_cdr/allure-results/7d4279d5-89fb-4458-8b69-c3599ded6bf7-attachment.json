@@ -1,0 +1,62 @@
+[
+  {
+    "id": 6,
+    "msisdn_one": "79334455667",
+    "msisdn_two": "",
+    "type": "01",
+    "start_time": "2024-05-24 15:00:00",
+    "in_one_network": false,
+    "our_subscriber_id": 3,
+    "lasts": 300000000000
+  },
+  {
+    "id": 5,
+    "msisdn_one": "79996667755",
+    "msisdn_two": "7988111223A",
+    "type": "02",
+    "start_time": "2024-05-24 14:00:00",
+    "in_one_network": false,
+    "our_subscriber_id": 2,
+    "lasts": 300000000000
+  },
+  {
+    "id": 4,
+    "msisdn_one": "79123456789",
+    "msisdn_two": "ABCDEFGHIJK",
+    "type": "01",
+    "start_time": "2024-05-24 13:00:00",
+    "in_one_network": false,
+    "our_subscriber_id": 1,
+    "lasts": 300000000000
+  },
+  {
+    "id": 3,
+    "msisdn_one": "79334455667",
+    "msisdn_two": "798877788990",
+    "type": "02",
+    "start_time": "2024-05-24 12:00:00",
+    "in_one_network": false,
+    "our_subscriber_id": 3,
+    "lasts": 300000000000
+  },
+  {
+    "id": 2,
+    "msisdn_one": "79996667755",
+    "msisdn_two": "7988444556",
+    "type": "01",
+    "start_time": "2024-05-24 11:00:00",
+    "in_one_network": false,
+    "our_subscriber_id": 2,
+    "lasts": 300000000000
+  },
+  {
+    "id": 1,
+    "msisdn_one": "79123456789",
+    "msisdn_two": "89881112233",
+    "type": "02",
+    "start_time": "2024-05-24 10:00:00",
+    "in_one_network": false,
+    "our_subscriber_id": 1,
+    "lasts": 300000000000
+  }
+]

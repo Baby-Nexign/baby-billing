@@ -1,0 +1,27 @@
+<div>POST to http://localhost:8084/api/services</div>
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;name&quot;: &quot;New Test Service 700285&quot;,
+    &quot;description&quot;: &quot;Description for New Test Service 700285&quot;
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjQiLCJpYXQiOjE3NDY5NzQ3MTUsImV4cCI6MTc0NzA2MTExNX0.2AlrL3SxnQ9znLCPigA-Umq57dqX0YsgRxXkO42f4fFxubRMOMWMlCK3lrYhDbU-ytLSGz6vLoXyHNRo-bPVog</div>
+        <div>Accept: */*</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+
+
+<h4>Curl</h4>
+<div>
+curl -v -X POST &#39;http://localhost:8084/api/services&#39; -H &#39;Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjQiLCJpYXQiOjE3NDY5NzQ3MTUsImV4cCI6MTc0NzA2MTExNX0.2AlrL3SxnQ9znLCPigA-Umq57dqX0YsgRxXkO42f4fFxubRMOMWMlCK3lrYhDbU-ytLSGz6vLoXyHNRo-bPVog&#39; -H &#39;Accept: */*&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;name&quot;: &quot;New Test Service 700285&quot;,
+    &quot;description&quot;: &quot;Description for New Test Service 700285&quot;
+}&#39;
+</div>

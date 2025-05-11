@@ -1,0 +1,9 @@
+[32mINFO    [0m database:database.py:19 Успешное подключение к БД brt
+[32mINFO    [0m database:database.py:113 Найдены существующие абоненты для MSISDNs: ['79111111111']
+[32mINFO    [0m database:database.py:121 Обновление данных для существующего абонента 79111111111 (ID: 4).
+[32mINFO    [0m database:database.py:188 Успешно обновлен абонент 79111111111 (person.id: 4).
+[32mINFO    [0m database:database.py:259 Транзакция успешно зафиксирована. Всего обработано абонентов: 1.
+[32mINFO    [0m rabbitmq_sender:rabbitmq_sender.py:30 Подключение к RabbitMQ: host=localhost, port=5672
+[32mINFO    [0m rabbitmq_sender:rabbitmq_sender.py:40 Канал RabbitMQ успешно создан.
+[32mINFO    [0m rabbitmq_sender:rabbitmq_sender.py:54 Сообщение с 1 CDR успешно отправлено.
+[32mINFO    [0m tests.test_e2e_classic_02:test_e2e_classic_02.py:104 Баланс 79111111111 ДО: 50, ПОСЛЕ: 0 (ожидалось: 0)
