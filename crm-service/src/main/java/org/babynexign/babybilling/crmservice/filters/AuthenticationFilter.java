@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -36,60 +37,10 @@ public class AuthenticationFilter implements GatewayFilter {
                 return this.onError(exchange, HttpStatus.FORBIDDEN);
             }
 
-            if (!hasAccess(request, token)) {
-                return this.onError(exchange, HttpStatus.FORBIDDEN);
-            }
-
-            this.updateRequest(exchange, token);
+            return chain.filter(updateRequest(exchange, token));
         }
 
         return chain.filter(exchange);
-    }
-
-    private boolean hasAccess(ServerHttpRequest request, String token) {
-        String path = request.getURI().getPath();
-
-        if (jwtUtil.hasAdminRole(token)) {
-            return true;
-        }
-
-        String userMsisdn = jwtUtil.getMsisdnFromToken(token);
-
-        if (userMsisdn == null || userMsisdn.isEmpty()) {
-            return false;
-        }
-
-        if (path.matches(".*/api/person/[^/]+")) {
-            String pathMsisdn = extractMsisdnFromPath(path);
-            return pathMsisdn.equals(userMsisdn);
-        }
-
-        if (path.matches(".*/api/person/[^/]+/balance")) {
-            String pathMsisdn = extractMsisdnFromPath(path);
-            return pathMsisdn.equals(userMsisdn);
-        }
-
-        return !path.contains("/generate-cdr") &&
-                (!path.matches(".*/api/person") || !isPostMethod(request)) &&
-                (!path.matches(".*/api/services") || !isPostMethod(request)) &&
-                (!path.matches(".*/api/tariffs") || !isPostMethod(request));
-    }
-
-    private String extractMsisdnFromPath(String path) {
-        String[] parts = path.split("/");
-        for (int i = 0; i < parts.length; i++) {
-            if (parts[i].equals("person") && i + 1 < parts.length) {
-                String msisdn = parts[i + 1];
-                if (msisdn.matches("\\d+")) {
-                    return msisdn;
-                }
-            }
-        }
-        return "";
-    }
-
-    private boolean isPostMethod(ServerHttpRequest request) {
-        return "POST".equals(request.getMethod().name());
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, HttpStatus httpStatus) {
@@ -106,7 +57,7 @@ public class AuthenticationFilter implements GatewayFilter {
         return !request.getHeaders().containsKey("Authorization");
     }
 
-    private void updateRequest(ServerWebExchange exchange, String token) {
+    private ServerWebExchange updateRequest(ServerWebExchange exchange, String token) {
         Claims claims = jwtUtil.getAllClaimsFromToken(token);
 
         ServerHttpRequest request = exchange.getRequest().mutate()
@@ -127,6 +78,18 @@ public class AuthenticationFilter implements GatewayFilter {
                     .build();
         }
 
-        exchange.mutate().request(request).build();
+        boolean isAdmin = jwtUtil.hasAdminRole(token);
+        request = request.mutate()
+                .header("X-User-Is-Admin", String.valueOf(isAdmin))
+                .build();
+
+        Date expiration = claims.getExpiration();
+        if (expiration != null) {
+            request = request.mutate()
+                    .header("X-Token-Expiration", String.valueOf(expiration.getTime()))
+                    .build();
+        }
+
+        return exchange.mutate().request(request).build();
     }
 }
