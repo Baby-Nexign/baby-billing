@@ -1,0 +1,22 @@
+[32mINFO    [0m tests.conftest:conftest.py:18 Фикстура db_connection: Попытка подключения к БД...
+[32mINFO    [0m db_checker:db_checker.py:17 Успешное подключение к БД brt на localhost:5432
+[32mINFO    [0m tests.test_edge_cases:test_edge_cases.py:29 --- Запуск теста: Обработка пустого файла test_data/empty_cdr.jsonl ---
+[32mINFO    [0m tests.test_edge_cases:test_edge_cases.py:33 Подготовка БД (очистка cdr_record)...
+[32mINFO    [0m db_checker:db_checker.py:112 --- Начало подготовки БД к тесту ---
+[32mINFO    [0m db_checker:db_checker.py:47 Таблица cdr_record очищена, счетчик ID сброшен.
+[32mINFO    [0m db_checker:db_checker.py:63 Найдены существующие абоненты: {}
+[32mINFO    [0m db_checker:db_checker.py:115 --- Подготовка БД к тесту завершена ---
+[32mINFO    [0m tests.test_edge_cases:test_edge_cases.py:40 БД подготовлена. ID затронутых абонентов: {}
+[32mINFO    [0m tests.test_edge_cases:test_edge_cases.py:43 Чтение CDR из файла: test_data/empty_cdr.jsonl
+[32mINFO    [0m cdr_reader:cdr_reader.py:11 Попытка чтения CDR файла: test_data/empty_cdr.jsonl
+[32mINFO    [0m cdr_reader:cdr_reader.py:30 Успешно прочитано 0 CDR записей из файла test_data/empty_cdr.jsonl
+[32mINFO    [0m tests.test_edge_cases:test_edge_cases.py:52 Успешно прочитан пустой список из test_data/empty_cdr.jsonl.
+[32mINFO    [0m tests.test_edge_cases:test_edge_cases.py:55 Отправка в RabbitMQ не выполняется, так как список CDR пуст.
+[32mINFO    [0m tests.test_edge_cases:test_edge_cases.py:64 Ожидание 1 сек...
+[32mINFO    [0m tests.test_edge_cases:test_edge_cases.py:69 Получение записей из cdr_record (ожидается 0)...
+[32mINFO    [0m db_checker:db_checker.py:105 Получено 0 записей из cdr_record.
+[32mINFO    [0m tests.test_edge_cases:test_edge_cases.py:71 Фактически найдено записей: 0.
+[32mINFO    [0m tests.test_edge_cases:test_edge_cases.py:88 --- Тест 'test_process_empty_cdr_file' УСПЕШНО завершен ---
+[32mINFO    [0m tests.conftest:conftest.py:23 Фикстура db_connection: Закрытие соединения с БД...
+[33mWARNING [0m db_checker:db_checker.py:34 Откат незавершенной транзакции при закрытии соединения.
+[32mINFO    [0m db_checker:db_checker.py:36 Соединение с БД закрыто.

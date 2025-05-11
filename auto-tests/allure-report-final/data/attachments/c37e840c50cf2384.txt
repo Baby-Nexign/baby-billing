@@ -1,0 +1,31 @@
+2025-05-11 15:46:55,174 - tests.conftest - INFO - Фикстура db_connection: Попытка подключения к БД...
+2025-05-11 15:46:55,210 - db_checker - INFO - Успешное подключение к БД brt на localhost:5432
+2025-05-11 15:46:55,211 - tests.test_invalid_second_msisdn - INFO - --- Тест: BRT должен отбросить CDR из test_data/invalid_format_second_msisdn.jsonl (невалидный формат secondSubscriberMsisdn) ---
+2025-05-11 15:46:55,212 - tests.test_invalid_second_msisdn - INFO - Подготовка БД: создание абонентов ['79996667755', '79334455667', '79123456789'] и очистка cdr_record...
+2025-05-11 15:46:55,212 - db_checker - INFO - --- Начало подготовки БД к тесту ---
+2025-05-11 15:46:55,222 - db_checker - INFO - Таблица cdr_record очищена, счетчик ID сброшен.
+2025-05-11 15:46:55,224 - db_checker - INFO - Найдены существующие абоненты: {'79334455667': 3, '79123456789': 1, '79996667755': 2}
+2025-05-11 15:46:55,225 - db_checker - INFO - --- Подготовка БД к тесту завершена ---
+2025-05-11 15:46:55,225 - tests.test_invalid_second_msisdn - INFO - БД подготовлена (только указанные firstSubscriberMsisdn). ID абонентов: {'79334455667': 3, '79123456789': 1, '79996667755': 2}
+2025-05-11 15:46:55,225 - tests.test_invalid_second_msisdn - INFO - Чтение CDR из файла: test_data/invalid_format_second_msisdn.jsonl
+2025-05-11 15:46:55,225 - cdr_reader - INFO - Попытка чтения CDR файла: test_data/invalid_format_second_msisdn.jsonl
+2025-05-11 15:46:55,226 - cdr_reader - INFO - Успешно прочитано 6 CDR записей из файла test_data/invalid_format_second_msisdn.jsonl
+2025-05-11 15:46:55,226 - tests.test_invalid_second_msisdn - INFO - Прочитано 6 CDR для отправки (предполагается, что все с невалидным форматом secondSubscriberMsisdn).
+2025-05-11 15:46:55,226 - tests.test_invalid_second_msisdn - INFO - Отправка 6 CDR в RabbitMQ...
+2025-05-11 15:46:55,226 - rabbitmq_sender - INFO - Подключение к RabbitMQ: host=localhost, port=5672
+2025-05-11 15:46:55,227 - pika.adapters.utils.connection_workflow - INFO - Pika version 1.3.2 connecting to ('127.0.0.1', 5672)
+2025-05-11 15:46:55,228 - pika.adapters.utils.io_services_utils - INFO - Socket connected: <socket.socket fd=32, family=2, type=1, proto=6, laddr=('127.0.0.1', 34318), raddr=('127.0.0.1', 5672)>
+2025-05-11 15:46:55,228 - pika.adapters.utils.connection_workflow - INFO - Streaming transport linked up: (<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc108eb820>, _StreamingProtocolShim: <SelectConnection PROTOCOL transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc108eb820> params=<ConnectionParameters host=localhost port=5672 virtual_host=/ ssl=False>>).
+2025-05-11 15:46:55,232 - pika.adapters.utils.connection_workflow - INFO - AMQPConnector - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc108eb820> params=<ConnectionParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+2025-05-11 15:46:55,232 - pika.adapters.utils.connection_workflow - INFO - AMQPConnectionWorkflow - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc108eb820> params=<ConnectionParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+2025-05-11 15:46:55,232 - pika.adapters.blocking_connection - INFO - Connection workflow succeeded: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc108eb820> params=<ConnectionParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+2025-05-11 15:46:55,233 - pika.adapters.blocking_connection - INFO - Created channel=1
+2025-05-11 15:46:55,234 - rabbitmq_sender - INFO - Канал RabbitMQ успешно создан.
+2025-05-11 15:46:55,234 - rabbitmq_sender - INFO - Сообщение с 6 CDR успешно отправлено.
+2025-05-11 15:46:55,234 - tests.test_invalid_second_msisdn - INFO - Ожидание 5 сек. для обработки BRT...
+2025-05-11 15:47:00,235 - tests.test_invalid_second_msisdn - INFO - Получение записей из cdr_record...
+2025-05-11 15:47:00,240 - db_checker - INFO - Получено 6 записей из cdr_record.
+2025-05-11 15:47:00,241 - tests.test_invalid_second_msisdn - INFO - Фактически найдено в cdr_record: 6.
+2025-05-11 15:47:00,270 - tests.conftest - INFO - Фикстура db_connection: Закрытие соединения с БД...
+2025-05-11 15:47:00,272 - db_checker - WARNING - Откат незавершенной транзакции при закрытии соединения.
+2025-05-11 15:47:00,273 - db_checker - INFO - Соединение с БД закрыто.

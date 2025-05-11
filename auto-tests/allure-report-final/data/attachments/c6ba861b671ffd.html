@@ -1,0 +1,109 @@
+<div>Status code 200 </div>
+
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+[
+    {
+        &quot;id&quot;: 11,
+        &quot;name&quot;: &quot;Классика&quot;,
+        &quot;tariffType&quot;: &quot;MONTHLY_PAYMENT&quot;,
+        &quot;cost&quot;: 0,
+        &quot;startDate&quot;: &quot;2025-05-09T18:43:36.818506&quot;,
+        &quot;avEndDate&quot;: null,
+        &quot;acEndDate&quot;: null,
+        &quot;description&quot;: &quot;Абонентам «Ромашка» = 1.5 у.е./минута; Абонентам других операторов = 2.5 у.е./минута&quot;,
+        &quot;services&quot;: [
+            
+        ],
+        &quot;telecomPrices&quot;: [
+            {
+                &quot;telecomType&quot;: &quot;OUTCOMING&quot;,
+                &quot;inOurNetwork&quot;: true,
+                &quot;telecomDataType&quot;: &quot;MINUTES&quot;,
+                &quot;cost&quot;: 15
+            },
+            {
+                &quot;telecomType&quot;: &quot;OUTCOMING&quot;,
+                &quot;inOurNetwork&quot;: false,
+                &quot;telecomDataType&quot;: &quot;MINUTES&quot;,
+                &quot;cost&quot;: 25
+            },
+            {
+                &quot;telecomType&quot;: &quot;INCOMING&quot;,
+                &quot;inOurNetwork&quot;: true,
+                &quot;telecomDataType&quot;: &quot;MINUTES&quot;,
+                &quot;cost&quot;: 0
+            },
+            {
+                &quot;telecomType&quot;: &quot;INCOMING&quot;,
+                &quot;inOurNetwork&quot;: false,
+                &quot;telecomDataType&quot;: &quot;MINUTES&quot;,
+                &quot;cost&quot;: 0
+            }
+        ]
+    },
+    {
+        &quot;id&quot;: 12,
+        &quot;name&quot;: &quot;Помесячный&quot;,
+        &quot;tariffType&quot;: &quot;MONTHLY_PAYMENT&quot;,
+        &quot;cost&quot;: 100,
+        &quot;startDate&quot;: &quot;2025-05-09T18:43:36.818506&quot;,
+        &quot;avEndDate&quot;: null,
+        &quot;acEndDate&quot;: null,
+        &quot;description&quot;: &quot;50 минут входящие и исходящие = 100 у.е. / месяц. Начиная с 51 минуты расчет продолжается по тарифу «Классика».&quot;,
+        &quot;services&quot;: [
+            {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;50 минут&quot;,
+                &quot;serviceType&quot;: &quot;MINUTES&quot;,
+                &quot;isQuantitative&quot;: true,
+                &quot;startDate&quot;: &quot;2025-05-09T18:43:36.150812&quot;,
+                &quot;avDate&quot;: null,
+                &quot;acEndDate&quot;: null,
+                &quot;amount&quot;: 50,
+                &quot;description&quot;: &quot;50 минут входящие и исходящие&quot;,
+                &quot;servicePrices&quot;: [
+                    
+                ]
+            }
+        ],
+        &quot;telecomPrices&quot;: [
+            {
+                &quot;telecomType&quot;: &quot;OUTCOMING&quot;,
+                &quot;inOurNetwork&quot;: true,
+                &quot;telecomDataType&quot;: &quot;MINUTES&quot;,
+                &quot;cost&quot;: 15
+            },
+            {
+                &quot;telecomType&quot;: &quot;OUTCOMING&quot;,
+                &quot;inOurNetwork&quot;: false,
+                &quot;telecomDataType&quot;: &quot;MINUTES&quot;,
+                &quot;cost&quot;: 25
+            },
+            {
+                &quot;telecomType&quot;: &quot;INCOMING&quot;,
+                &quot;inOurNetwork&quot;: true,
+                &quot;telecomDataType&quot;: &quot;MINUTES&quot;,
+                &quot;cost&quot;: 0
+            },
+            {
+                &quot;telecomType&quot;: &quot;INCOMING&quot;,
+                &quot;inOurNetwork&quot;: false,
+                &quot;telecomDataType&quot;: &quot;MINUTES&quot;,
+                &quot;cost&quot;: 0
+            }
+        ]
+    }
+]    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>Date: Sun, 11 May 2025 14:45:16 GMT</div>
+        <div>transfer-encoding: chunked</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+

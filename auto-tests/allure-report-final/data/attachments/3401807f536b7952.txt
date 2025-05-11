@@ -1,0 +1,31 @@
+[32mINFO    [0m tests.conftest:conftest.py:18 Фикстура db_connection: Попытка подключения к БД...
+[32mINFO    [0m db_checker:db_checker.py:17 Успешное подключение к БД brt на localhost:5432
+[32mINFO    [0m tests.test_start_after_end:test_start_after_end.py:32 --- Запуск теста: Проверка отсутствия вставки невалидных CDR (callEnd < callStart) из test_data/end_before_start.jsonl ---
+[32mINFO    [0m tests.test_start_after_end:test_start_after_end.py:36 Подготовка БД (очистка cdr_record, создание абонентов): ['79123456789', '79996667755', '79334455667']...
+[32mINFO    [0m db_checker:db_checker.py:112 --- Начало подготовки БД к тесту ---
+[32mINFO    [0m db_checker:db_checker.py:47 Таблица cdr_record очищена, счетчик ID сброшен.
+[32mINFO    [0m db_checker:db_checker.py:63 Найдены существующие абоненты: {'79334455667': 3, '79123456789': 1, '79996667755': 2}
+[32mINFO    [0m db_checker:db_checker.py:115 --- Подготовка БД к тесту завершена ---
+[32mINFO    [0m tests.test_start_after_end:test_start_after_end.py:44 БД подготовлена. ID абонентов: {'79334455667': 3, '79123456789': 1, '79996667755': 2}
+[32mINFO    [0m tests.test_start_after_end:test_start_after_end.py:47 Чтение CDR из файла: test_data/end_before_start.jsonl
+[32mINFO    [0m cdr_reader:cdr_reader.py:11 Попытка чтения CDR файла: test_data/end_before_start.jsonl
+[32mINFO    [0m cdr_reader:cdr_reader.py:30 Успешно прочитано 10 CDR записей из файла test_data/end_before_start.jsonl
+[32mINFO    [0m tests.test_start_after_end:test_start_after_end.py:55 Прочитано 10 записей из файла для отправки (все невалидные).
+[32mINFO    [0m tests.test_start_after_end:test_start_after_end.py:65 Отправка невалидных CDR данных в RabbitMQ...
+[32mINFO    [0m rabbitmq_sender:rabbitmq_sender.py:22 Подключение к RabbitMQ: host=localhost, port=5672
+[32mINFO    [0m pika.adapters.utils.connection_workflow:connection_workflow.py:179 Pika version 1.3.2 connecting to ('127.0.0.1', 5672)
+[32mINFO    [0m pika.adapters.utils.io_services_utils:io_services_utils.py:345 Socket connected: <socket.socket fd=24, family=2, type=1, proto=6, laddr=('127.0.0.1', 50788), raddr=('127.0.0.1', 5672)>
+[32mINFO    [0m pika.adapters.utils.connection_workflow:connection_workflow.py:428 Streaming transport linked up: (<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc107b86b0>, _StreamingProtocolShim: <SelectConnection PROTOCOL transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc107b86b0> params=<ConnectionParameters host=localhost port=5672 virtual_host=/ ssl=False>>).
+[32mINFO    [0m pika.adapters.utils.connection_workflow:connection_workflow.py:293 AMQPConnector - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc107b86b0> params=<ConnectionParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+[32mINFO    [0m pika.adapters.utils.connection_workflow:connection_workflow.py:725 AMQPConnectionWorkflow - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc107b86b0> params=<ConnectionParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+[32mINFO    [0m pika.adapters.blocking_connection:blocking_connection.py:453 Connection workflow succeeded: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x7fcc107b86b0> params=<ConnectionParameters host=localhost port=5672 virtual_host=/ ssl=False>>
+[32mINFO    [0m pika.adapters.blocking_connection:blocking_connection.py:1264 Created channel=1
+[32mINFO    [0m rabbitmq_sender:rabbitmq_sender.py:32 Канал RabbitMQ успешно создан.
+[32mINFO    [0m rabbitmq_sender:rabbitmq_sender.py:46 Сообщение с 10 CDR успешно отправлено.
+[32mINFO    [0m tests.test_start_after_end:test_start_after_end.py:76 Ожидание 5 секунд для обработки CDR консьюмером...
+[32mINFO    [0m tests.test_start_after_end:test_start_after_end.py:80 Проверка таблицы cdr_record на отсутствие новых записей...
+[32mINFO    [0m db_checker:db_checker.py:105 Получено 10 записей из cdr_record.
+[32mINFO    [0m tests.test_start_after_end:test_start_after_end.py:83 Фактически найдено в cdr_record: 10.
+[32mINFO    [0m tests.conftest:conftest.py:23 Фикстура db_connection: Закрытие соединения с БД...
+[33mWARNING [0m db_checker:db_checker.py:34 Откат незавершенной транзакции при закрытии соединения.
+[32mINFO    [0m db_checker:db_checker.py:36 Соединение с БД закрыто.
