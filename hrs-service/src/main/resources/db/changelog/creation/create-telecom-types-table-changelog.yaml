@@ -40,3 +40,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: INCOMING
+  - changeSet:
+      id: reset-telecom_types-sequence
+      author: developer
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE telecom_types_id_seq RESTART WITH 3

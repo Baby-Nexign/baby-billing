@@ -31,3 +31,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: MINUTES
+  - changeSet:
+      id: reset-telecom_data_types-sequence
+      author: developer
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE telecom_data_types_id_seq RESTART WITH 2

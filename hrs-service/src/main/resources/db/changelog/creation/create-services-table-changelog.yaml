@@ -77,3 +77,9 @@ databaseChangeLog:
               - column:
                   name: cost
                   value: 0
+  - changeSet:
+      id: reset-services-sequence
+      author: developer
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE services_id_seq RESTART WITH 2
