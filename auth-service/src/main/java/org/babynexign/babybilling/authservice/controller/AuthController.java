@@ -1,5 +1,6 @@
 package org.babynexign.babybilling.authservice.controller;
 
+import jakarta.validation.Valid;
 import org.babynexign.babybilling.authservice.dto.AuthResponse;
 import org.babynexign.babybilling.authservice.dto.LoginRequest;
 import org.babynexign.babybilling.authservice.dto.RegisterRequest;
@@ -20,12 +21,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(userService.register(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(userService.login(request));
     }
 }

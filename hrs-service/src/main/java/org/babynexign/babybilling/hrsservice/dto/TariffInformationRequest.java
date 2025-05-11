@@ -1,4 +1,11 @@
 package org.babynexign.babybilling.hrsservice.dto;
 
-public record TariffInformationRequest(Long personId, Long tariffId) {
-}
+import jakarta.validation.constraints.NotNull;
+
+public record TariffInformationRequest(
+    @NotNull(message = "Person ID cannot be null")
+    Long personId,
+    
+    @NotNull(message = "Tariff ID cannot be null")
+    Long tariffId
+) {}

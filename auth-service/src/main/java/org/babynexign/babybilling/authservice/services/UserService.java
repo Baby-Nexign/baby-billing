@@ -9,6 +9,13 @@ import org.babynexign.babybilling.authservice.dto.RegisterRequest;
 import org.babynexign.babybilling.authservice.entity.Role;
 import org.babynexign.babybilling.authservice.entity.User;
 import org.babynexign.babybilling.authservice.entity.enums.ERole;
+import org.babynexign.babybilling.authservice.exception.InvalidCredentialsException;
+import org.babynexign.babybilling.authservice.exception.InvalidRoleException;
+import org.babynexign.babybilling.authservice.exception.MsisdnAlreadyInUseException;
+import org.babynexign.babybilling.authservice.exception.MsisdnVerificationException;
+import org.babynexign.babybilling.authservice.exception.RoleNotFoundException;
+import org.babynexign.babybilling.authservice.exception.UserNotFoundException;
+import org.babynexign.babybilling.authservice.exception.UsernameAlreadyExistsException;
 import org.babynexign.babybilling.authservice.repository.RoleRepository;
 import org.babynexign.babybilling.authservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,15 +46,15 @@ public class UserService {
 
     public AuthResponse register(RegisterRequest request) {
         if (request.username() == null && request.msisdn() == null) {
-            throw new RuntimeException("Either username or msisdn must be provided");
+            throw new InvalidCredentialsException("Either username or msisdn must be provided");
         }
 
         if (request.username() != null && userRepository.existsByUsername(request.username())) {
-            throw new RuntimeException("Username is already taken");
+            throw new UsernameAlreadyExistsException("Username is already taken");
         }
 
         if (request.msisdn() != null && userRepository.existsByMsisdn(request.msisdn())) {
-            throw new RuntimeException("MSISDN is already in use");
+            throw new MsisdnAlreadyInUseException("MSISDN is already in use");
         }
 
         Set<String> strRoles = request.roles() != null ? request.roles() : new HashSet<>();
@@ -59,11 +66,11 @@ public class UserService {
                 ResponseEntity<PersonDTO> response = brtServiceClient.getPersonByMsisdn(request.msisdn());
 
                 if (response.getBody() == null) {
-                    throw new RuntimeException("Person with msisdn " + request.msisdn() + " not found in BRT");
+                    throw new MsisdnVerificationException("Person with msisdn " + request.msisdn() + " not found in BRT");
                 }
 
             } catch (FeignException e) {
-                throw new RuntimeException("Failed to verify msisdn in BRT: " + e.getMessage());
+                throw new MsisdnVerificationException("Failed to verify msisdn in BRT: " + e.getMessage(), e);
             }
         }
 
@@ -77,23 +84,23 @@ public class UserService {
 
         if (strRoles.isEmpty()) {
             Role subscriberRole = roleRepository.findByName(ERole.ROLE_SUBSCRIBER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role SUBSCRIBER is not found."));
+                    .orElseThrow(() -> new RoleNotFoundException("Error: Role SUBSCRIBER is not found."));
             roles.add(subscriberRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role.toLowerCase()) {
                     case "admin":
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role ADMIN is not found."));
+                                .orElseThrow(() -> new RoleNotFoundException("Error: Role ADMIN is not found."));
                         roles.add(adminRole);
                         break;
                     case "subscriber":
                         Role subscriberRole = roleRepository.findByName(ERole.ROLE_SUBSCRIBER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role SUBSCRIBER is not found."));
+                                .orElseThrow(() -> new RoleNotFoundException("Error: Role SUBSCRIBER is not found."));
                         roles.add(subscriberRole);
                         break;
                     default:
-                        throw new RuntimeException("Error: Role " + role + " is not found.");
+                        throw new InvalidRoleException("Error: Role " + role + " is not found.");
                 }
             });
         }
@@ -136,12 +143,12 @@ public class UserService {
             if (userByMsisdn.isPresent()) {
                 user = userByMsisdn.get();
             } else {
-                throw new RuntimeException("User not found with login: " + request.login());
+                throw new UserNotFoundException("User not found with login: " + request.login());
             }
         }
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new InvalidCredentialsException("Invalid password");
         }
 
         String subject = String.valueOf(user.getId());

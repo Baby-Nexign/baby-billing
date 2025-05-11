@@ -1,6 +1,7 @@
 package org.babynexign.babybilling.brtservice.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,21 +23,27 @@ public class CDRRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Record type must be specified")
     @Convert(converter = RecordTypeConverter.class)
     private RecordType type;
 
+    @Pattern(regexp = "^[0-9]{11}$", message = "MSISDN must contain exactly 11 digits")
     @Column(name = "msisdn_one")
     private String firstMsisdn;
 
+    @Pattern(regexp = "^[0-9]{11}$", message = "MSISDN must contain exactly 11 digits")
     @Column(name = "msisdn_two")
     private String secondMsisdn;
 
+    @NotNull(message = "Call start time must be specified")
     @Column(name = "start_time")
     private LocalDateTime callStart;
 
+    @NotNull(message = "Call duration must be specified")
     @Column(name = "lasts")
     private Duration callDuration;
 
+    @NotNull(message = "inOneNetwork must not be empty")
     @Column(name = "in_one_network")
     private Boolean inOneNetwork;
 

@@ -1,6 +1,7 @@
 package org.babynexign.babybilling.authservice.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,12 +19,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String username;
 
+    @Pattern(regexp = "^[0-9]{11}$", message = "MSISDN must contain exactly 11 digits")
     @Column(unique = true)
     private String msisdn;
 
+    @NotBlank(message = "Password must not be empty")
     @Column(nullable = false)
     private String password;
 
