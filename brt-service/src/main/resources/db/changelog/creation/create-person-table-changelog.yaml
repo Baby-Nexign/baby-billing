@@ -114,3 +114,171 @@ databaseChangeLog:
               - column:
                   name: tariff_id
                   value: 3
+        - insert:
+            tableName: person
+            columns:
+              - column:
+                  name: name
+                  value: "Test4"
+              - column:
+                  name: msisdn
+                  value: "79012345678"
+              - column:
+                  name: money
+                  value: 4500
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
+              - column:
+                  name: reg_data
+                  value: "2023-04-05 11:20:00"
+              - column:
+                  name: description
+                  value: "Test4"
+              - column:
+                  name: tariff_id
+                  value: 4
+        - insert:
+            tableName: person
+            columns:
+              - column:
+                  name: name
+                  value: "Test5"
+              - column:
+                  name: msisdn
+                  value: "79234567890"
+              - column:
+                  name: money
+                  value: 6200
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
+              - column:
+                  name: reg_data
+                  value: "2023-04-12 14:30:00"
+              - column:
+                  name: description
+                  value: "Test5"
+              - column:
+                  name: tariff_id
+                  value: 5
+        - insert:
+            tableName: person
+            columns:
+              - column:
+                  name: name
+                  value: "Test6"
+              - column:
+                  name: msisdn
+                  value: "79345678901"
+              - column:
+                  name: money
+                  value: 8700
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
+              - column:
+                  name: reg_data
+                  value: "2023-04-20 16:45:00"
+              - column:
+                  name: description
+                  value: "Test6"
+              - column:
+                  name: tariff_id
+                  value: 6
+        - insert:
+            tableName: person
+            columns:
+              - column:
+                  name: name
+                  value: "Test7"
+              - column:
+                  name: msisdn
+                  value: "79456789012"
+              - column:
+                  name: money
+                  value: 3800
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
+              - column:
+                  name: reg_data
+                  value: "2023-05-01 08:15:00"
+              - column:
+                  name: description
+                  value: "Test7"
+              - column:
+                  name: tariff_id
+                  value: 7
+        - insert:
+            tableName: person
+            columns:
+              - column:
+                  name: name
+                  value: "Test8"
+              - column:
+                  name: msisdn
+                  value: "79567890123"
+              - column:
+                  name: money
+                  value: 5500
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
+              - column:
+                  name: reg_data
+                  value: "2023-05-10 10:45:00"
+              - column:
+                  name: description
+                  value: "Test8"
+              - column:
+                  name: tariff_id
+                  value: 8
+        - insert:
+            tableName: person
+            columns:
+              - column:
+                  name: name
+                  value: "Test9"
+              - column:
+                  name: msisdn
+                  value: "79678901234"
+              - column:
+                  name: money
+                  value: 7100
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
+              - column:
+                  name: reg_data
+                  value: "2023-05-18 13:20:00"
+              - column:
+                  name: description
+                  value: "Test9"
+              - column:
+                  name: tariff_id
+                  value: 9
+        - insert:
+            tableName: person
+            columns:
+              - column:
+                  name: name
+                  value: "Test10"
+              - column:
+                  name: msisdn
+                  value: "79789012345"
+              - column:
+                  name: money
+                  value: 9200
+              - column:
+                  name: is_restricted
+                  valueBoolean: false
+              - column:
+                  name: reg_data
+                  value: "2023-05-25 15:10:00"
+              - column:
+                  name: description
+                  value: "Test10"
+              - column:
+                  name: tariff_id
+                  value: 10
