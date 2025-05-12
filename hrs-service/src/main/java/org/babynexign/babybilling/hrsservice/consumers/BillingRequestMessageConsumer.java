@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.function.Consumer;
 
+/**
+ * Consumer for billing request messages.
+ * Processes billing calculations for call charges.
+ */
 @Configuration
 public class BillingRequestMessageConsumer {
     private final BillingService billingService;

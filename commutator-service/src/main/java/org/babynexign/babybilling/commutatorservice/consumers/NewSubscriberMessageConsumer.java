@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.function.Consumer;
 
+/**
+ * Consumer for new subscriber registration messages.
+ * Handles creation of new subscriber records.
+ */
 @Configuration
 public class NewSubscriberMessageConsumer {
     private final SubscriberService subscriberService;

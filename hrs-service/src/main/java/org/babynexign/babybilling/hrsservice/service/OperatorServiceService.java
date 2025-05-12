@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service for managing telecom operator services.
+ * Provides operations for retrieving service information.
+ */
 @Service
 public class OperatorServiceService {
     private final ServiceRepository serviceRepository;

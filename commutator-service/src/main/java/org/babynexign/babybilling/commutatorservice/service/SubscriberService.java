@@ -8,6 +8,10 @@ import org.babynexign.babybilling.commutatorservice.repository.SubscriberReposit
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for managing subscriber operations.
+ * Handles subscriber creation and call restriction status changes.
+ */
 @Service
 public class SubscriberService {
     private final SubscriberRepository subscriberRepository;

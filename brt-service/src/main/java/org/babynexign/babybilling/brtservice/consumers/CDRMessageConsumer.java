@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Consumer for CDR messages from the commutator service.
+ * Receives and processes call detail records.
+ */
 @Configuration
 public class CDRMessageConsumer {
 

@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.function.Consumer;
 
+/**
+ * Consumer for call restriction messages.
+ * Updates subscriber call restriction status.
+ */
 @Configuration
 public class CallRestrictionMessageConsumer {
     private final SubscriberService subscriberService;
