@@ -24,7 +24,8 @@ public class RouterValidator {
             new OpenEndpoint("/api/services", HttpMethod.GET),
             new OpenEndpoint("/api/services/[0-9]+", HttpMethod.GET),
             new OpenEndpoint("/api/tariffs", HttpMethod.GET),
-            new OpenEndpoint("/api/tariffs/[0-9]+", HttpMethod.GET)
+            new OpenEndpoint("/api/tariffs/[0-9]+", HttpMethod.GET),
+            new OpenEndpoint("/h2-console", null)
     );
 
     public Predicate<ServerHttpRequest> isSecured = request -> openApiEndpoints
