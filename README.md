@@ -74,7 +74,6 @@ Baby-Billing — микросервисная биллинговая систе�
 <details>
 <summary>Commutator Schema</summary>
   
-![com](https://github.com/user-attachments/assets/e1304fce-9f83-47c0-b8d8-2301b524a2a1)
 </details>
 
 <details>

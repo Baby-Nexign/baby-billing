@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.not;
 public class ApiTestConfig {
 
     // Базовый URI и пути
-    public static final String BASE_URI = "http://localhost:8084/api"; // Через CRM Gateway
+    public static final String BASE_URI = "http://localhost:8080/api"; 
     public static final String AUTH_BASE_PATH = "/auth";
     public static final String LOGIN_PATH = AUTH_BASE_PATH + "/login";
     public static final String REGISTER_PATH = AUTH_BASE_PATH + "/register";
