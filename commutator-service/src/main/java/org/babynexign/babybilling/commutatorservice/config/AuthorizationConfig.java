@@ -38,7 +38,7 @@ public class AuthorizationConfig {
     }
 
     private boolean isPublicEndpoint(String uri, String method) {
-        return false;
+        return uri.matches(".*/h2-console.*");
     }
 
     private boolean hasAccess(HttpServletRequest request) {
