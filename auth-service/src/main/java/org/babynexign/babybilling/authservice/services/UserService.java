@@ -26,6 +26,10 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service for user authentication and management operations.
+ * Handles user registration, login, and token generation.
+ */
 @Service
 public class UserService {
 
@@ -44,6 +48,19 @@ public class UserService {
         this.brtServiceClient = brtServiceClient;
     }
 
+    /**
+     * Registers a new user in the system.
+     * Validates credentials, assigns roles, and generates authentication tokens.
+     *
+     * @param request The registration request with user credentials
+     * @return AuthResponse containing access and refresh tokens
+     * @throws InvalidCredentialsException if neither username nor MSISDN is provided
+     * @throws UsernameAlreadyExistsException if the username is already taken
+     * @throws MsisdnAlreadyInUseException if the MSISDN is already in use
+     * @throws MsisdnVerificationException if the MSISDN verification fails
+     * @throws RoleNotFoundException if a requested role doesn't exist
+     * @throws InvalidRoleException if an invalid role is specified
+     */
     public AuthResponse register(RegisterRequest request) {
         if (request.username() == null && request.msisdn() == null) {
             throw new InvalidCredentialsException("Either username or msisdn must be provided");
@@ -132,6 +149,14 @@ public class UserService {
         );
     }
 
+    /**
+     * Authenticates a user and generates access tokens.
+     *
+     * @param request The login request containing credentials
+     * @return AuthResponse containing access and refresh tokens
+     * @throws UserNotFoundException if no user is found with the provided login
+     * @throws InvalidCredentialsException if the password is incorrect
+     */
     public AuthResponse login(LoginRequest request) {
         User user;
         Optional<User> userByUsername = userRepository.findByUsername(request.login());

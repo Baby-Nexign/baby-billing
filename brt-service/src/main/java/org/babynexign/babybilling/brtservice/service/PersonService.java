@@ -24,6 +24,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Service for managing subscriber operations.
+ * Handles billing, tariff changes, balance operations and subscriber management.
+ */
 @Service
 public class PersonService {
     private final PersonRepository personRepository;
@@ -38,6 +42,13 @@ public class PersonService {
         this.hrsSender = hrsSender;
     }
 
+    /**
+     * Processes a billing response by updating the subscriber's balance.
+     * If the new balance is negative, it restricts the subscriber's calls.
+     *
+     * @param billingResponse The billing response containing the person ID and payment amount
+     * @throws SubscriberNotFoundException if the person with the specified ID is not found
+     */
     public void processBillingResponse(BillingResponse billingResponse) {
         Person subscriber = personRepository.findById(billingResponse.personId())
                 .orElseThrow(() -> new SubscriberNotFoundException("Person with id " + billingResponse.personId() + " not found"));
@@ -52,8 +63,14 @@ public class PersonService {
         personRepository.save(subscriber);
     }
 
+    /**
+     * Creates a new subscriber with default tariff and services.
+     *
+     * @param createPersonRequest Request containing new person information
+     * @return PersonDTO with created person information
+     * @throws MsisdnAlreadyExistsException if the MSISDN is already in use
+     */
     public PersonDTO createPerson(CreatePersonRequest createPersonRequest) {
-        // Check if MSISDN already exists
         if (personRepository.findByMsisdn(createPersonRequest.msisdn()).isPresent()) {
             throw new MsisdnAlreadyExistsException("Subscriber with MSISDN " + createPersonRequest.msisdn() + " already exists");
         }
@@ -86,6 +103,13 @@ public class PersonService {
         return newSubscriberDto;
     }
 
+    /**
+     * Initiates a tariff change for a subscriber by sending a tariff information request.
+     *
+     * @param msisdn The MSISDN of the subscriber whose tariff is being changed
+     * @param changePersonTariffRequest The request containing the new tariff ID
+     * @throws SubscriberNotFoundException if no subscriber with the given MSISDN is found
+     */
     public void changePersonTariff(String msisdn, ChangePersonTariffRequest changePersonTariffRequest) {
         Person subscriber = personRepository.findByMsisdn(msisdn)
                 .orElseThrow(() -> new SubscriberNotFoundException("Person with MSISDN " + msisdn + " not found"));
@@ -93,6 +117,13 @@ public class PersonService {
                 new TariffInformationRequest(subscriber.getId(), changePersonTariffRequest.newTariff()));
     }
 
+    /**
+     * Processes a tariff change response by updating the subscriber's tariff and services.
+     * This method is called after receiving a tariff information response from the HRS service.
+     *
+     * @param tariffInformationResponse The response containing tariff and service information
+     * @throws SubscriberNotFoundException if the person with the specified ID is not found
+     */
     public void processChangePersonTariff(TariffInformationResponse tariffInformationResponse) {
         Person subscriber = personRepository.findById(tariffInformationResponse.personId())
                 .orElseThrow(() -> new SubscriberNotFoundException("Person with id " + tariffInformationResponse.personId() + " not found"));
@@ -119,6 +150,13 @@ public class PersonService {
         personRepository.save(subscriber);
     }
 
+    /**
+     * Adds money to a subscriber's balance and removes call restrictions if the balance becomes positive.
+     *
+     * @param personMsisdn The MSISDN of the subscriber whose balance is being replenished
+     * @param money The amount of money to add to the balance
+     * @throws SubscriberNotFoundException if no subscriber with the given MSISDN is found
+     */
     public void replenishBalance(String personMsisdn, Long money) {
         Person subscriber = personRepository.findByMsisdn(personMsisdn)
                 .orElseThrow(() -> new SubscriberNotFoundException("Person with MSISDN " + personMsisdn + " not found"));
@@ -132,6 +170,13 @@ public class PersonService {
         personRepository.save(subscriber);
     }
 
+    /**
+     * Retrieves a subscriber by their MSISDN number.
+     *
+     * @param personMsisdn The MSISDN number to search for
+     * @return PersonDTO with the person's information
+     * @throws SubscriberNotFoundException if no person with the given MSISDN exists
+     */
     public PersonDTO getPersonByMsisdn(String personMsisdn) {
         Person person = personRepository.findByMsisdn(personMsisdn)
                 .orElseThrow(() -> new SubscriberNotFoundException("Person with MSISDN " + personMsisdn + " not found"));
@@ -139,6 +184,12 @@ public class PersonService {
         return PersonDTO.fromEntity(person);
     }
 
+    /**
+     * Initiates tariff payment withdrawal for all non-restricted subscribers.
+     * Sends payment calculation requests to the HRS service for each eligible subscriber.
+     *
+     * @param tariffPaymentRequest The request containing the current date for payment calculations
+     */
     public void withdrawTariffPayment(TariffPaymentRequest tariffPaymentRequest) {
         List<Person> allPersons = personRepository.findAllByIsRestrictedFalse();
         for (Person person : allPersons) {
@@ -146,6 +197,13 @@ public class PersonService {
         }
     }
 
+    /**
+     * Processes a tariff payment calculation response.
+     * Updates the subscriber's balance based on the calculated cost and refreshes their tariff.
+     *
+     * @param countTariffPaymentResponse The response containing the person ID and calculated cost
+     * @throws SubscriberNotFoundException if the person with the specified ID is not found
+     */
     public void processCountTariffPaymentResponse(CountTariffPaymentResponse countTariffPaymentResponse) {
         processBillingResponse(new BillingResponse(countTariffPaymentResponse.personId(), countTariffPaymentResponse.cost()));
         Person person = personRepository.findById(countTariffPaymentResponse.personId())

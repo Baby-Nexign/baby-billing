@@ -21,6 +21,10 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service for processing Call Detail Records (CDRs).
+ * Handles CDR validation, storage, and billing.
+ */
 @Service
 public class CDRRecordService {
     private final CDRRecordRepository cdrRecordRepository;
@@ -34,6 +38,12 @@ public class CDRRecordService {
         this.hrsSender = hrsSender;
     }
 
+    /**
+     * Processes a list of call detail records (CDRs).
+     * Validates, saves call records and processes billing for each call.
+     *
+     * @param callDTOs List of call detail records to process
+     */
     @Transactional
     public void processCDRs(List<CallDTO> callDTOs) {
         if (callDTOs == null || callDTOs.isEmpty()) {
@@ -54,6 +64,15 @@ public class CDRRecordService {
         }
     }
 
+    /**
+     * Validates and saves a call detail record.
+     *
+     * @param callDTO The call detail record to save
+     * @return The saved CDR record, or null if the subscriber is not found
+     * @throws InvalidCallTypeException if the call type is invalid
+     * @throws InvalidCallDateException if call dates are invalid or inconsistent
+     * @throws RuntimeException if there's an error during processing
+     */
     private CDRRecord saveCallRecord(CallDTO callDTO) {
         try {
             RecordType recordType;
@@ -107,6 +126,12 @@ public class CDRRecordService {
         }
     }
 
+    /**
+     * Processes billing for a call record.
+     * Checks available minutes and sends billing request if needed.
+     *
+     * @param record The call record to process billing for
+     */
     private void processBilling(CDRRecord record) {
         Optional<QuantService> quantServiceOpt = record.getSubscriber().getQuantServices().stream()
                 .filter(service -> service.getServiceType() == QuantServiceType.MINUTES)

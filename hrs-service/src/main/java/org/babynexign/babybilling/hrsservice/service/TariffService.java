@@ -20,6 +20,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service for managing tariffs and calculating payments.
+ * Handles tariff information requests and provides tariff-related operations.
+ */
 @Service
 public class TariffService {
     private final TariffRepository tariffRepository;
@@ -39,6 +43,13 @@ public class TariffService {
         this.brtSender = brtSender;
     }
 
+    /**
+     * Processes a tariff information request and sends a response with service details.
+     *
+     * @param tariffInformationRequest The request containing tariff and person IDs
+     * @throws TariffValidationException if required parameters are missing
+     * @throws TariffNotFoundException if the requested tariff doesn't exist
+     */
     @Transactional
     public void processTariffInformationRequest(TariffInformationRequest tariffInformationRequest) {
         if (tariffInformationRequest.tariffId() == null || tariffInformationRequest.personId() == null) {
@@ -73,6 +84,13 @@ public class TariffService {
         ));
     }
 
+    /**
+     * Processes a count tariff payment request and sends a response if payment is due.
+     *
+     * @param countTariffPaymentRequest The request containing payment calculation parameters
+     * @throws TariffValidationException if required parameters are missing or invalid
+     * @throws TariffNotFoundException if the requested tariff doesn't exist
+     */
     public void processCountTariffPaymentRequest(CountTariffPaymentRequest countTariffPaymentRequest){
         if (countTariffPaymentRequest.tariffId() == null || 
             countTariffPaymentRequest.personId() == null ||
@@ -106,6 +124,14 @@ public class TariffService {
                 .orElseThrow(() -> new TariffNotFoundException("Tariff with ID " + id + " not found")));
     }
 
+    /**
+     * Creates a new tariff with associated services and call prices.
+     *
+     * @param createTariffRequest The request containing tariff information
+     * @return TariffDTO with the created tariff details
+     * @throws ServiceNotFoundException if requested services are not found
+     * @throws TelecomPriceNotFoundException if telecom types or data types are not found
+     */
     @Transactional
     public TariffDTO createTariff(CreateTariffRequest createTariffRequest) {
         Tariff tariff = Tariff.builder()

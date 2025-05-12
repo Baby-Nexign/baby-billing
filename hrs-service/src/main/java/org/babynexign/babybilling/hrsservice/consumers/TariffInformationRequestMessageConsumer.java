@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.function.Consumer;
 
+/**
+ * Consumer for tariff information request messages.
+ * Retrieves and sends tariff details for subscribers.
+ */
 @Configuration
 public class TariffInformationRequestMessageConsumer {
     private final TariffService tariffService;

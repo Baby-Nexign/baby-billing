@@ -10,6 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Authorization configuration for the commutator service.
+ * Provides request filtering based on admin status.
+ */
 @Configuration
 public class AuthorizationConfig {
 

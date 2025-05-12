@@ -9,6 +9,10 @@ import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 
+/**
+ * Service for JWT operations.
+ * Handles token generation and validation.
+ */
 @Service
 public class JwtService {
 
