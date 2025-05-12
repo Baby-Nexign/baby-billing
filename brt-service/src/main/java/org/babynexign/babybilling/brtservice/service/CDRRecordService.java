@@ -108,28 +108,37 @@ public class CDRRecordService {
     }
 
     private void processBilling(CDRRecord record) {
-        QuantService quantService = record.getSubscriber().getQuantServices().stream()
+        Optional<QuantService> quantServiceOpt = record.getSubscriber().getQuantServices().stream()
                 .filter(service -> service.getServiceType() == QuantServiceType.MINUTES)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("QuantService with serviceTypeId=1 not found"));
+                .findFirst();
 
         Tariff tariff = record.getSubscriber().getTariff();
 
-        if (quantService.getAmountLeft() >= record.getDurationInMinutes()) {
-            quantService.setAmountLeft(quantService.getAmountLeft() - record.getDurationInMinutes());
+        if (quantServiceOpt.isPresent()) {
+            QuantService quantService = quantServiceOpt.get();
+
+            if (quantService.getAmountLeft() >= record.getDurationInMinutes()) {
+                quantService.setAmountLeft(quantService.getAmountLeft() - record.getDurationInMinutes());
+            } else {
+                Long minutesToBill = record.getDurationInMinutes() - quantService.getAmountLeft();
+                quantService.setAmountLeft(0L);
+                BillingRequest billingRequest = new BillingRequest(
+                        record.getSubscriber().getId(),
+                        tariff.getTariffId(),
+                        minutesToBill,
+                        record.getType().toString(),
+                        record.getInOneNetwork()
+                );
+                hrsSender.sendBillingRequest(billingRequest);
+            }
         } else {
-            Long minutesToBill = record.getDurationInMinutes() - quantService.getAmountLeft();
-
-            quantService.setAmountLeft(0L);
-
             BillingRequest billingRequest = new BillingRequest(
                     record.getSubscriber().getId(),
                     tariff.getTariffId(),
-                    minutesToBill,
+                    record.getDurationInMinutes(),
                     record.getType().toString(),
                     record.getInOneNetwork()
             );
-
             hrsSender.sendBillingRequest(billingRequest);
         }
     }

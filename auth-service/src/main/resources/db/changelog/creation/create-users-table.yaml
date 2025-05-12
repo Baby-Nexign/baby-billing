@@ -84,9 +84,93 @@ databaseChangeLog:
               - column:
                   name: password
                   value: "$2a$10$2OsuCxaFNinM2i/fcvR3wujKoioBEf4o6jnWtoz0JfqKQ.4Y35Tf."
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: msisdn
+                  value: "79012345678"
+              - column:
+                  name: password
+                  value: "$2a$10$EuZaUaXd3w/oQIvQtSrRJuR5AK8lMpedd7riIMVwVC3JJ.7lKPDu6"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: msisdn
+                  value: "79234567890"
+              - column:
+                  name: password
+                  value: "$2a$10$NireOnVKAesaje0XLRf7w.Xd/efJgvcqWzNiDS53P/gBEiVPaUz3K"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: msisdn
+                  value: "79345678901"
+              - column:
+                  name: password
+                  value: "$2a$10$Nmc2iB8r7TQf9GNGBtmRp.3sBuSA8VBJGzvay7EY1CMNljhxBjrme"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: msisdn
+                  value: "79456789012"
+              - column:
+                  name: password
+                  value: "$2a$10$rOOAwdI6qyb7PtFRkVPgM.q6Zkq5ngtUnPrJTC5I4KQcY2bu7o4ta"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 9
+              - column:
+                  name: msisdn
+                  value: "79567890123"
+              - column:
+                  name: password
+                  value: "$2a$10$jEMnEoxhOJ0zvn3c2AneU.cIl0Q2dVsPFe5.8WzX3FidjKIy8qZYG"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 10
+              - column:
+                  name: msisdn
+                  value: "79678901234"
+              - column:
+                  name: password
+                  value: "$2a$10$vXybbrnP1mRTcV7r3Tv3LOzsIiGftZfxk1Kru4K.KTh.xtrKoCSZO"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 11
+              - column:
+                  name: msisdn
+                  value: "79789012345"
+              - column:
+                  name: password
+                  value: "$2a$10$X0nj/xD3.OJmtDs07FTW/eU2Alq2qViCVHhpHMHQKrdVTqLECyeve"
   - changeSet:
       id: reset-users-sequence
       author: developer
       changes:
         - sql:
-            sql: ALTER SEQUENCE users_id_seq RESTART WITH 5
+            sql: ALTER SEQUENCE users_id_seq RESTART WITH 12

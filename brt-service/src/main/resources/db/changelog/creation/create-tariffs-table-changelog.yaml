@@ -60,9 +60,93 @@ databaseChangeLog:
               - column:
                   name: start_date
                   value: "2023-02-01"
+        - insert:
+            tableName: person_tariff
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: t_id
+                  value: 11
+              - column:
+                  name: start_date
+                  value: "2023-02-01"
+        - insert:
+            tableName: person_tariff
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: t_id
+                  value: 11
+              - column:
+                  name: start_date
+                  value: "2023-01-01"
+        - insert:
+            tableName: person_tariff
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: t_id
+                  value: 11
+              - column:
+                  name: start_date
+                  value: "2023-01-15"
+        - insert:
+            tableName: person_tariff
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: t_id
+                  value: 11
+              - column:
+                  name: start_date
+                  value: "2023-02-01"
+        - insert:
+            tableName: person_tariff
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: t_id
+                  value: 11
+              - column:
+                  name: start_date
+                  value: "2023-02-01"
+        - insert:
+            tableName: person_tariff
+            columns:
+              - column:
+                  name: id
+                  value: 9
+              - column:
+                  name: t_id
+                  value: 11
+              - column:
+                  name: start_date
+                  value: "2023-02-01"
+        - insert:
+            tableName: person_tariff
+            columns:
+              - column:
+                  name: id
+                  value: 10
+              - column:
+                  name: t_id
+                  value: 11
+              - column:
+                  name: start_date
+                  value: "2023-02-01"
   - changeSet:
       id: reset-person-tariff-sequence
       author: developer
       changes:
         - sql:
-            sql: ALTER SEQUENCE person_tariff_id_seq RESTART WITH 4
+            sql: ALTER SEQUENCE person_tariff_id_seq RESTART WITH 11
