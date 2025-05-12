@@ -9,6 +9,7 @@ import org.babynexign.babybilling.brtservice.entity.Tariff;
 import org.babynexign.babybilling.brtservice.entity.enums.QuantServiceType;
 import org.babynexign.babybilling.brtservice.entity.enums.RecordType;
 import org.babynexign.babybilling.brtservice.exception.InvalidCallDateException;
+import org.babynexign.babybilling.brtservice.exception.InvalidCallTypeException;
 import org.babynexign.babybilling.brtservice.repository.CDRRecordRepository;
 import org.babynexign.babybilling.brtservice.repository.PersonRepository;
 import org.babynexign.babybilling.brtservice.senders.HrsSender;
@@ -40,51 +41,70 @@ public class CDRRecordService {
         }
 
         for (CallDTO callDTO : callDTOs) {
-            CDRRecord record = saveCallRecord(callDTO);
-            if (record != null) {
-                processBilling(record);
+            try {
+                CDRRecord record = saveCallRecord(callDTO);
+                if (record != null) {
+                    processBilling(record);
+                }
+            } catch (Exception e) {
+                System.err.println("Error processing CDR: " + e.getMessage() +
+                                 " (First MSISDN: " + callDTO.firstSubscriberMsisdn() + 
+                                 ", Second MSISDN: " + callDTO.secondSubscriberMsisdn() + ")");
             }
         }
     }
 
     private CDRRecord saveCallRecord(CallDTO callDTO) {
-        RecordType recordType;
-        recordType = switch (callDTO.callType()) {
-            case "01" -> RecordType.OUTCOMING;
-            case "02" -> RecordType.INCOMING;
-            default -> throw new IllegalArgumentException("Unknown call type: " + callDTO.callType());
-        };
+        try {
+            RecordType recordType;
+            try {
+                recordType = switch (callDTO.callType()) {
+                    case "01" -> RecordType.OUTCOMING;
+                    case "02" -> RecordType.INCOMING;
+                    default -> throw new IllegalArgumentException("Unknown call type: " + callDTO.callType());
+                };
+            } catch (IllegalArgumentException e) {
+                throw new InvalidCallTypeException("Invalid call type: " + callDTO.callType());
+            }
 
-        Optional<Person> firstPerson = personRepository.findByMsisdn(callDTO.firstSubscriberMsisdn());
-        Optional<Person> secondPerson = personRepository.findByMsisdn(callDTO.secondSubscriberMsisdn());
-        Boolean inOneNetwork = firstPerson.isPresent() && secondPerson.isPresent();
-        Person subscriber = firstPerson.orElse(null);
+            Optional<Person> firstPerson = personRepository.findByMsisdn(callDTO.firstSubscriberMsisdn());
+            Optional<Person> secondPerson = personRepository.findByMsisdn(callDTO.secondSubscriberMsisdn());
+            Boolean inOneNetwork = firstPerson.isPresent() && secondPerson.isPresent();
+            Person subscriber = firstPerson.orElse(null);
 
-        if (subscriber == null) {
-            return null;
+            if (subscriber == null) {
+                return null;
+            }
+
+            if (callDTO.callStart() == null || callDTO.callEnd() == null) {
+                throw new InvalidCallDateException("Call start and end times must be provided. First MSISDN: " + 
+                    callDTO.firstSubscriberMsisdn() + ", Second MSISDN: " + callDTO.secondSubscriberMsisdn());
+            }
+
+            if (callDTO.callEnd().isBefore(callDTO.callStart())) {
+                throw new InvalidCallDateException("Call end time cannot be before call start time. First MSISDN: " + 
+                    callDTO.firstSubscriberMsisdn() + ", Second MSISDN: " + callDTO.secondSubscriberMsisdn());
+            }
+
+            Duration callDuration = Duration.between(callDTO.callStart(), callDTO.callEnd());
+
+            CDRRecord cdrRecord = CDRRecord.builder()
+                    .type(recordType)
+                    .firstMsisdn(callDTO.firstSubscriberMsisdn())
+                    .secondMsisdn(callDTO.secondSubscriberMsisdn())
+                    .callStart(callDTO.callStart())
+                    .callDuration(callDuration)
+                    .inOneNetwork(inOneNetwork)
+                    .subscriber(subscriber)
+                    .build();
+
+            return cdrRecordRepository.save(cdrRecord);
+        } catch (Exception e) {
+            if (e instanceof InvalidCallDateException || e instanceof InvalidCallTypeException) {
+                throw e;
+            }
+            throw new RuntimeException("Error processing CDR record: " + e.getMessage(), e);
         }
-
-        if (callDTO.callStart() != null && callDTO.callEnd() != null && callDTO.callEnd().isBefore(callDTO.callStart())) {
-            throw new InvalidCallDateException("Call end time cannot be before call start time. First MSISDN: " + 
-                callDTO.firstSubscriberMsisdn() + ", Second MSISDN: " + callDTO.secondSubscriberMsisdn());
-        }
-
-        Duration callDuration = null;
-        if (callDTO.callStart() != null && callDTO.callEnd() != null) {
-            callDuration = Duration.between(callDTO.callStart(), callDTO.callEnd());
-        }
-
-        CDRRecord cdrRecord = CDRRecord.builder()
-                .type(recordType)
-                .firstMsisdn(callDTO.firstSubscriberMsisdn())
-                .secondMsisdn(callDTO.secondSubscriberMsisdn())
-                .callStart(callDTO.callStart())
-                .callDuration(callDuration)
-                .inOneNetwork(inOneNetwork)
-                .subscriber(subscriber)
-                .build();
-
-        return cdrRecordRepository.save(cdrRecord);
     }
 
     private void processBilling(CDRRecord record) {
