@@ -64,3 +64,6 @@ eureka:
       defaultZone: http://${EUREKA_HOST}:${EUREKA_PORT}/eureka/
   instance:
     prefer-ip-address: true
+
+server:
+  port: 8081

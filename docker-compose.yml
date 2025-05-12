@@ -18,8 +18,6 @@ services:
       context: eureka-server/
     container_name: eureka
     restart: always
-    ports:
-      - "8761:8761"
 
   hrs-db:
     image: postgres:latest
@@ -43,8 +41,6 @@ services:
     build:
       context: hrs-service/
     container_name: baby-billing-hrs
-    ports:
-      - "8082:8082"
     environment:
       POSTGRES_USERNAME: "postgres"
       POSTGRES_PASSWORD: "postgres"
@@ -84,8 +80,6 @@ services:
     build:
       context: brt-service/
     container_name: baby-billing-brt
-    ports:
-      - "8081:8081"
     environment:
       POSTGRES_USERNAME: "postgres"
       POSTGRES_PASSWORD: "postgres"
@@ -108,7 +102,7 @@ services:
       context: commutator-service/
     container_name: baby-billing-commutator
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
       H2_USERNAME: "su"
       H2_PASSWORD: "password"
@@ -145,8 +139,6 @@ services:
     build:
       context: auth-service/
     container_name: baby-billing-auth
-    ports:
-      - "8083:8083"
     environment:
       POSTGRES_USERNAME: "postgres"
       POSTGRES_PASSWORD: "postgres"
@@ -168,7 +160,7 @@ services:
       context: crm-service/
     container_name: baby-billing-crm
     ports:
-      - "8084:8084"
+      - "8080:8080"
     environment:
       EUREKA_HOST: "eureka"
       EUREKA_PORT: 8761

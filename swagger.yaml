@@ -1,0 +1,899 @@
+openapi: 3.0.0
+info:
+  title: chamomile
+  description: API для предоставления информации по менеджерам и абонентам телефонной связи Ромашка
+  termsOfService: http://chamapi.ru
+  contact:
+    name: KKK
+    url: http://chamapi.ru/staff/kkk
+  license:
+    name: MIT
+  version: '1.0.0.'
+externalDocs:
+  description: Документация о Ромашке API
+  url: http://chamapi.ru/docs1
+servers:
+  - url: http://localhost:8080
+    description: API Gateway
+tags:
+  - name: auth
+    description: Операции, связанные с аутентификацией
+  - name: tariffs
+    description: Операции, связанные с тарифами
+  - name: services
+    description: Операции, связанные с услугами в тарифах
+  - name: persons
+    description: Операции, связанные с абонентами
+  - name: commutator
+    description: Операции, связанные с генерацией звонков
+
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - auth
+      summary: Регистрация нового пользователя
+      description: Создать новую учетную запись пользователя с указанной ролью
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '200':
+          description: Пользователь успешно зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '404':
+          $ref: '#/components/responses/404Response'
+        '409':
+          $ref: '#/components/responses/409Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+  /api/auth/login:
+    post:
+      tags:
+        - auth
+      summary: Аутентификация пользователя
+      description: Вход с помощью имени пользователя и пароля
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Успешная аутентификация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '404':
+          $ref: '#/components/responses/404Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+  /api/tariffs:
+    get:
+      tags:
+        - tariffs
+      summary: Получить список всех тарифов
+      description: Возвращает список всех доступных тарифов
+      operationId: getAllTariffs
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TariffDTO'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+    post:
+      tags:
+        - tariffs
+      summary: Создать новый тариф
+      description: Добавляет новый тариф в систему
+      operationId: createTariff
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTariffRequest'
+      responses:
+        '200':
+          description: Тариф успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TariffDTO'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+  /api/tariffs/{tariffId}:
+    get:
+      tags:
+        - tariffs
+      summary: Получить конкретный тариф
+      description: Возвращает подробную информацию о конкретном тарифе
+      operationId: getTariff
+
+      parameters:
+        - name: tariffId
+          in: path
+          description: Уникальный идентификатор тарифа
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TariffDTO'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '404':
+          $ref: '#/components/responses/404Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+  /api/services:
+    get:
+      tags:
+        - services
+      summary: Получить список всех услуг
+      description: Возвращает список всех доступных дополнительных услуг
+      operationId: getAllServices
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceDTO'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+  /api/services/{serviceId}:
+    get:
+      tags:
+        - services
+      summary: Получить конкретную услугу
+      description: Возвращает подробную информацию о конкретной услуге
+      operationId: getService
+      parameters:
+        - name: serviceId
+          in: path
+          description: Уникальный идентификатор услуги
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceDTO'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '404':
+          $ref: '#/components/responses/404Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+  /api/person:
+    post:
+      tags:
+        - persons
+      summary: Создать нового абонента
+      description: Добавляет нового абонента в систему
+      operationId: createPerson
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePersonRequest'
+      responses:
+        '201':
+          description: Абонент успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDTO'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '409':
+          $ref: '#/components/responses/409Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+  /api/person/{msisdn}:
+    get:
+      tags:
+        - persons
+      summary: Получить абонента по MSISDN
+      description: Возвращает подробную информацию о конкретном абоненте
+      operationId: getPersonByMsisdn
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: msisdn
+          in: path
+          description: Номер телефона абонента (11 цифр)
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9]{11}$'
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDTO'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '404':
+          $ref: '#/components/responses/404Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+  /api/person/{msisdn}/tariff:
+    put:
+      tags:
+        - persons
+      summary: Изменить тариф абонента
+      description: Обновляет тариф для конкретного абонента
+      operationId: changePersonTariff
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: msisdn
+          in: path
+          description: Номер телефона абонента (11 цифр)
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9]{11}$'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePersonTariffRequest'
+      responses:
+        '200':
+          description: Тариф успешно изменен
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '404':
+          $ref: '#/components/responses/404Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+  /api/person/{msisdn}/balance:
+    put:
+      tags:
+        - persons
+      summary: Пополнить баланс
+      description: Добавляет деньги на баланс абонента
+      operationId: replenishBalance
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: msisdn
+          in: path
+          description: Номер телефона абонента (11 цифр)
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9]{11}$'
+        - name: money
+          in: query
+          description: Сумма для пополнения баланса
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: Баланс успешно пополнен
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '404':
+          $ref: '#/components/responses/404Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+  /api/person/tariff-payment:
+    post:
+      tags:
+        - persons
+      summary: Списание платы за тариф у всех пользователей
+      description: Списывает оплату за тариф со счетов абонентов
+      operationId: tariffPayment
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TariffPaymentRequest'
+      responses:
+        '200':
+          description: Платеж успешно обработан
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '404':
+          $ref: '#/components/responses/404Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+  /api/commutator/generate-cdr:
+    post:
+      tags:
+        - commutator
+      summary: Сгенерировать записи о вызовах
+      description: Запускает генерацию записей о вызовах (CDR)
+      operationId: generateCallRecords
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: CDR generation completed successfully.
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - msisdn
+        - password
+        - roles
+      properties:
+        username:
+          type: string
+          description: Имя пользователя
+        msisdn:
+          type: string
+          pattern: '^[0-9]{11}$'
+          description: Номер телефона пользователя (11 цифр)
+        password:
+          type: string
+          description: Пароль пользователя
+        roles:
+          type: array
+          items:
+            type: string
+            enum:
+              - ADMIN
+              - MANAGER
+              - SUBSCRIBER
+          description: Роли пользователя
+
+    LoginRequest:
+      type: object
+      required:
+        - login
+        - password
+      properties:
+        login:
+          type: string
+          description: Логин пользователя
+        password:
+          type: string
+          description: Пароль пользователя
+
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: JWT токен доступа
+        refreshToken:
+          type: string
+          description: Токен для обновления доступа
+
+    PersonDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: ФИО абонента
+        msisdn:
+          type: string
+          pattern: '^[0-9]{11}$'
+          description: Номер телефона абонента (11 цифр)
+        balance:
+          type: integer
+          format: int64
+          description: Баланс счета абонента
+        isRestricted:
+          type: boolean
+          description: Флаг ограничения аккаунта абонента
+        registrationDate:
+          type: string
+          format: date-time
+          description: Дата регистрации
+        description:
+          type: string
+          description: Дополнительные примечания об абоненте
+        quantServices:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantServiceDTO'
+          description: Количественные услуги, используемые абонентом
+        tariff:
+          $ref: '#/components/schemas/TariffDTO'
+        extraServices:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExtraServiceDTO'
+          description: Дополнительные услуги, используемые абонентом
+
+    QuantServiceDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор услуги
+        name:
+          type: string
+          description: Название услуги
+        quantity:
+          type: integer
+          format: int64
+          description: Количество услуги
+        serviceType:
+          type: string
+          description: Тип услуги
+        cost:
+          type: integer
+          format: int64
+          description: Стоимость услуги
+
+    ExtraServiceDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор услуги
+        name:
+          type: string
+          description: Название услуги
+        serviceType:
+          type: string
+          description: Тип услуги
+        cost:
+          type: integer
+          format: int64
+          description: Стоимость услуги
+        startDate:
+          type: string
+          format: date
+          description: Дата начала действия услуги
+        endDate:
+          type: string
+          format: date
+          description: Дата окончания действия услуги
+
+    TariffDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор тарифа
+        name:
+          type: string
+          description: Название тарифа
+        paymentPeriod:
+          type: integer
+          description: Период оплаты в днях
+        cost:
+          type: integer
+          format: int64
+          description: Стоимость тарифа
+        startDate:
+          type: string
+          format: date
+          description: Дата, когда тариф стал доступен
+        avEndDate:
+          type: string
+          format: date
+          description: Дата, когда тариф станет недоступен для новых абонентов
+        acEndDate:
+          type: string
+          format: date
+          description: Дата, когда тариф будет полностью прекращен
+        description:
+          type: string
+          description: Подробное описание тарифа
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceDTO'
+          description: Услуги, включенные в тариф
+        telecomPrices:
+          type: array
+          items:
+            $ref: '#/components/schemas/TelecomPriceDTO'
+          description: Цены на различные типы связи
+
+    TelecomPriceDTO:
+      type: object
+      required:
+        - telecomType
+        - inOurNetwork
+        - telecomDataType
+      properties:
+        telecomType:
+          type: string
+          description: Тип телекоммуникации
+        inOurNetwork:
+          type: boolean
+          description: Признак звонка внутри сети
+        telecomDataType:
+          type: string
+          description: Тип телекоммуникационных данных
+        cost:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Стоимость за единицу услуги
+
+    ServiceDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор услуги
+        name:
+          type: string
+          description: Название услуги
+        serviceType:
+          type: string
+          description: Тип услуги
+        isQuantitative:
+          type: boolean
+          description: Является ли услуга количественной (например, минуты, SMS)
+        startDate:
+          type: string
+          format: date
+          description: Дата, когда услуга стала доступна
+        avDate:
+          type: string
+          format: date
+          description: Дата, когда услуга будет прекращена
+        acEndDate:
+          type: string
+          format: date
+          description: Дата, когда услуга больше не будет доступна для покупки
+        amount:
+          type: integer
+          format: int64
+          description: Количество предоставляемой услуги (для количественных услуг)
+        description:
+          type: string
+          description: Подробное описание услуги
+        cost:
+          type: integer
+          format: int64
+          description: Стоимость услуги
+        period:
+          type: integer
+          description: Период действия услуги в днях
+
+    CreatePersonRequest:
+      type: object
+      required:
+        - name
+        - msisdn
+      properties:
+        name:
+          type: string
+          description: ФИО абонента
+        msisdn:
+          type: string
+          pattern: '^[0-9]{11}$'
+          description: Номер телефона абонента (11 цифр)
+        description:
+          type: string
+          description: Дополнительные примечания об абоненте
+
+    ChangePersonTariffRequest:
+      type: object
+      required:
+        - newTariff
+      properties:
+        newTariff:
+          type: integer
+          format: int64
+          minimum: 1
+          description: ID нового тарифа
+
+    TariffPaymentRequest:
+      type: object
+      required:
+        - currentDate
+      properties:
+        currentDate:
+          type: string
+          format: date
+          description: Текущая дата
+
+    CreateTariffRequest:
+      type: object
+      required:
+        - name
+        - paymentPeriod
+        - cost
+      properties:
+        name:
+          type: string
+          description: Название тарифа
+        paymentPeriod:
+          type: integer
+          minimum: 1
+          description: Период оплаты в днях
+        cost:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Стоимость тарифа
+        description:
+          type: string
+          description: Подробное описание тарифа
+        serviceIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: Идентификаторы услуг, включаемых в тариф
+        callPrices:
+          $ref: '#/components/schemas/CallPricesDTO'
+
+    CallPricesDTO:
+      type: object
+      required:
+        - incomingInNetworkPrice
+        - outgoingInNetworkPrice
+        - incomingOutNetworkPrice
+        - outgoingOutNetworkPrice
+      properties:
+        incomingInNetworkPrice:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Цена за входящие вызовы внутри сети
+        outgoingInNetworkPrice:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Цена за исходящие вызовы внутри сети
+        incomingOutNetworkPrice:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Цена за входящие вызовы из других сетей
+        outgoingOutNetworkPrice:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Цена за исходящие вызовы в другие сети
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: Status code
+        message:
+          type: string
+          description: Message
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+          description: Errors
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp
+
+  responses:
+    4xxResponse:
+      description: Некорректные данные
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    400Response:
+      description: Некорректный запрос
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            validationError:
+              value:
+                status: 400
+                message: "Validation failed"
+                errors:
+                  "msisdn": "MSISDN must contain exactly 11 digits"
+                timestamp: "2025-05-01T10:00:00Z"
+
+    401Response:
+      description: Пользователь не авторизован
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            authError:
+              value:
+                status: 401
+                message: "Invalid credentials"
+                timestamp: "2025-05-01T10:00:00Z"
+
+    403Response:
+      description: Недостаточно прав доступа
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            forbiddenError:
+              value:
+                status: 403
+                message: "Access denied"
+                timestamp: "2025-05-01T10:00:00Z"
+
+    404Response:
+      description: Не найдено
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            notFoundError:
+              value:
+                status: 404
+                message: "Person with MSISDN 89991234567 not found"
+                timestamp: "2025-05-01T10:00:00Z"
+
+    409Response:
+      description: Конфликт
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            conflictError:
+              value:
+                status: 409
+                message: "MSISDN 89991234567 is already in use"
+                timestamp: "2025-05-01T10:00:00Z"
+
+    5xxResponse:
+      description: Ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    500Response:
+      description: Ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            serverError:
+              value:
+                status: 500
+                message: "An unexpected error occurred"
+                timestamp: "2025-05-01T10:00:00Z"
+
+    defaultResponse:
+      description: Успешное действие
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
