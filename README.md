@@ -9,6 +9,9 @@ HRS:
 ![hrs](https://github.com/user-attachments/assets/ecc61043-da43-4557-9657-e64cc489ba5a)
 H2:
 ![com](https://github.com/user-attachments/assets/e1304fce-9f83-47c0-b8d8-2301b524a2a1)
+Users:
+![image](https://github.com/user-attachments/assets/70bfabe8-4ece-4fa2-97f8-d878dc78fdef)
+
 
 Архив с диаграммами и постановками, описывающими работу сервиса: https://drive.google.com/drive/folders/1Gjx6BDM-7p8aNl7Oi4BmzQes1Nce9YPg?usp=sharing
 
