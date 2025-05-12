@@ -22,7 +22,7 @@ eureka:
     prefer-ip-address: true
 
 server:
-  port: 8083
+  port: 8084
 
 jwt:
   secret: ${JWT_SECRET}
