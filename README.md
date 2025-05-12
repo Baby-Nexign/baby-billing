@@ -3,8 +3,11 @@
 Swagger: https://drive.google.com/file/d/1RzgC_ptH3GVuE0hb2hHORBM5SSECajOZ/view?usp=sharing
 
 Изображения ERD диаграмм для баз данных:
+BRT:
 ![brt](https://github.com/user-attachments/assets/03881678-1175-4484-9a61-c95481e28cda)
+HRS:
 ![hrs](https://github.com/user-attachments/assets/ecc61043-da43-4557-9657-e64cc489ba5a)
+H2:
 ![com](https://github.com/user-attachments/assets/e1304fce-9f83-47c0-b8d8-2301b524a2a1)
 
 Архив с диаграммами и постановками, описывающими работу сервиса: https://drive.google.com/drive/folders/1Gjx6BDM-7p8aNl7Oi4BmzQes1Nce9YPg?usp=sharing
