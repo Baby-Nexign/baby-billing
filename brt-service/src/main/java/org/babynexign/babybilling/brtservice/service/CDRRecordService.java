@@ -8,6 +8,7 @@ import org.babynexign.babybilling.brtservice.entity.QuantService;
 import org.babynexign.babybilling.brtservice.entity.Tariff;
 import org.babynexign.babybilling.brtservice.entity.enums.QuantServiceType;
 import org.babynexign.babybilling.brtservice.entity.enums.RecordType;
+import org.babynexign.babybilling.brtservice.exception.InvalidCallDateException;
 import org.babynexign.babybilling.brtservice.repository.CDRRecordRepository;
 import org.babynexign.babybilling.brtservice.repository.PersonRepository;
 import org.babynexign.babybilling.brtservice.senders.HrsSender;
@@ -61,6 +62,11 @@ public class CDRRecordService {
 
         if (subscriber == null) {
             return null;
+        }
+
+        if (callDTO.callStart() != null && callDTO.callEnd() != null && callDTO.callEnd().isBefore(callDTO.callStart())) {
+            throw new InvalidCallDateException("Call end time cannot be before call start time. First MSISDN: " + 
+                callDTO.firstSubscriberMsisdn() + ", Second MSISDN: " + callDTO.secondSubscriberMsisdn());
         }
 
         Duration callDuration = null;
